@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { send } from 'loot-core/src/platform/client/fetch';
@@ -15,6 +16,8 @@ export default function PostsOfflineNotification() {
   let payees = (location.state && location.state.payees) || [];
   let plural = payees.length > 1;
 
+  const { t } = useTranslation();
+
   function onClose() {
     history.goBack();
   }
@@ -25,11 +28,17 @@ export default function PostsOfflineNotification() {
   }
 
   return (
-    <Page title="Post transactions?" modalSize="small">
+    <Page
+      title={t('schedule.postTransactionsQuestion', 'Post transactions?')}
+      modalSize="small"
+    >
       <P>
         {payees.length > 0 ? (
           <Text>
-            The {plural ? 'payees ' : 'payee '}
+            The{' '}
+            {plural
+              ? t('general.payees', 'payees')
+              : t('general.payee', 'payee')}{' '}
             {payees.map((id, idx) => (
               <Text>
                 <Text style={{ color: colors.p4 }}>
@@ -38,31 +47,45 @@ export default function PostsOfflineNotification() {
                 {idx === payees.length - 1
                   ? ' '
                   : idx === payees.length - 2
-                  ? ', and '
+                  ? `, ${t('general.and', 'and')} `
                   : ', '}
               </Text>
             ))}
           </Text>
         ) : (
-          <Text>There {plural ? 'are payees ' : 'is a payee '} that </Text>
+          <Text>
+            {t('schedule.thereArePayeesThat', {
+              count: plural,
+              defaultValue: `There ${
+                plural ? 'are payees ' : 'is a payee '
+              } that `,
+            })}
+          </Text>
         )}
 
         <Text>
-          {plural ? 'have ' : 'has '} schedules that are due today. Usually we
-          automatically post transactions for these, but you are offline or
-          syncing failed. In order to avoid duplicate transactions, we let you
-          choose whether or not to create transactions for these schedules.
+          {t('schedule.thereAreSchedulesDueToday', {
+            count: plural,
+            defaultValue: `${
+              plural ? 'have ' : 'has '
+            } schedules that are due today. Usually we
+            automatically post transactions for these, but you are offline or
+            syncing failed. In order to avoid duplicate transactions, we let you
+            choose whether or not to create transactions for these schedules.`,
+          })}
         </Text>
       </P>
       <P>
-        Be aware that other devices may have already created these transactions.
-        If you have multiple devices, make sure you only do this on one device
-        or you will have duplicate transactions.
+        {t(
+          'schedule.otherDevicesMayHaveAlreadyCreatedTransactions',
+          'Be aware that other devices may have already created these transactions. If you have multiple devices, make sure you only do this on one device or you will have duplicate transactions.',
+        )}
       </P>
       <P>
-        You can always manually post a transaction later for a due schedule by
-        selecting the schedule and clicking “Post transaction” in the action
-        menu.
+        {t(
+          'schedule.youCanAlwaysManuallyPostTransaction',
+          'You can always manually post a transaction later for a due schedule by selecting the schedule and clicking “Post transaction” in the action menu.',
+        )}
       </P>
       <Stack
         direction="row"
@@ -72,7 +95,7 @@ export default function PostsOfflineNotification() {
       >
         <Button onClick={onClose}>Decide later</Button>
         <Button primary onClick={onPost}>
-          Post transactions
+          {t('schedule.postTransactions', 'Post transactions')}
         </Button>
       </Stack>
     </Page>

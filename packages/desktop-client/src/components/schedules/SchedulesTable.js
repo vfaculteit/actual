@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { useCachedAccounts } from 'loot-core/src/client/data-hooks/accounts';
@@ -20,6 +21,7 @@ export let ROW_HEIGHT = 43;
 
 function OverflowMenu({ schedule, status, onAction }) {
   let [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -51,15 +53,21 @@ function OverflowMenu({ schedule, status, onAction }) {
             items={[
               status === 'due' && {
                 name: 'post-transaction',
-                text: 'Post transaction',
+                text: t('schedules.postTransaction', 'Post transaction'),
               },
               ...(schedule.completed
-                ? [{ name: 'restart', text: 'Restart' }]
+                ? [{ name: 'restart', text: t('general.restart', 'Restart') }]
                 : [
-                    { name: 'skip', text: 'Skip next date' },
-                    { name: 'complete', text: 'Complete' },
+                    {
+                      name: 'skip',
+                      text: t('schedules.skipNextDate', 'Skip next date'),
+                    },
+                    {
+                      name: 'complete',
+                      text: t('general.complete', 'Complete'),
+                    },
                   ]),
-              { name: 'delete', text: 'Delete' },
+              { name: 'delete', text: t('general.delete', 'Delete') },
             ]}
           />
         </Tooltip>
@@ -72,6 +80,8 @@ export function ScheduleAmountCell({ amount, op }) {
   let num = getScheduledAmount(amount);
   let str = integerToCurrency(Math.abs(num || 0));
   let isApprox = op === 'isapprox' || op === 'isbetween';
+
+  const { t } = useTranslation();
 
   return (
     <Cell
@@ -93,7 +103,10 @@ export function ScheduleAmountCell({ amount, op }) {
             lineHeight: '1em',
             marginRight: 10,
           }}
-          title={(isApprox ? 'Approximately ' : '') + str}
+          title={t('general.approximatelyWithAmount', {
+            amount: str,
+            defaultValue: (isApprox ? 'Approximately ' : '') + str,
+          })}
         >
           ~
         </View>
@@ -106,7 +119,10 @@ export function ScheduleAmountCell({ amount, op }) {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         }}
-        title={(isApprox ? 'Approximately ' : '') + str}
+        title={t('general.approximatelyWithAmount', {
+          amount: str,
+          defaultValue: (isApprox ? 'Approximately ' : '') + str,
+        })}
       >
         {num > 0 ? `+${str}` : `${str}`}
       </Text>
@@ -125,6 +141,8 @@ export function SchedulesTable({
   onAction,
   tableStyle,
 }) {
+  const { t } = useTranslation();
+
   let dateFormat = useSelector(state => {
     return state.prefs.local.dateFormat || 'MM/dd/yyyy';
   });
@@ -211,7 +229,7 @@ export function SchedulesTable({
         </Field>
         <Field width={110} name="date">
           {item.next_date
-            ? monthUtils.format(item.next_date, dateFormat)
+            ? monthUtils.nonLocalizedFormat(item.next_date, dateFormat)
             : null}
         </Field>
         <Field width={120} name="status" style={{ alignItems: 'flex-start' }}>
@@ -260,7 +278,7 @@ export function SchedulesTable({
               color: colors.n6,
             }}
           >
-            Show completed schedules
+            {t('schedules.showCompletedSchedules', 'Show completed schedules')}
           </Field>
         </Row>
       );
@@ -271,17 +289,17 @@ export function SchedulesTable({
   return (
     <View style={[{ flex: 1 }, tableStyle]}>
       <TableHeader height={ROW_HEIGHT} inset={15} version="v2">
-        <Field width="flex">Name</Field>
-        <Field width="flex">Payee</Field>
-        <Field width="flex">Account</Field>
-        <Field width={110}>Next date</Field>
-        <Field width={120}>Status</Field>
+        <Field width="flex">{t('general.name', 'Name')}</Field>
+        <Field width="flex">{t('general.payee_one', 'Payee')}</Field>
+        <Field width="flex">{t('general.account_one', 'Account')}</Field>
+        <Field width={110}>{t('schedules.nextDate', 'Next date')}</Field>
+        <Field width={120}>{t('general.status', 'Status')}</Field>
         <Field width={100} style={{ textAlign: 'right' }}>
-          Amount
+          {t('general.amount', 'Amount')}
         </Field>
         {!minimal && (
           <Field width={80} style={{ textAlign: 'center' }}>
-            Recurring
+            {t('general.recurring', 'Recurring')}
           </Field>
         )}
         {!minimal && <Field width={40}></Field>}

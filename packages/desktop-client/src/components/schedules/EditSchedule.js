@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -86,6 +87,7 @@ export default function ScheduleDetails() {
   let dateFormat = useSelector(state => {
     return state.prefs.local.dateFormat || 'MM/dd/yyyy';
   });
+  const { t } = useTranslation();
 
   let [state, dispatch] = useReducer(
     (state, action) => {
@@ -344,7 +346,10 @@ export default function ScheduleDetails() {
       if (sameName.length > 0 && sameName[0].id !== state.schedule.id) {
         dispatch({
           type: 'form-error',
-          error: 'There is already a schedule with this name',
+          error: t(
+            'schedule.already-schedule',
+            'There is already a schedule with this name',
+          ),
         });
         return;
       }
@@ -372,8 +377,11 @@ export default function ScheduleDetails() {
     if (res.error) {
       dispatch({
         type: 'form-error',
-        error:
-          'An error occurred while saving. Please contact help@actualbudget.com for support.',
+        error: t('support.anErrorOccuredWhileSaving', {
+          email: 'help@actualbudget.com',
+          defaultValue:
+            'An error occurred while saving. Please contact help@actualbudget.com for support.',
+        }),
       });
     } else {
       if (adding) {
@@ -430,12 +438,22 @@ export default function ScheduleDetails() {
 
   return (
     <Page
-      title={payee ? `Schedule: ${payee.name}` : 'Schedule'}
+      title={
+        payee
+          ? t('schedules.scheduleNamed', {
+              name: payee.name,
+              defaultValue: `Schedule: ${payee.name}`,
+            })
+          : t('general.schedule', 'Schedule')
+      }
       modalSize="medium"
     >
       <Stack direction="row" style={{ marginTop: 10 }}>
         <FormField style={{ flex: 1 }}>
-          <FormLabel title="Schedule Name" htmlFor="name-field" />
+          <FormLabel
+            title={t('schedule.scheduleName', 'Schedule Name')}
+            htmlFor="name-field"
+          />
           <GenericInput
             field="string"
             type="string"
@@ -449,7 +467,11 @@ export default function ScheduleDetails() {
       </Stack>
       <Stack direction="row" style={{ marginTop: 20 }}>
         <FormField style={{ flex: 1 }}>
-          <FormLabel title="Payee" id="payee-label" htmlFor="payee-field" />
+          <FormLabel
+            title={t('general.payee_one', 'Payee')}
+            id="payee-label"
+            htmlFor="payee-field"
+          />
           <PayeeAutocomplete
             value={state.fields.payee}
             labelProps={{ id: 'payee-label' }}
@@ -463,7 +485,7 @@ export default function ScheduleDetails() {
 
         <FormField style={{ flex: 1 }}>
           <FormLabel
-            title="Account"
+            title={t('general.account_one', 'Account')}
             id="account-label"
             htmlFor="account-field"
           />
@@ -471,7 +493,10 @@ export default function ScheduleDetails() {
             includeClosedAccounts={false}
             value={state.fields.account}
             labelProps={{ id: 'account-label' }}
-            inputProps={{ id: 'account-field', placeholder: '(none)' }}
+            inputProps={{
+              id: 'account-field',
+              placeholder: t('schedules.none', '(none)'),
+            }}
             onSelect={id =>
               dispatch({ type: 'set-field', field: 'account', value: id })
             }
@@ -481,7 +506,7 @@ export default function ScheduleDetails() {
         <FormField style={{ flex: 1 }}>
           <Stack direction="row" align="center" style={{ marginBottom: 3 }}>
             <FormLabel
-              title="Amount"
+              title={t('general.amount', 'Amount')}
               htmlFor="amount-field"
               style={{ margin: 0, flex: 1 }}
             />
@@ -491,11 +516,11 @@ export default function ScheduleDetails() {
               formatOp={op => {
                 switch (op) {
                   case 'is':
-                    return 'is exactly';
+                    return t('schedules.isExactly', 'is exactly');
                   case 'isapprox':
-                    return 'is approximately';
+                    return t('schedules.isApproximately', 'is approximately');
                   case 'isbetween':
-                    return 'is between';
+                    return t('schedules.isBetween', 'is between');
                   default:
                     throw new Error('Invalid op for select: ' + op);
                 }
@@ -538,7 +563,7 @@ export default function ScheduleDetails() {
       </Stack>
 
       <View style={{ marginTop: 20 }}>
-        <FormLabel title="Date" />
+        <FormLabel title={t('general.date', 'Date')} />
       </View>
 
       <Stack direction="row" align="flex-start">
@@ -563,7 +588,7 @@ export default function ScheduleDetails() {
           {state.upcomingDates && (
             <View style={{ fontSize: 13, marginTop: 20 }}>
               <Text style={{ color: colors.n4, fontWeight: 600 }}>
-                Upcoming dates
+                {t('schedules.upcomingDates', 'Upcoming dates')}
               </Text>
               <Stack
                 direction="column"
@@ -597,7 +622,7 @@ export default function ScheduleDetails() {
             }}
           />
           <label htmlFor="form_repeats" style={{ userSelect: 'none' }}>
-            Repeats
+            {t('general.repeats', 'Repeats')}
           </label>
         </View>
 
@@ -631,7 +656,10 @@ export default function ScheduleDetails() {
               htmlFor="form_posts_transaction"
               style={{ userSelect: 'none' }}
             >
-              Automatically add transaction
+              {t(
+                'schedules.automaticallyAddTransaction',
+                'Automatically add transaction',
+              )}
             </label>
           </View>
 
@@ -645,8 +673,10 @@ export default function ScheduleDetails() {
               lineHeight: '1.4em',
             }}
           >
-            If checked, the schedule will automatically create transactions for
-            you in the specified account
+            {t(
+              'schedules.automaticallyAddTransactionAdvice',
+              'If checked, the schedule will automatically create transactions for you in the specified account',
+            )}
           </Text>
 
           {!adding && state.schedule.rule && (
@@ -660,11 +690,14 @@ export default function ScheduleDetails() {
                     width: 350,
                   }}
                 >
-                  This schedule has custom conditions and actions
+                  {t(
+                    'schedules.thisScheduleHasCustomConditionsAndActions',
+                    'This schedule has custom conditions and actions',
+                  )}
                 </Text>
               )}
               <Button onClick={() => onEditRule()} disabled={adding}>
-                Edit as rule
+                {t('schedules.editAsRule', 'Edit as rule')}
               </Button>
             </Stack>
           )}
@@ -676,11 +709,17 @@ export default function ScheduleDetails() {
           {adding ? (
             <View style={{ flexDirection: 'row', padding: '5px 0' }}>
               <Text style={{ color: colors.n4 }}>
-                These transactions match this schedule:
+                {t(
+                  'schedules.theseTransactionsMatchThisSchedule',
+                  'These transactions match this schedule:',
+                )}
               </Text>
               <View style={{ flex: 1 }} />
               <Text style={{ color: colors.n6 }}>
-                Select transactions to link on save
+                {t(
+                  'schedules.selectTransactionsToLinkOnSave',
+                  'Select transactions to link on save',
+                )}
               </Text>
             </View>
           ) : (
@@ -695,7 +734,7 @@ export default function ScheduleDetails() {
                 }}
                 onClick={() => onSwitchTransactions('linked')}
               >
-                Linked transactions
+                {t('schedules.linkedTransactions', 'Linked transactions')}
               </Button>{' '}
               <Button
                 bare
@@ -708,15 +747,34 @@ export default function ScheduleDetails() {
                 }}
                 onClick={() => onSwitchTransactions('matched')}
               >
-                Find matching transactions
+                {t(
+                  'schedules.findMatchingTransactions',
+                  'Find matching transactions',
+                )}
               </Button>
               <View style={{ flex: 1 }} />
               <SelectedItemsButton
                 name="transactions"
                 items={
                   state.transactionsMode === 'linked'
-                    ? [{ name: 'unlink', text: 'Unlink from schedule' }]
-                    : [{ name: 'link', text: 'Link to schedule' }]
+                    ? [
+                        {
+                          name: 'unlink',
+                          text: t(
+                            'schedules.unlinkFromSchedule',
+                            'Unlink from schedule',
+                          ),
+                        },
+                      ]
+                    : [
+                        {
+                          name: 'link',
+                          text: t(
+                            'schedules.linkToSchedule',
+                            'Link to schedule',
+                          ),
+                        },
+                      ]
                 }
                 onSelect={(name, ids) => {
                   switch (name) {
@@ -742,10 +800,13 @@ export default function ScheduleDetails() {
                 >
                   {state.error ? (
                     <Text style={{ color: colors.r4 }}>
-                      Could not search: {state.error}
+                      {t('schedule.couldNotSearchError', {
+                        error: state.error,
+                        defaultValue: `Could not search: ${state.error}`,
+                      })}
                     </Text>
                   ) : (
-                    'No transactions found'
+                    t('schedule.noTransactionsFound', 'No transactions found')
                   )}
                 </View>
               ))
@@ -770,10 +831,10 @@ export default function ScheduleDetails() {
       >
         {state.error && <Text style={{ color: colors.r4 }}>{state.error}</Text>}
         <Button style={{ marginRight: 10 }} onClick={() => history.goBack()}>
-          Cancel
+          {t('general.cancel', 'Cancel')}
         </Button>
         <Button primary onClick={onSave}>
-          {adding ? 'Add' : 'Save'}
+          {adding ? t('general.add', 'Add') : t('general.save', 'Save')}
         </Button>
       </Stack>
     </Page>

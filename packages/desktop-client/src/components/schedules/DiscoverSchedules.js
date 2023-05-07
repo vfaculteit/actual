@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import q, { runQuery } from 'loot-core/src/client/query-helpers';
@@ -24,6 +25,7 @@ function DiscoverSchedulesTable({ schedules, loading }) {
   let pageType = usePageType();
   let selectedItems = useSelectedItems();
   let dispatchSelected = useSelectedDispatch();
+  const { t } = useTranslation();
 
   function renderItem({ item }) {
     let selected = selectedItems.has(item.id);
@@ -78,13 +80,13 @@ function DiscoverSchedulesTable({ schedules, loading }) {
           selected={selectedItems.size > 0}
           onSelect={() => dispatchSelected({ type: 'select-all' })}
         />
-        <Field width="flex">Payee</Field>
-        <Field width="flex">Account</Field>
+        <Field width="flex">{t('general.payee_one', 'Payee')}</Field>
+        <Field width="flex">{t('general.account_one', 'Account')}</Field>
         <Field width="auto" style={{ flex: 1.5 }}>
-          When
+          {t('general.when', 'When')}
         </Field>
         <Field width={100} style={{ textAlign: 'right' }}>
-          Amount
+          {t('general.amount', 'Amount')}
         </Field>
       </TableHeader>
       <Table
@@ -100,7 +102,7 @@ function DiscoverSchedulesTable({ schedules, loading }) {
         loading={loading}
         isSelected={id => selectedItems.has(id)}
         renderItem={renderItem}
-        renderEmpty="No schedules found"
+        renderEmpty={t('schedules.noSchedulesFound', 'No schedules found')}
       />
     </View>
   );
@@ -113,6 +115,7 @@ export default function DiscoverSchedules() {
   let [creating, setCreating] = useState(false);
 
   let selectedInst = useSelected('discover-schedules', schedules, []);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function run() {
@@ -153,18 +156,27 @@ export default function DiscoverSchedules() {
   }
 
   return (
-    <Page title="Found schedules" modalSize={{ width: 850, height: 650 }}>
+    <Page
+      title={t('schedules.foundSchedules', 'Found schedules')}
+      modalSize={{ width: 850, height: 650 }}
+    >
       <P>
-        We found some possible schedules in your current transactions. Select
-        the ones you want to create.
+        {t(
+          'schedules.foundSomePossibleSchedulesAdvice',
+          'We found some possible schedules in your current transactions. Select the ones you want to create.',
+        )}
       </P>
       <P>
-        If you expected a schedule here and don’t see it, it might be because
-        the payees of the transactions don’t match. Make sure you rename payees
-        on all transactions for a schedule to be the same payee.
+        {t(
+          'schedules.expectedSchedulesAdvice',
+          'If you expected a schedule here and don’t see it, it might be because the payees of the transactions don’t match. Make sure you rename payees on all transactions for a schedule to be the same payee.',
+        )}
       </P>
       <P>
-        You can always do this later from “More Tools” &rarr; “Find Schedules.”
+        {t(
+          'schedules.youCanDoThisLaterFromMoreTools',
+          'You can always do this later from “More Tools” &rarr; “Find Schedules.”',
+        )}
       </P>
 
       <SelectedProvider instance={selectedInst}>
@@ -189,7 +201,10 @@ export default function DiscoverSchedules() {
           disabled={selectedInst.items.size === 0}
           onClick={onCreate}
         >
-          Create schedules
+          {t('schedules.createSchedule', {
+            count: selectedInst.items.size,
+            defaultValue: 'Create schedules',
+          })}
         </ButtonWithLoading>
       </Stack>
     </Page>

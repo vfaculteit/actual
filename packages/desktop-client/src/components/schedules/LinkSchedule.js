@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { useSchedules } from 'loot-core/src/client/data-hooks/schedules';
@@ -18,6 +19,8 @@ export default function ScheduleLink() {
 
   let [filter, setFilter] = useState('');
 
+  const { t } = useTranslation();
+
   if (scheduleData == null) {
     return null;
   }
@@ -36,11 +39,19 @@ export default function ScheduleLink() {
   }
 
   return (
-    <Page title="Link Schedule" modalSize="medium">
+    <Page
+      title={t('schedule.linkSchedule', 'Link Schedule')}
+      modalSize="medium"
+    >
       <View
         style={{ flexDirection: 'row', marginBottom: 20, alignItems: 'center' }}
       >
-        <Text>Choose a schedule to link these transactions to:</Text>
+        <Text>
+          {t(
+            'schedule.chooseScheduleToLinkTransactions',
+            'Choose a schedule to link these transactions to:',
+          )}
+        </Text>
         <View style={{ flex: 1 }} />
         <Search
           isInModal

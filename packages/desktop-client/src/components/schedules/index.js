@@ -99,7 +99,7 @@ export default function Schedules() {
       >
         <Button onClick={onDiscover}>Find schedules</Button>
         <Button primary onClick={onAdd}>
-          Add new schedule
+          {t('schedules.addNewSchedule', 'Add new schedule')}
         </Button>
       </View>
     </Page>

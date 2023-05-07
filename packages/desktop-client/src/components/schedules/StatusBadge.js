@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { titleFirst } from 'loot-core/src/shared/util';
 
@@ -13,57 +14,69 @@ import { colors } from '../../style';
 import { View, Text } from '../common';
 
 export function getStatusProps(status) {
-  let color, backgroundColor, Icon;
+  let color, backgroundColor, Icon, title;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation();
 
   switch (status) {
     case 'missed':
       color = colors.r1;
       backgroundColor = colors.r10;
       Icon = EditSkull1;
+      title = t('status.missed', status);
       break;
     case 'due':
       color = colors.y1;
       backgroundColor = colors.y9;
       Icon = AlertTriangle;
+      title = t('status.due', status);
       break;
     case 'upcoming':
       color = colors.p1;
       backgroundColor = colors.p10;
       Icon = CalendarIcon;
+      title = t('status.upcoming', status);
       break;
     case 'paid':
       color = colors.g2;
       backgroundColor = colors.g10;
       Icon = ValidationCheck;
+      title = t('status.paid', status);
       break;
     case 'completed':
       color = colors.n4;
       backgroundColor = colors.n11;
       Icon = FavoriteStar;
+      title = t('status.completed', status);
       break;
     case 'pending':
       color = colors.g4;
       backgroundColor = colors.g11;
       Icon = CalendarIcon;
+      title = t('status.pending', status);
       break;
     case 'scheduled':
       color = colors.n1;
       backgroundColor = colors.n11;
       Icon = CalendarIcon;
+      title = t('status.scheduled', status);
       break;
     case 'cleared':
       color = colors.g5;
       backgroundColor = colors.n11;
       Icon = CheckCircle1;
+      title = t('status.cleared', status);
       break;
     default:
       color = colors.n1;
       backgroundColor = colors.n11;
       Icon = CheckCircleHollow;
+      title = status;
       break;
   }
 
-  return { color, backgroundColor, Icon };
+  return { color, backgroundColor, Icon, title };
 }
 
 export function StatusIcon({ status }) {
@@ -73,7 +86,7 @@ export function StatusIcon({ status }) {
 }
 
 export function StatusBadge({ status, style }) {
-  let { color, backgroundColor, Icon } = getStatusProps(status);
+  let { color, backgroundColor, Icon, title } = getStatusProps(status);
   return (
     <View
       style={[
@@ -97,7 +110,7 @@ export function StatusBadge({ status, style }) {
           marginRight: 7,
         }}
       />
-      <Text style={{ lineHeight: '1em' }}>{titleFirst(status)}</Text>
+      <Text style={{ lineHeight: '1em' }}>{titleFirst(title)}</Text>
     </View>
   );
 }
