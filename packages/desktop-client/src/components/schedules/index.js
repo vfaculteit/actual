@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import { useSchedules } from 'loot-core/src/client/data-hooks/schedules';
@@ -15,6 +16,8 @@ export default function Schedules() {
   let [filter, setFilter] = useState('');
 
   let scheduleData = useSchedules();
+
+  const { t } = useTranslation();
 
   if (scheduleData == null) {
     return null;
@@ -59,7 +62,7 @@ export default function Schedules() {
   }
 
   return (
-    <Page title="Schedules">
+    <Page title={t('general.schedule_other', 'Schedules')}>
       <View style={{ alignItems: 'flex-end' }}>
         <Search
           placeholder="Filter schedules…"

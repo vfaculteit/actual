@@ -19,3 +19,6 @@ npm-debug.log
 public/kcab
 public/data
 public/data-file-index.txt
+
+# Ignore auto generated dictionaries with check-i18n
+src/locales/*_old.json

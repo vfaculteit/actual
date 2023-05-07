@@ -29,6 +29,8 @@
     "formik": "^0.11.10",
     "glamor": "^2.20.40",
     "hotkeys-js": "3.8.2",
+    "i18next": "^22.4.15",
+    "i18next-parser": "^7.7.0",
     "identity-obj-proxy": "3.0.0",
     "inter-ui": "^3.19.3",
     "jest": "^27.0.0",
@@ -42,6 +44,7 @@
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "18.2.0",
+    "react-i18next": "^12.2.2",
     "react-merge-refs": "^1.1.0",
     "react-modal": "3.16.1",
     "react-redux": "7.2.1",
@@ -64,7 +67,8 @@
     "build:browser": "cross-env ./bin/build-browser",
     "test": "react-app-rewired test",
     "e2e": "npx playwright test --browser=chromium",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check-i18n": "i18next"
   },
   "jest": {
     "setupFilesAfterEnv": [

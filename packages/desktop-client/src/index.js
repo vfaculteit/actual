@@ -7,6 +7,7 @@ import '@reach/listbox/styles.css';
 
 import 'inter-ui/inter.css';
 
+import './locales';
 import React from 'react';
 import { Provider } from 'react-redux';
 
