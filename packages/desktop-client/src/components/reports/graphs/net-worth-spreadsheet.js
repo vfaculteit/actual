@@ -19,6 +19,7 @@ export default function createSpreadsheet(
   end,
   accounts,
   conditions = [],
+  t,
 ) {
   return async (spreadsheet, setData) => {
     if (accounts.length === 0) {
@@ -68,13 +69,12 @@ export default function createSpreadsheet(
       }),
     );
 
-    setData(recalculate(data, start, end));
+    setData(recalculate(data, start, end, t));
   };
 }
 
-function recalculate(data, start, end) {
+function recalculate(data, start, end, t) {
   const months = monthUtils.rangeInclusive(start, end);
-
   const accountBalances = data.map(account => {
     // Start off with the balance at that point in time
     let balance = account.starting;
@@ -119,13 +119,22 @@ function recalculate(data, start, end) {
           <strong>{d.format(x, 'MMMM yyyy')}</strong>
         </div>
         <div style={{ lineHeight: 1.5 }}>
-          <AlignedText left="Assets:" right={integerToCurrency(assets)} />
-          <AlignedText left="Debt:" right={`-${integerToCurrency(debt)}`} />
           <AlignedText
-            left="Net worth:"
+            left={t('AssetsColon', 'Assets:')}
+            right={integerToCurrency(assets)}
+          />
+          <AlignedText
+            left={t('DebtColon', 'Debt:')}
+            right={`-${integerToCurrency(debt)}`}
+          />
+          <AlignedText
+            left={t('NetWorthColon', 'Net worth:')}
             right={<strong>{integerToCurrency(total)}</strong>}
           />
-          <AlignedText left="Change:" right={integerToCurrency(change)} />
+          <AlignedText
+            left={t('ChangeColon', 'Change:')}
+            right={integerToCurrency(change)}
+          />
         </div>
       </div>
     );

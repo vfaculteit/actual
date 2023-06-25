@@ -61,7 +61,7 @@ export function BetweenAmountInput({ defaultValue, onChange }) {
           onChange({ num1: value, num2 });
         }}
       />
-      <View style={{ margin: '0 5px' }}>{t('general.and', 'and')}</View>
+      <View style={{ margin: '0 5px' }}>{t('and')}</View>
       <AmountInput
         defaultValue={num2}
         onChange={value => {

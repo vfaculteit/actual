@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { withRouter, useHistory } from 'react-router';
@@ -23,6 +24,7 @@ function EditableBudgetName({ prefs, savePrefs }) {
   let history = useHistory();
   const [editing, setEditing] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   function onMenuSelect(type) {
     setMenuOpen(false);
@@ -45,10 +47,10 @@ function EditableBudgetName({ prefs, savePrefs }) {
   }
 
   let items = [
-    { name: 'rename', text: 'Rename budget' },
-    { name: 'settings', text: 'Settings' },
-    ...(Platform.isBrowser ? [{ name: 'help', text: 'Help' }] : []),
-    { name: 'close', text: 'Close file' },
+    { name: 'rename', text: t('Rename budget') },
+    { name: 'settings', text: t('Settings') },
+    ...(Platform.isBrowser ? [{ name: 'help', text: t('Help') }] : []),
+    { name: 'close', text: t('Close file') },
   ];
 
   if (editing) {
@@ -88,7 +90,7 @@ function EditableBudgetName({ prefs, savePrefs }) {
         onClick={() => setMenuOpen(true)}
       >
         <Text style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-          {prefs.budgetName || 'A budget has no name'}
+          {prefs.budgetName || t('A budget has no name')}
         </Text>
         <ExpandArrow
           width={7}

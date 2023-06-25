@@ -44,7 +44,7 @@ export function simpleCashFlow(start, end) {
   };
 }
 
-export function cashFlowByDate(start, end, isConcise, conditions = []) {
+export function cashFlowByDate(start, end, isConcise, conditions = [], t) {
   return async (spreadsheet, setData) => {
     let { filters } = await send('make-filters-from-conditions', {
       conditions: conditions.filter(cond => !cond.customName),
@@ -93,13 +93,13 @@ export function cashFlowByDate(start, end, isConcise, conditions = []) {
         makeQuery('amount < 0').filter({ amount: { $lt: 0 } }),
       ],
       data => {
-        setData(recalculate(data, start, end, isConcise));
+        setData(recalculate(data, start, end, isConcise, t));
       },
     );
   };
 }
 
-function recalculate(data, start, end, isConcise) {
+function recalculate(data, start, end, isConcise, t) {
   let [startingBalance, income, expense] = data;
   const dates = isConcise
     ? monthUtils.rangeInclusive(
@@ -146,13 +146,22 @@ function recalculate(data, start, end, isConcise) {
             </strong>
           </div>
           <div style={{ lineHeight: 1.5 }}>
-            <AlignedText left="Income:" right={integerToCurrency(income)} />
-            <AlignedText left="Expenses:" right={integerToCurrency(expense)} />
             <AlignedText
-              left="Change:"
+              left={t('IncomeColon', 'Income:')}
+              right={integerToCurrency(income)}
+            />
+            <AlignedText
+              left={t('ExpensesColon', 'Expenses:')}
+              right={integerToCurrency(expense)}
+            />
+            <AlignedText
+              left={t('ChangeColon', 'Change:')}
               right={<strong>{integerToCurrency(income + expense)}</strong>}
             />
-            <AlignedText left="Balance:" right={integerToCurrency(balance)} />
+            <AlignedText
+              left={t('BalanceColon', 'Balance:')}
+              right={integerToCurrency(balance)}
+            />
           </div>
         </div>
       );

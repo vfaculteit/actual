@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { media } from 'glamor';
@@ -30,12 +31,15 @@ function About() {
   const version = useServerVersion();
   const latestVersion = useLatestVersion();
   const isOutdated = useIsOutdated();
+  const { t } = useTranslation();
 
   return (
     <Setting>
       <Text>
-        <strong>Actual</strong> is a super fast privacy-focused app for managing
-        your finances.
+        <Trans i18nKey="actualIsAPrivacySuperFastApp">
+          <strong>Actual</strong> is a super fast privacy-focused app for
+          managing your finances.
+        </Trans>
       </Text>
       <View
         style={[
@@ -49,23 +53,28 @@ function About() {
           }),
         ]}
       >
-        <Text>Client version: v{window.Actual.ACTUAL_VERSION}</Text>
-        <Text>Server version: {version}</Text>
+        <Text>
+          {t('clientVersionColon', 'Client version: ')} v
+          {window.Actual.ACTUAL_VERSION}
+        </Text>
+        <Text>
+          {t('serverVersionColon', 'Server version: ')} {version}
+        </Text>
         {isOutdated ? (
           <a
             style={{ color: colors.p4 }}
             href="https://actualbudget.github.io/docs/Release-Notes"
           >
-            New version available: {latestVersion}
+            {t('New version available') + `: ${latestVersion}`}
           </a>
         ) : (
           <Text style={{ color: colors.g2, fontWeight: 600 }}>
-            You’re up to date!
+            {t('You’re up to date!')}
           </Text>
         )}
         <Text>
           <a href="https://actualbudget.github.io/docs/Release-Notes">
-            Release Notes
+            {t('Release Notes')}
           </a>
         </Text>
       </View>
@@ -78,19 +87,23 @@ function IDName({ children }) {
 }
 
 function AdvancedAbout({ prefs }) {
+  const { t } = useTranslation();
   return (
     <Setting>
       <Text>
-        <strong>IDs</strong> are the names Actual uses to identify your budget
-        internally. There are several different IDs associated with your budget.
-        The Budget ID is used to identify your budget file. The Sync ID is used
-        to access the budget on the server.
+        <Trans i18nKey="actualIdExplanation">
+          <strong>IDs</strong> are the names Actual uses to identify your budget
+          internally. There are several different IDs associated with your
+          budget. The Budget ID is used to identify your budget file. The Sync
+          ID is used to access the budget on the server.
+        </Trans>
       </Text>
       <Text>
-        <IDName>Budget ID:</IDName> {prefs.id}
+        <IDName>{t('budgetIdColon', 'Budget ID:')}</IDName> {prefs.id}
       </Text>
       <Text style={{ color: colors.n5 }}>
-        <IDName>Sync ID:</IDName> {prefs.groupId || '(none)'}
+        <IDName>{t('syncIdColon', 'Sync ID:')}</IDName>{' '}
+        {prefs.groupId || '(none)'}
       </Text>
       {/* low priority todo: eliminate some or all of these, or decide when/if to show them */}
       {/* <Text>
@@ -113,6 +126,7 @@ function Settings({
   resetSync,
   closeBudget,
 }) {
+  const { t } = useTranslation();
   useEffect(() => {
     let unlisten = listen('prefs-updated', () => {
       loadPrefs();
@@ -129,7 +143,7 @@ function Settings({
       }}
     >
       <Page
-        title="Settings"
+        title={t('Settings')}
         titleStyle={
           isMobile()
             ? {
@@ -146,14 +160,14 @@ function Settings({
             >
               {/* The only spot to close a budget on mobile */}
               <FormField>
-                <FormLabel title="Budget Name" />
+                <FormLabel title={t('Budget Name')} />
                 <Input
                   value={prefs.budgetName}
                   disabled
                   style={{ color: '#999' }}
                 />
               </FormField>
-              <Button onClick={closeBudget}>Close Budget</Button>
+              <Button onClick={closeBudget}>{t('Close Budget')}</Button>
             </View>
           )}
 

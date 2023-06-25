@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { send } from 'loot-core/src/platform/client/fetch';
 
@@ -7,26 +8,35 @@ import { View, Text, P, ButtonWithLoading } from '../common';
 
 import { Setting } from './UI';
 
-function renderResults(results) {
+function renderResults(results, t) {
   let { numBlankPayees, numCleared, numDeleted } = results;
   let result = '';
   if (numBlankPayees === 0 && numCleared === 0 && numDeleted === 0) {
-    result = 'No split transactions found needing repair.';
+    result = t('No split transactions found needing repair.');
   } else {
     if (numBlankPayees > 0) {
-      result += `Fixed ${numBlankPayees} splits with a blank payee.`;
+      result += t('fixedNumBlankPayees', {
+        numBlankPayees,
+        defaultValue: `Fixed ${numBlankPayees} splits with a blank payee.`,
+      });
     }
     if (numCleared > 0) {
       if (result !== '') {
         result += '\n';
       }
-      result += `Fixed ${numCleared} splits with the wrong cleared flag.`;
+      result += t('fixedSplitsWrongClearedFlag', {
+        numCleared,
+        defaultValue: `Fixed ${numCleared} splits with the wrong cleared flag.`,
+      });
     }
     if (numDeleted > 0) {
       if (result !== '') {
         result += '\n';
       }
-      result += `Fixed ${numDeleted} splits that weren’t properly deleted.`;
+      result += t('fixedNonDeletedSplits', {
+        numDeleted,
+        defaultValue: `Fixed ${numDeleted} splits that weren’t properly deleted.`,
+      });
     }
   }
 
@@ -48,6 +58,7 @@ function renderResults(results) {
 export default function FixSplitsTool() {
   let [loading, setLoading] = useState(false);
   let [results, setResults] = useState(null);
+  const { t } = useTranslation();
 
   async function onFix() {
     setLoading(true);
@@ -69,31 +80,37 @@ export default function FixSplitsTool() {
           }}
         >
           <ButtonWithLoading loading={loading} onClick={onFix}>
-            Repair split transactions
+            {t('Repair split transactions')}
           </ButtonWithLoading>
-          {results && renderResults(results)}
+          {results && renderResults(results, t)}
         </View>
       }
     >
       <Text>
-        <strong>Repair split transactions</strong> if you are experiencing bugs
-        relating to split transactions and the “Reset budget cache” button above
-        does not help. If you see blank payees on splits or account balances (or
-        any balances) are incorrect, this tool may fix them. This tool does two
-        things:
+        <Trans i18nKey="repairSplitTransactions">
+          <strong>Repair split transactions</strong> if you are experiencing
+          bugs relating to split transactions and the “Reset budget cache”
+          button above does not help. If you see blank payees on splits or
+          account balances (or any balances) are incorrect, this tool may fix
+          them. This tool does two things:
+        </Trans>
       </Text>
       <ul style={{ margin: 0, paddingLeft: '1.5em' }}>
         <li style={{ marginBottom: '0.5em' }}>
-          Ensures that deleted split transactions are fully deleted. In previous
-          versions of the app, certain split transactions may appear deleted but
-          not all of them are actually deleted. This causes the transactions
-          list to look correct, but certain balances may be incorrect when
-          filtering.
+          <Trans i18nKey="repairSplitTransactions2">
+            Ensures that deleted split transactions are fully deleted. In
+            previous versions of the app, certain split transactions may appear
+            deleted but not all of them are actually deleted. This causes the
+            transactions list to look correct, but certain balances may be
+            incorrect when filtering.
+          </Trans>
         </li>
         <li>
-          Sync the payee and cleared flag of a split transaction to the main or
-          “parent” transaction, if appropriate. The payee will only be set if it
-          currently doesn’t have one.
+          <Trans i18nKey="repairSplitTransactions3">
+            Sync the payee and cleared flag of a split transaction to the main
+            or “parent” transaction, if appropriate. The payee will only be set
+            if it currently doesn’t have one.
+          </Trans>
         </li>
       </ul>
     </Setting>

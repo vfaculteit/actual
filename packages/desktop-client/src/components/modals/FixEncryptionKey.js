@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { send } from 'loot-core/src/platform/client/fetch';
 import { getTestKeyError } from 'loot-core/src/shared/errors';
@@ -28,6 +29,8 @@ export default function FixEncryptionKey({
   let [error, setError] = useState('');
   let [loading, setLoading] = useState(false);
   let [showPassword, setShowPassword] = useState(false);
+
+  const { t } = useTranslation();
 
   async function onUpdateKey() {
     if (password !== '' && !loading) {
@@ -62,31 +65,35 @@ export default function FixEncryptionKey({
             }}
           >
             {hasExistingKey
-              ? 'Unable to decrypt file'
-              : 'This file is encrypted'}
+              ? t('Unable to decrypt file')
+              : t('This file is encrypted')}
           </Text>
           {hasExistingKey ? (
             <P>
-              This file was encrypted with a different key than you are
-              currently using. This probably means you changed your password.
-              Enter your current password to update your key.{' '}
-              <ExternalLink
-                asAnchor
-                href="https://actualbudget.github.io/docs/Getting-Started/sync#end-to-end-encryption"
-              >
-                Learn more
-              </ExternalLink>
+              <Trans i18nKey="fileWasEncryptedWithDifferentKey">
+                This file was encrypted with a different key than you are
+                currently using. This probably means you changed your password.
+                Enter your current password to update your key.{' '}
+                <ExternalLink
+                  asAnchor
+                  href="https://actualbudget.github.io/docs/Getting-Started/sync#end-to-end-encryption"
+                >
+                  Learn more
+                </ExternalLink>
+              </Trans>
             </P>
           ) : (
             <P>
-              We don’t have a key that encrypts or decrypts this file. Enter the
-              password for this file to create the key for encryption.{' '}
-              <ExternalLink
-                asAnchor
-                href="https://actualbudget.github.io/docs/Getting-Started/sync#end-to-end-encryption"
-              >
-                Learn more
-              </ExternalLink>
+              <Trans i18nKey="noKeyForFile">
+                We don’t have a key that encrypts or decrypts this file. Enter
+                the password for this file to create the key for encryption.{' '}
+                <ExternalLink
+                  asAnchor
+                  href="https://actualbudget.github.io/docs/Getting-Started/sync#end-to-end-encryption"
+                >
+                  Learn more
+                </ExternalLink>
+              </Trans>
             </P>
           )}
           <form
@@ -128,7 +135,7 @@ export default function FixEncryptionKey({
                     type="checkbox"
                     onClick={() => setShowPassword(!showPassword)}
                   />{' '}
-                  Show password
+                  {t('Show password')}
                 </label>
               </Text>
             </View>
@@ -139,14 +146,14 @@ export default function FixEncryptionKey({
                 onClick={() => modalProps.onBack()}
                 type="button"
               >
-                Back
+                {t('Back')}
               </Button>
               <ButtonWithLoading
                 loading={loading}
                 primary
                 onClick={onUpdateKey}
               >
-                {hasExistingKey ? 'Update key' : 'Create key'}
+                {hasExistingKey ? t('Update key') : t('Create key')}
               </ButtonWithLoading>
             </ModalButtons>
           </form>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { getMonthYearFormat } from 'loot-core/src/shared/months';
@@ -30,6 +31,7 @@ export default function GenericInput({
       dateFormat: state.prefs.local.dateFormat || 'MM/dd/yyyy',
     };
   });
+  const { t } = useTranslation();
 
   // This makes the UI more resilient in case of faulty data
   if (multi && !Array.isArray(value)) {
@@ -56,7 +58,7 @@ export default function GenericInput({
               onSelect={onChange}
               inputProps={{
                 inputRef,
-                ...(showPlaceholder ? { placeholder: 'nothing' } : null),
+                ...(showPlaceholder ? { placeholder: t('nothing') } : null),
               }}
             />
           );
@@ -72,7 +74,7 @@ export default function GenericInput({
               onSelect={onChange}
               inputProps={{
                 inputRef,
-                ...(showPlaceholder ? { placeholder: 'nothing' } : null),
+                ...(showPlaceholder ? { placeholder: t('nothing') } : null),
               }}
             />
           );
@@ -88,7 +90,7 @@ export default function GenericInput({
               onSelect={onChange}
               inputProps={{
                 inputRef,
-                ...(showPlaceholder ? { placeholder: 'nothing' } : null),
+                ...(showPlaceholder ? { placeholder: t('nothing') } : null),
               }}
             />
           );

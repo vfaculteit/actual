@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CachedAccounts } from 'loot-core/src/client/data-hooks/accounts';
 import { CachedPayees } from 'loot-core/src/client/data-hooks/payees';
@@ -8,6 +9,7 @@ import { Text } from '../common';
 
 export default function DisplayId({ type, id, noneColor = colors.n8 }) {
   let DataComponent;
+  const { t } = useTranslation();
 
   switch (type) {
     case 'payees':
@@ -28,9 +30,9 @@ export default function DisplayId({ type, id, noneColor = colors.n8 }) {
         return (
           <Text
             style={item == null ? { color: noneColor } : null}
-            title={item ? item.name : 'None'}
+            title={item ? item.name : t('None')}
           >
-            {item ? item.name : 'None'}
+            {item ? item.name : t('None')}
           </Text>
         );
       }}

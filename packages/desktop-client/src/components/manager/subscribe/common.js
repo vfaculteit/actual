@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { send } from 'loot-core/src/platform/client/fetch';
@@ -152,6 +153,7 @@ export const ExternalLink = React.forwardRef((props, ref) => {
 });
 
 export const BackLink = React.forwardRef((props, ref) => {
+  const { t } = useTranslation();
   return (
     <BareButton
       ref={ref}
@@ -161,7 +163,7 @@ export const BackLink = React.forwardRef((props, ref) => {
         props.history.goBack();
       }}
     >
-      Back
+      {t('Back')}
     </BareButton>
   );
 });

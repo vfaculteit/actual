@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
@@ -57,6 +58,7 @@ export function TitlebarProvider({ children }) {
 }
 
 export function UncategorizedButton() {
+  const { t } = useTranslation();
   return (
     <SheetValue binding={queries.uncategorizedCount()}>
       {node => {
@@ -68,7 +70,8 @@ export function UncategorizedButton() {
               to="/accounts/uncategorized"
               style={{ color: colors.r5 }}
             >
-              {num} uncategorized {num === 1 ? 'transaction' : 'transactions'}
+              {num} uncategorized{' '}
+              {num === 1 ? t('transaction') : t('transactions')}
             </ButtonLink>
           )
         );
@@ -80,6 +83,7 @@ export function UncategorizedButton() {
 export function SyncButton({ localPrefs, style, onSync }) {
   let [syncing, setSyncing] = useState(false);
   let [syncState, setSyncState] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let unlisten = listen('sync-event', ({ type, subtype, syncDisabled }) => {
@@ -150,10 +154,10 @@ export function SyncButton({ localPrefs, style, onSync }) {
       )}
       <Text style={{ marginLeft: 3 }}>
         {syncState === 'disabled'
-          ? 'Disabled'
+          ? t('Disabled')
           : syncState === 'offline'
-          ? 'Offline'
-          : 'Sync'}
+          ? t('Offline')
+          : t('Sync')}
       </Text>
     </Button>
   );
@@ -163,6 +167,7 @@ function BudgetTitlebar({ globalPrefs, saveGlobalPrefs, localPrefs }) {
   let { sendEvent } = useContext(TitlebarContext);
   let [loading, setLoading] = useState(false);
   let [showTooltip, setShowTooltip] = useState(false);
+  const { t } = useTranslation();
 
   const reportBudgetEnabled = useFeatureFlag('reportBudget');
 
@@ -194,10 +199,12 @@ function BudgetTitlebar({ globalPrefs, saveGlobalPrefs, localPrefs }) {
               alignSelf: 'flex-start',
               padding: '4px 7px',
             }}
-            title="Learn more about budgeting"
+            title={t('Learn more about budgeting')}
             onClick={() => setShowTooltip(true)}
           >
-            {budgetType === 'report' ? 'Report budget' : 'Rollover budget'}
+            {budgetType === 'report'
+              ? t('Report budget')
+              : t('Rollover budget')}
           </ButtonWithLoading>
           {showTooltip && (
             <Tooltip
@@ -212,11 +219,13 @@ function BudgetTitlebar({ globalPrefs, saveGlobalPrefs, localPrefs }) {
                 You are currently using a{' '}
                 <Text style={{ fontWeight: 600 }}>
                   {budgetType === 'report'
-                    ? 'Report budget'
-                    : 'Rollover budget'}
+                    ? t('Report budget')
+                    : t('Rollover budget')}
                   .
                 </Text>{' '}
-                Switching will not lose any data and you can always switch back.
+                {t(
+                  'Switching will not lose any data and you can always switch back.',
+                )}
               </P>
               <P>
                 <ButtonWithLoading
@@ -226,8 +235,8 @@ function BudgetTitlebar({ globalPrefs, saveGlobalPrefs, localPrefs }) {
                 >
                   Switch to a{' '}
                   {budgetType === 'report'
-                    ? 'Rollover budget'
-                    : 'Report budget'}
+                    ? t('Rollover budget')
+                    : t('Report budget')}
                 </ButtonWithLoading>
               </P>
               <P isLast={true}>
@@ -239,7 +248,7 @@ function BudgetTitlebar({ globalPrefs, saveGlobalPrefs, localPrefs }) {
                     fontStyle: 'italic',
                   }}
                 >
-                  How do these types of budgeting work?
+                  {t('How do these types of budgeting work?')}
                 </a>
               </P>
             </Tooltip>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import * as monthUtils from 'loot-core/src/shared/months';
 
@@ -54,6 +55,8 @@ function Header({
   onChangeDates,
   extraButtons,
 }) {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -93,7 +96,7 @@ function Header({
               </option>
             ))}
           </Select>{' '}
-          to{' '}
+          {t('to') + ' '}
           <Select
             style={{ flex: 0, backgroundColor: 'white' }}
             onChange={e =>
@@ -113,20 +116,20 @@ function Header({
 
         {show1Month && (
           <Button bare onClick={() => onChangeDates(...getLatestRange(1))}>
-            1 month
+            {t('1 month')}
           </Button>
         )}
         <Button bare onClick={() => onChangeDates(...getLatestRange(2))}>
-          3 months
+          {t('3 months')}
         </Button>
         <Button bare onClick={() => onChangeDates(...getLatestRange(5))}>
-          6 months
+          {t('6 months')}
         </Button>
         <Button bare onClick={() => onChangeDates(...getLatestRange(11))}>
-          1 Year
+          {t('1 Year')}
         </Button>
         <Button bare onClick={() => onChangeDates(...getFullRange(allMonths))}>
-          All Time
+          {t('All Time')}
         </Button>
       </View>
     </View>

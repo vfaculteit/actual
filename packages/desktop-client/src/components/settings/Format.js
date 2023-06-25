@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { numberFormats } from 'loot-core/src/shared/util';
 
@@ -47,6 +48,7 @@ function Column({ title, children }) {
 }
 
 export default function FormatSettings({ prefs, savePrefs }) {
+  const { t } = useTranslation();
   function onFirstDayOfWeek(idx) {
     savePrefs({ firstDayOfWeekIdx: idx });
   }
@@ -81,7 +83,7 @@ export default function FormatSettings({ prefs, savePrefs }) {
             },
           }}
         >
-          <Column title="Numbers">
+          <Column title={t('Numbers')}>
             <Button bounce={false} style={{ padding: 0 }}>
               <CustomSelect
                 key={prefs.hideFraction} // needed because label does not update
@@ -101,11 +103,13 @@ export default function FormatSettings({ prefs, savePrefs }) {
                 checked={prefs.hideFraction}
                 onChange={onHideFraction}
               />
-              <label htmlFor="settings-textDecimal">Hide decimal places</label>
+              <label htmlFor="settings-textDecimal">
+                {t('Hide decimal places')}
+              </label>
             </Text>
           </Column>
 
-          <Column title="Dates">
+          <Column title={t('Dates')}>
             <Button bounce={false} style={{ padding: 0 }}>
               <CustomSelect
                 value={dateFormat}
@@ -116,12 +120,12 @@ export default function FormatSettings({ prefs, savePrefs }) {
             </Button>
           </Column>
 
-          <Column title="First day of the week">
+          <Column title={t('First day of the week')}>
             <Button bounce={false} style={{ padding: 0 }}>
               <CustomSelect
                 value={firstDayOfWeekIdx}
                 onChange={onFirstDayOfWeek}
-                options={daysOfWeek.map(f => [f.value, f.label])}
+                options={daysOfWeek.map(f => [f.value, t(f.label)])}
                 style={{ padding: '5px 10px', fontSize: 15 }}
               />
             </Button>
@@ -130,8 +134,10 @@ export default function FormatSettings({ prefs, savePrefs }) {
       }
     >
       <Text>
-        <strong>Formatting</strong> does not affect how budget data is stored,
-        and can be changed at any time.
+        <Trans i18nKey="formattingDoesNotAffectStoredData">
+          <strong>Formatting</strong> does not affect how budget data is stored,
+          and can be changed at any time.
+        </Trans>
       </Text>
     </Setting>
   );

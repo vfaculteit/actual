@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { rolloverBudget } from 'loot-core/src/client/queries';
 import * as monthUtils from 'loot-core/src/shared/months';
@@ -11,10 +12,11 @@ import NamespaceContext from '../spreadsheet/NamespaceContext';
 import SheetValue from '../spreadsheet/SheetValue';
 
 function BudgetSummary({ month, modalProps }) {
+  const { t } = useTranslation();
   const prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
 
   return (
-    <Modal title="Budget Details" {...modalProps} animate>
+    <Modal title={t('Budget Details')} {...modalProps} animate>
       {() => (
         <NamespaceContext.Provider value={monthUtils.sheetForMonth(month)}>
           <View
@@ -63,10 +65,18 @@ function BudgetSummary({ month, modalProps }) {
                 },
               ]}
             >
-              <Text>Available Funds</Text>
-              <Text>Overspent in {prevMonthName}</Text>
-              <Text>Budgeted</Text>
-              <Text>For Next Month</Text>
+              <Text>
+                <Trans>Available Funds</Trans>
+              </Text>
+              <Text>
+                <Trans>Overspent in {prevMonthName}</Trans>
+              </Text>
+              <Text>
+                <Trans>Budgeted</Trans>
+              </Text>
+              <Text>
+                <Trans>For Next Month</Trans>
+              </Text>
             </View>
           </View>
 
@@ -76,7 +86,9 @@ function BudgetSummary({ month, modalProps }) {
                 return (
                   <>
                     <Text style={styles.text}>
-                      {amount < 0 ? 'Overbudget:' : 'To budget:'}
+                      {amount < 0
+                        ? t('Overbudget') + ':'
+                        : t('To budget') + ':'}
                     </Text>
                     <Text
                       style={[
@@ -104,7 +116,7 @@ function BudgetSummary({ month, modalProps }) {
             }}
           >
             <Button style={{ marginRight: 10 }} onClick={modalProps.onClose}>
-              Close
+              {t('Close')}
             </Button>
           </View>
         </NamespaceContext.Provider>

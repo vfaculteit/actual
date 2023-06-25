@@ -1,10 +1,5 @@
 module.exports = {
-  input: [
-    'src/components/budget/rollover/BudgetSummary.js',
-    'src/components/budget/rollover/HoldTooltip.js',
-    'src/components/budget/rollover/rollover-components.js',
-    'src/**/*.js',
-  ],
+  input: ['src/**/*.js'],
   output: 'src/locales/$LOCALE.json',
   locales: ['en-GB', 'es-ES', 'nl-BE'],
   defaultNamespace: 'web',

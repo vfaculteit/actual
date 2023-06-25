@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
@@ -21,6 +22,7 @@ function LoggedInUser({
   style,
   color,
 }) {
+  const { t } = useTranslation();
   let [loading, setLoading] = useState(true);
   let [menuOpen, setMenuOpen] = useState(false);
   const serverUrl = useServerURL();
@@ -74,7 +76,7 @@ function LoggedInUser({
     return (
       <View style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>
         <Button bare onClick={onClick} style={{ color }}>
-          {serverUrl ? 'Server' : 'No server'}
+          {serverUrl ? t('Server') : t('No server')}
         </Button>
 
         {menuOpen && (
@@ -86,8 +88,8 @@ function LoggedInUser({
             <Menu
               onMenuSelect={onMenuSelect}
               items={[
-                { name: 'change-password', text: 'Change password' },
-                { name: 'sign-out', text: 'Sign out' },
+                { name: 'change-password', text: t('Change password') },
+                { name: 'sign-out', text: t('Sign out') },
               ]}
             />
           </Tooltip>
@@ -97,7 +99,7 @@ function LoggedInUser({
   } else {
     return (
       <Button bare onClick={onClick} style={[{ color }, style]}>
-        Not logged in
+        {t('Not logged in')}
       </Button>
     );
   }

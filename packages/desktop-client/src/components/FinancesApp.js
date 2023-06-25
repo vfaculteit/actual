@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import {
   Router,
@@ -172,6 +173,7 @@ function NavTab({ icon: TabIcon, name, path }) {
 }
 
 function MobileNavTabs() {
+  const { t } = useTranslation();
   return (
     <div
       style={{
@@ -186,14 +188,24 @@ function MobileNavTabs() {
         width: '100%',
       }}
     >
-      <NavTab name="Budget" path="/budget" icon={Wallet} isActive={false} />
       <NavTab
-        name="Accounts"
+        name={t('Budget')}
+        path="/budget"
+        icon={Wallet}
+        isActive={false}
+      />
+      <NavTab
+        name={t('Accounts')}
         path="/accounts"
         icon={PiggyBank}
         isActive={false}
       />
-      <NavTab name="Settings" path="/settings" icon={Cog} isActive={false} />
+      <NavTab
+        name={t('Settings')}
+        path="/settings"
+        icon={Cog}
+        isActive={false}
+      />
     </div>
   );
 }

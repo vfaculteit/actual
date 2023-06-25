@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ import { useServerURL, useSetServerURL } from '../ServerContext';
 import { Title, Input } from './subscribe/common';
 
 export default function ConfigServer() {
+  const { t } = useTranslation();
   useSetThemeColor(colors.p5);
   let dispatch = useDispatch();
   let history = useHistory();
@@ -29,9 +31,13 @@ export default function ConfigServer() {
   function getErrorMessage(error) {
     switch (error) {
       case 'network-failure':
-        return 'Server is not running at this URL. Make sure you have HTTPS set up properly.';
+        return t(
+          'Server is not running at this URL. Make sure you have HTTPS set up properly.',
+        );
       default:
-        return 'Server does not look like an Actual server. Is it set up correctly?';
+        return t(
+          'Server does not look like an Actual server. Is it set up correctly?',
+        );
     }
   }
 
@@ -86,7 +92,7 @@ export default function ConfigServer() {
 
   return (
     <View style={{ maxWidth: 500, marginTop: -30 }}>
-      <Title text="Where’s the server?" />
+      <Title text={t('Where’s the server?')} />
 
       <Text
         style={{
@@ -96,16 +102,16 @@ export default function ConfigServer() {
         }}
       >
         {currentUrl ? (
-          <>
+          <Trans>
             Existing sessions will be logged out and you will log in to this
             server. We will validate that Actual is running at this URL.
-          </>
+          </Trans>
         ) : (
-          <>
+          <Trans>
             There is no server configured. After running the server, specify the
             URL here to use the app. You can always change this later. We will
             validate that Actual is running at this URL.
-          </>
+          </Trans>
         )}
       </Text>
 
@@ -137,7 +143,7 @@ export default function ConfigServer() {
           style={{ flex: 1, marginRight: 10 }}
         />
         <ButtonWithLoading primary loading={loading} style={{ fontSize: 15 }}>
-          OK
+          {t('OK')}
         </ButtonWithLoading>
         {currentUrl && (
           <Button
@@ -146,7 +152,7 @@ export default function ConfigServer() {
             style={{ fontSize: 15, marginLeft: 10 }}
             onClick={() => history.goBack()}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         )}
       </form>
@@ -161,7 +167,7 @@ export default function ConfigServer() {
       >
         {currentUrl ? (
           <Button bare style={{ color: colors.n4 }} onClick={onSkip}>
-            Stop using a server
+            {t('Stop using a server')}
           </Button>
         ) : (
           <>
@@ -181,7 +187,7 @@ export default function ConfigServer() {
               style={{ color: colors.n4, margin: 5 }}
               onClick={onSkip}
             >
-              Don’t use a server
+              {t('Don’t use a server')}
             </Button>
 
             {isNonProductionEnvironment() && (
@@ -190,7 +196,7 @@ export default function ConfigServer() {
                 style={{ marginLeft: 15 }}
                 onClick={onCreateTestFile}
               >
-                Create test file
+                {t('Create test file')}
               </Button>
             )}
           </>

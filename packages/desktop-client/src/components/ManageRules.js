@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { format as formatDate, parseISO } from 'date-fns';
@@ -51,6 +52,7 @@ export function Value({
   data: dataProp,
   describe = x => x.name,
 }) {
+  const { t } = useTranslation();
   let { data, dateFormat } = useSelector(state => {
     let data;
     if (dataProp) {
@@ -121,7 +123,7 @@ export function Value({
             if (item) {
               return describe(item);
             } else {
-              return '(deleted)';
+              return t('(deleted)');
             }
           }
 
@@ -240,11 +242,11 @@ export function ConditionExpression({
   );
 }
 
-function describeSchedule(schedule, payee) {
+function describeSchedule(schedule, payee, t) {
   if (payee) {
     return `${payee.name} (${schedule.next_date})`;
   } else {
-    return `Next: ${schedule.next_date}`;
+    return t('Next') + `: ${schedule.next_date}`;
   }
 }
 
@@ -252,18 +254,21 @@ function ScheduleValue({ value }) {
   let payees = useSelector(state => state.queries.payees);
   let byId = getPayeesById(payees);
   let { data: schedules } = SchedulesQuery.useQuery();
-
+  const { t } = useTranslation();
   return (
     <Value
       value={value}
       field="rule"
       data={schedules}
-      describe={schedule => describeSchedule(schedule, byId[schedule._payee])}
+      describe={schedule =>
+        describeSchedule(schedule, byId[schedule._payee], t)
+      }
     />
   );
 }
 
 export function ActionExpression({ field, op, value, options, style }) {
+  const { t } = useTranslation();
   return (
     <View
       style={[
@@ -284,7 +289,7 @@ export function ActionExpression({ field, op, value, options, style }) {
         <>
           <Text style={{ color: colors.n3 }}>{friendlyOp(op)}</Text>{' '}
           <Text style={{ color: colors.p4 }}>{mapField(field, options)}</Text>{' '}
-          <Text style={{ color: colors.n3 }}>to </Text>
+          <Text style={{ color: colors.n3 }}>{t('to') + ' '}</Text>
           <Value value={value} field={field} />
         </>
       ) : op === 'link-schedule' ? (
@@ -311,6 +316,7 @@ let Rule = React.memo(
     let dispatchSelected = useSelectedDispatch();
     let borderColor = selected ? colors.b8 : colors.border;
     let backgroundFocus = hovered || focusedField === 'select';
+    const { t } = useTranslation();
 
     return (
       <Row
@@ -403,7 +409,7 @@ let Rule = React.memo(
             onSelect={() => onEditRule(rule)}
             onEdit={() => onEdit(rule.id, 'edit')}
           >
-            Edit
+            {t('Edit')}
           </Button>
         </Cell>
       </Row>
@@ -469,6 +475,7 @@ let SimpleTable = React.forwardRef(
 function RulesHeader() {
   let selectedItems = useSelectedItems();
   let dispatchSelected = useSelectedDispatch();
+  const { t } = useTranslation();
 
   return (
     <TableHeader version="v2" style={{}}>
@@ -478,8 +485,8 @@ function RulesHeader() {
         selected={selectedItems.size > 0}
         onSelect={() => dispatchSelected({ type: 'select-all' })}
       />
-      <Cell value="Stage" width={50} />
-      <Cell value="Rule" width="flex" />
+      <Cell value={t('Stage')} width={50} />
+      <Cell value={t('Rule')} width="flex" />
     </TableHeader>
   );
 }
@@ -523,7 +530,7 @@ function RulesList({
   );
 }
 
-function mapValue(field, value, { payees, categories, accounts }) {
+function mapValue(field, value, { payees, categories, accounts }, t) {
   if (!value) return '';
 
   let object = null;
@@ -539,16 +546,16 @@ function mapValue(field, value, { payees, categories, accounts }) {
   if (object) {
     return object.name;
   }
-  return '(deleted)';
+  return t('(deleted)');
 }
 
-function ruleToString(rule, data) {
+function ruleToString(rule, data, t) {
   let conditions = rule.conditions.flatMap(cond => [
     mapField(cond.field),
     friendlyOp(cond.op),
     cond.op === 'oneOf'
-      ? cond.value.map(v => mapValue(cond.field, v, data)).join(', ')
-      : mapValue(cond.field, cond.value, data),
+      ? cond.value.map(v => mapValue(cond.field, v, data, t)).join(', ')
+      : mapValue(cond.field, cond.value, data, t),
   ]);
   let actions = rule.actions.flatMap(action => {
     if (action.op === 'set') {
@@ -556,7 +563,7 @@ function ruleToString(rule, data) {
         friendlyOp(action.op),
         mapField(action.field),
         'to',
-        mapValue(action.field, action.value, data),
+        mapValue(action.field, action.value, data, t),
       ];
     } else if (action.op === 'link-schedule') {
       let schedule = data.schedules.find(s => s.id === action.value);
@@ -565,6 +572,7 @@ function ruleToString(rule, data) {
         describeSchedule(
           schedule,
           data.payees.find(p => p.id === schedule._payee),
+          t,
         ),
       ];
     } else {
@@ -582,7 +590,7 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
   let [filter, setFilter] = useState('');
   let dispatch = useDispatch();
   let navigator = useTableNavigator(rules, ['select', 'edit']);
-
+  const { t } = useTranslation();
   let { data: schedules } = SchedulesQuery.useQuery();
   let filterData = useSelector(state => ({
     payees: state.queries.payees,
@@ -596,7 +604,7 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
       filter === '' || !rules
         ? rules
         : rules.filter(rule =>
-            ruleToString(rule, filterData)
+            ruleToString(rule, filterData, t)
               .toLowerCase()
               .includes(filter.toLowerCase()),
           ),
@@ -651,7 +659,9 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
     ]);
 
     if (someDeletionsFailed) {
-      alert('Some rules were not deleted because they are linked to schedules');
+      alert(
+        t('Some rules were not deleted because they are linked to schedules'),
+      );
     }
 
     let newRules = await loadRules();
@@ -754,19 +764,21 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
             }}
           >
             <Text>
-              Rules are always run in the order that you see them.{' '}
-              <ExternalLink
-                asAnchor={true}
-                href="https://actualbudget.github.io/docs/Budgeting/rules/"
-                style={{ color: colors.n4 }}
-              >
-                Learn more
-              </ExternalLink>
+              <Trans i18nKey="rulesAreRunInTheOrderYouSeeThem">
+                Rules are always run in the order that you see them.{' '}
+                <ExternalLink
+                  asAnchor={true}
+                  href="https://actualbudget.github.io/docs/Budgeting/rules/"
+                  style={{ color: colors.n4 }}
+                >
+                  Learn more
+                </ExternalLink>
+              </Trans>
             </Text>
           </View>
           <View style={{ flex: 1 }} />
           <Input
-            placeholder="Filter rules..."
+            placeholder={t('Filter rules...')}
             value={filter}
             onChange={e => {
               setFilter(e.target.value);
@@ -816,11 +828,14 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
           <Stack direction="row" align="center" justify="flex-end" spacing={2}>
             {selectedInst.items.size > 0 && (
               <Button onClick={onDeleteSelected}>
-                Delete {selectedInst.items.size} rules
+                {t('deleteNRules', {
+                  amountRules: selectedInst.items.size,
+                  defaultValue: `Delete ${selectedInst.items.size} rules`,
+                })}
               </Button>
             )}
             <Button primary onClick={onCreateRule}>
-              Create new rule
+              {t('Create new rule')}
             </Button>
           </Stack>
         </View>

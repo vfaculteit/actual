@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
 import { css, media } from 'glamor';
@@ -56,7 +57,7 @@ interface AdvancedToggleProps {
 export const AdvancedToggle: React.FC<AdvancedToggleProps> = ({ children }) => {
   let location = useLocation();
   let [expanded, setExpanded] = useState(location.hash === '#advanced');
-
+  const { t } = useTranslation();
   return expanded ? (
     <View
       id="advanced"
@@ -78,7 +79,7 @@ export const AdvancedToggle: React.FC<AdvancedToggleProps> = ({ children }) => {
       }}
     >
       <View style={{ fontSize: 20, fontWeight: 500, flexShrink: 0 }}>
-        Advanced Settings
+        {t('Advanced Settings')}
       </View>
       {children}
     </View>
@@ -93,7 +94,7 @@ export const AdvancedToggle: React.FC<AdvancedToggleProps> = ({ children }) => {
         marginBottom: 25,
       }}
     >
-      Show advanced settings
+      {t('Show advanced settings')}
     </Link>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { savePrefs } from 'loot-core/src/client/actions';
@@ -15,7 +16,7 @@ export default function MobileWebMessage() {
   const hideMobileMessagePref = useSelector(state => {
     return (state.prefs.local && state.prefs.local.hideMobileMessage) || true;
   });
-
+  const { t } = useTranslation();
   let [show, setShow] = useState(
     isMobile() &&
       !hideMobileMessagePref &&
@@ -62,11 +63,13 @@ export default function MobileWebMessage() {
       }}
     >
       <Text style={{ lineHeight: '1.5em' }}>
-        <strong>Actual features are limited on small screens.</strong>
+        <strong>{t('Actual features are limited on small screens.')}</strong>
         <br />
         <span>
-          While we work to improve this experience, you may find the full Actual
-          feature set on devices with larger screens.
+          <Trans>
+            While we work to improve this experience, you may find the full
+            Actual feature set on devices with larger screens.
+          </Trans>
         </span>
       </Text>
 
@@ -78,7 +81,7 @@ export default function MobileWebMessage() {
         }}
       >
         <Button style={buttonStyle} onClick={onTry}>
-          Try it anyway
+          {t('Try it anyway')}
         </Button>
         <View
           style={{
@@ -100,7 +103,7 @@ export default function MobileWebMessage() {
               userSelect: 'none',
             }}
           >
-            Don’t remind me again
+            {t('Don’t remind me again')}
           </label>
         </View>
       </View>

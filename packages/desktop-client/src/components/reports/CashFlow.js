@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import * as d from 'date-fns';
 
@@ -18,6 +19,7 @@ import Header from './Header';
 import useReport from './useReport';
 
 function CashFlow() {
+  const { t } = useTranslation();
   const {
     filters,
     onApply: onApplyFilter,
@@ -40,7 +42,7 @@ function CashFlow() {
   });
 
   const params = useMemo(
-    () => cashFlowByDate(start, end, isConcise, filters),
+    () => cashFlowByDate(start, end, isConcise, filters, t),
     [start, end, isConcise, filters],
   );
   const data = useReport('cash_flow', params);
@@ -91,7 +93,7 @@ function CashFlow() {
   return (
     <View style={[styles.page, { minWidth: 650, overflow: 'hidden' }]}>
       <Header
-        title="Cash Flow"
+        title={t('Cash Flow')}
         allMonths={allMonths}
         start={monthUtils.getMonth(start)}
         end={monthUtils.getMonth(end)}
@@ -136,7 +138,7 @@ function CashFlow() {
         >
           <AlignedText
             style={{ marginBottom: 5, minWidth: 160 }}
-            left={<Block>Income:</Block>}
+            left={<Block>{t('IncomeColon', 'Income:')}</Block>}
             right={
               <Text style={{ fontWeight: 600 }}>
                 {integerToCurrency(totalIncome)}
@@ -146,7 +148,7 @@ function CashFlow() {
 
           <AlignedText
             style={{ marginBottom: 5, minWidth: 160 }}
-            left={<Block>Expenses:</Block>}
+            left={<Block>{t('ExpensesColon', 'Expenses:')}</Block>}
             right={
               <Text style={{ fontWeight: 600 }}>
                 {integerToCurrency(totalExpenses)}
@@ -167,13 +169,15 @@ function CashFlow() {
 
         <View style={{ marginTop: 30 }}>
           <P>
-            <strong>How is cash flow calculated?</strong>
+            <strong>{t('How is cash flow calculated?')}</strong>
           </P>
           <P>
-            Cash flow shows the balance of your budgeted accounts over time, and
-            the amount of expenses/income each day or month. Your budgeted
-            accounts are considered to be “cash on hand,” so this gives you a
-            picture of how available money fluctuates.
+            <Trans i18nKey="cashFlowExplanation">
+              Cash flow shows the balance of your budgeted accounts over time,
+              and the amount of expenses/income each day or month. Your budgeted
+              accounts are considered to be “cash on hand,” so this gives you a
+              picture of how available money fluctuates.
+            </Trans>
           </P>
         </View>
       </View>

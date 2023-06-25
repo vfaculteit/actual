@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useAllFeatureFlags } from '../../hooks/useFeatureFlag';
 import { colors } from '../../style';
@@ -11,7 +12,7 @@ export default function ExperimentalFeatures({ prefs, savePrefs }) {
   let [expanded, setExpanded] = React.useState(false);
   const flags = useAllFeatureFlags();
   let disabled = prefs.budgetType === 'report' && flags.reportBudget;
-
+  const { t } = useTranslation();
   return (
     <Setting
       primaryAction={
@@ -32,10 +33,12 @@ export default function ExperimentalFeatures({ prefs, savePrefs }) {
                 disabled={disabled}
               />{' '}
               <View>
-                Budget mode toggle
+                {t('Budget mode toggle')}
                 {disabled && (
                   <Text style={{ color: colors.r3, fontWeight: 500 }}>
-                    Switch to a rollover budget before turning off this feature
+                    {t(
+                      'Switch to a rollover budget before turning off this feature',
+                    )}
                   </Text>
                 )}
               </View>
@@ -49,7 +52,7 @@ export default function ExperimentalFeatures({ prefs, savePrefs }) {
                   savePrefs({ 'flags.syncAccount': !flags.syncAccount });
                 }}
               />{' '}
-              <View>Account syncing via Nordigen</View>
+              <View>{t('Account syncing via Nordigen')}</View>
             </label>
             <label style={{ display: 'flex' }}>
               <Checkbox
@@ -61,7 +64,7 @@ export default function ExperimentalFeatures({ prefs, savePrefs }) {
                   });
                 }}
               />{' '}
-              <View>Goal templates</View>
+              <View>{t('Goal templates')}</View>
             </label>
           </View>
         ) : (
@@ -73,16 +76,18 @@ export default function ExperimentalFeatures({ prefs, savePrefs }) {
               color: colors.p4,
             }}
           >
-            I understand the risks, show experimental features
+            {t('I understand the risks, show experimental features')}
           </Link>
         )
       }
     >
       <Text>
-        <strong>Experimental features.</strong> These features are not fully
-        tested and may not work as expected. THEY MAY CAUSE IRRECOVERABLE DATA
-        LOSS. They may do nothing at all. Only enable them if you know what you
-        are doing.
+        <Trans i18nKey="experimentalFeaturesExplanation">
+          <strong>Experimental features.</strong> These features are not fully
+          tested and may not work as expected. THEY MAY CAUSE IRRECOVERABLE DATA
+          LOSS. They may do nothing at all. Only enable them if you know what
+          you are doing.
+        </Trans>
       </Text>
     </Setting>
   );

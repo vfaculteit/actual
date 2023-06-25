@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
@@ -24,6 +25,8 @@ function UpdateNotification({
   updateApp,
   setAppState,
 }) {
+  const { t } = useTranslation();
+
   if (updateInfo && showUpdateNotification) {
     let notes = updateInfo.releaseNotes;
 
@@ -44,7 +47,12 @@ function UpdateNotification({
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginRight: 10, fontWeight: 700 }}>
-            <Text>App updated to {updateInfo.version}</Text>
+            <Text>
+              {t('appUpdatedToVersion', {
+                version: updateInfo.version,
+                defaultValue: `App updated to {updateInfo.version}`,
+              })}
+            </Text>
           </View>
           <View style={{ flex: 1 }} />
           <View style={{ marginTop: -1 }}>
@@ -53,7 +61,7 @@ function UpdateNotification({
                 onClick={updateApp}
                 style={{ color: 'white', textDecoration: 'underline' }}
               >
-                Restart
+                {t('Restart')}
               </Link>{' '}
               (
               <Link
@@ -64,7 +72,7 @@ function UpdateNotification({
                   )
                 }
               >
-                notes
+                {t('notes')}
               </Link>
               )
               <Button
