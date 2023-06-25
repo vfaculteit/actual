@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import {
@@ -152,6 +153,7 @@ export default function SimpleTransactionsTable({
   let selectedItems = useSelectedItems();
   let dispatchSelected = useSelectedDispatch();
   let memoFields = useMemo(() => fields, [JSON.stringify(fields)]);
+  const { t } = useTranslation();
 
   let serializedTransactions = useMemo(() => {
     return transactions.map(trans => serializeTransaction(trans, dateFormat));
@@ -192,43 +194,43 @@ export default function SimpleTransactionsTable({
               case 'date':
                 return (
                   <Field key={i} width={100}>
-                    Date
+                    {t('general.Date', 'Date')}
                   </Field>
                 );
               case 'imported_payee':
                 return (
                   <Field key={i} width="flex">
-                    Imported payee
+                    {t('general.importedPayee', 'Imported payee')}
                   </Field>
                 );
               case 'payee':
                 return (
                   <Field key={i} width="flex">
-                    Payee
+                    {t('general.payee_one', 'Payee')}
                   </Field>
                 );
               case 'category':
                 return (
                   <Field key={i} width="flex">
-                    Category
+                    {t('general.category_one', 'Category')}
                   </Field>
                 );
               case 'account':
                 return (
                   <Field key={i} width="flex">
-                    Account
+                    {t('general.account', 'Account')}
                   </Field>
                 );
               case 'notes':
                 return (
                   <Field key={i} width="flex">
-                    Notes
+                    {t('general.notes', 'Notes')}
                   </Field>
                 );
               case 'amount':
                 return (
                   <Field key={i} width={75} style={{ textAlign: 'right' }}>
-                    Amount
+                    {t('general.amount', 'Amount')}
                   </Field>
                 );
               default:

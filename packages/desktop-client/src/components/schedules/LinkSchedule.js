@@ -40,7 +40,7 @@ export default function ScheduleLink() {
 
   return (
     <Page
-      title={t('schedule.linkSchedule', 'Link Schedule')}
+      title={t('schedules.linkSchedule', 'Link Schedule')}
       modalSize="medium"
     >
       <View

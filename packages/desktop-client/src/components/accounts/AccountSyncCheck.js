@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import * as actions from 'loot-core/src/client/actions';
@@ -8,14 +9,20 @@ import { authorizeBank } from '../../nordigen';
 import { colors } from '../../style';
 import { View, Button, Tooltip } from '../common';
 
-function getErrorMessage(type, code) {
+function getErrorMessage(type, code, t) {
   switch (type.toUpperCase()) {
     case 'ITEM_ERROR':
       switch (code.toUpperCase()) {
         case 'NO_ACCOUNTS':
-          return 'No open accounts could be found. Did you close the account? If so, unlink the account.';
+          return t(
+            'account.errorNoOpenAccounts',
+            'No open accounts could be found. Did you close the account? If so, unlink the account.',
+          );
         case 'ITEM_LOGIN_REQUIRED':
-          return 'Your password or something else has changed with your bank and you need to login again.';
+          return t(
+            'account.errorLoginRequired',
+            'Your password or something else has changed with your bank and you need to login again.',
+          );
         default:
       }
       break;
@@ -23,13 +30,19 @@ function getErrorMessage(type, code) {
     case 'INVALID_INPUT':
       switch (code.toUpperCase()) {
         case 'INVALID_ACCESS_TOKEN':
-          return 'Item is no longer authorized. You need to login again.';
+          return t(
+            'account.errorInvalidAccessToken',
+            'Item is no longer authorized. You need to login again.',
+          );
         default:
       }
       break;
 
     case 'RATE_LIMIT_EXCEEDED':
-      return 'Rate limit exceeded for this item. Please try again later.';
+      return t(
+        'account.errorRateLimitExceeded',
+        'Rate limit exceeded for this item. Please try again later.',
+      );
 
     default:
   }
@@ -61,6 +74,7 @@ function AccountSyncCheck({
   getAccounts,
   addNotification,
 }) {
+  const { t } = useTranslation();
   let [open, setOpen] = useState(false);
   if (!failedAccounts) {
     return null;
@@ -110,7 +124,10 @@ function AccountSyncCheck({
             color: 'currentColor',
           }}
         />{' '}
-        This account is experiencing connection problems. Let’s fix it.
+        {t(
+          'account.thisAccountIsExperiencingConnectionProblems',
+          'This account is experiencing connection problems. Let’s fix it.',
+        )}
       </Button>
 
       {open && (
@@ -120,11 +137,14 @@ function AccountSyncCheck({
           style={{ fontSize: 14, padding: 15, maxWidth: 400 }}
         >
           <div style={{ marginBottom: '1.15em' }}>
-            The server returned the following error:
+            {t(
+              'account.theServerReturnedTheFollowingError',
+              'The server returned the following error:',
+            )}
           </div>
 
           <div style={{ marginBottom: '1.25em', color: colors.r5 }}>
-            {getErrorMessage(error.type, error.code)}
+            {getErrorMessage(error.type, error.code, t)}
           </div>
 
           <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
@@ -132,11 +152,13 @@ function AccountSyncCheck({
               <>
                 <Button onClick={unlink}>Unlink</Button>
                 <Button primary onClick={reauth} style={{ marginLeft: 5 }}>
-                  Reauthorize
+                  {t('general.reauthorize', 'Reauthorize')}
                 </Button>
               </>
             ) : (
-              <Button onClick={unlink}>Unlink account</Button>
+              <Button onClick={unlink}>
+                {t('general.unlinkAccount', 'Unlink account')}
+              </Button>
             )}
           </View>
         </Tooltip>

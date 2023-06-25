@@ -4,9 +4,11 @@ import i18n from 'i18next';
 
 import enUKCore from 'loot-core/src/locales/en-GB.json';
 import esESCore from 'loot-core/src/locales/es-ES.json';
+import nlBECore from 'loot-core/src/locales/nl-BE.json';
 
 import enUK from './en-GB.json';
 import esES from './es-ES.json';
+import nlBE from './nl-BE.json';
 
 const resources = {
   en: {
@@ -17,6 +19,10 @@ const resources = {
     web: esES,
     core: esESCore,
   },
+  nl: {
+    web: nlBE,
+    core: nlBECore,
+  },
 };
 
 i18n
@@ -24,7 +30,7 @@ i18n
   .init({
     resources,
     defaultNS: 'web',
-    lng: 'es', // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
+    lng: 'nl', // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
     // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
     // if you're using a language detector, do not define the lng option
 

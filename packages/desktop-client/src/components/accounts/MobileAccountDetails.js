@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import Add from '../../icons/v1/Add';
@@ -13,7 +14,7 @@ import { TransactionList } from './MobileTransaction';
 
 function TransactionSearchInput({ accountName, onSearch }) {
   const [text, setText] = useState('');
-
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -44,7 +45,10 @@ function TransactionSearchInput({ accountName, onSearch }) {
           setText(text);
           onSearch(text);
         }}
-        placeholder={`Search ${accountName}`}
+        placeholder={t('account.searchAccountName', {
+          accountName,
+          defaultValue: `Search ${accountName}`,
+        })}
         style={{
           backgroundColor: colors.n11,
           border: `1px solid ${colors.n9}`,
@@ -78,6 +82,7 @@ export default function AccountDetails({
     return prependTransactions.concat(transactions);
   }, [prependTransactions, transactions]);
 
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -123,7 +128,7 @@ export default function AccountDetails({
               }}
             />
             <Text style={{ ...styles.text, color: colors.b5, fontWeight: 500 }}>
-              Back
+              {t('general.back', 'Back')}
             </Text>
           </Link>
           <View
@@ -175,6 +180,7 @@ export default function AccountDetails({
         // refreshControl={refreshControl}
         onLoadMore={onLoadMore}
         onSelect={onSelectTransaction}
+        t={t}
       />
     </View>
   );

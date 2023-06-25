@@ -451,7 +451,7 @@ export default function ScheduleDetails() {
       <Stack direction="row" style={{ marginTop: 10 }}>
         <FormField style={{ flex: 1 }}>
           <FormLabel
-            title={t('schedule.scheduleName', 'Schedule Name')}
+            title={t('schedules.scheduleName', 'Schedule Name')}
             htmlFor="name-field"
           />
           <GenericInput
@@ -800,13 +800,13 @@ export default function ScheduleDetails() {
                 >
                   {state.error ? (
                     <Text style={{ color: colors.r4 }}>
-                      {t('schedule.couldNotSearchError', {
+                      {t('schedules.couldNotSearchError', {
                         error: state.error,
                         defaultValue: `Could not search: ${state.error}`,
                       })}
                     </Text>
                   ) : (
-                    t('schedule.noTransactionsFound', 'No transactions found')
+                    t('schedules.noTransactionsFound', 'No transactions found')
                   )}
                 </View>
               ))

@@ -103,9 +103,10 @@ export function ScheduleAmountCell({ amount, op }) {
             lineHeight: '1em',
             marginRight: 10,
           }}
-          title={t('general.approximatelyWithAmount', {
+          title={t('general.approximatelyWithAmounttt', {
             amount: str,
-            defaultValue: (isApprox ? 'Approximately ' : '') + str,
+            defaultValue:
+              (isApprox ? 'Approximately {{amount}}' : '{{amount}}') + str,
           })}
         >
           ~
@@ -119,9 +120,9 @@ export function ScheduleAmountCell({ amount, op }) {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         }}
-        title={t('general.approximatelyWithAmount', {
+        title={t('general.approximatelyWithAmounttt', {
           amount: str,
-          defaultValue: (isApprox ? 'Approximately ' : '') + str,
+          defaultValue: isApprox ? 'Approximately {{amount}}' : '{{amount}}',
         })}
       >
         {num > 0 ? `+${str}` : `${str}`}
@@ -218,7 +219,7 @@ export function SchedulesTable({
             style={item.name == null ? { color: colors.n8 } : null}
             title={item.name ? item.name : ''}
           >
-            {item.name ? item.name : 'None'}
+            {item.name ? item.name : t('general.none', 'None')}
           </Text>
         </Field>
         <Field width="flex" name="payee">
@@ -227,7 +228,7 @@ export function SchedulesTable({
         <Field width="flex" name="account">
           <DisplayId type="accounts" id={item._account} />
         </Field>
-        <Field width={110} name="date">
+        <Field width={120} name="date">
           {item.next_date
             ? monthUtils.nonLocalizedFormat(item.next_date, dateFormat)
             : null}
@@ -235,9 +236,13 @@ export function SchedulesTable({
         <Field width={120} name="status" style={{ alignItems: 'flex-start' }}>
           <StatusBadge status={statuses.get(item.id)} />
         </Field>
-        <ScheduleAmountCell amount={item._amount} op={item._amountOp} />
+        <ScheduleAmountCell
+          width={80}
+          amount={item._amount}
+          op={item._amountOp}
+        />
         {!minimal && (
-          <Field width={80} style={{ textAlign: 'center' }}>
+          <Field width={120} style={{ textAlign: 'center' }}>
             {item._date && item._date.frequency && (
               <Check style={{ width: 13, height: 13 }} />
             )}
@@ -292,13 +297,13 @@ export function SchedulesTable({
         <Field width="flex">{t('general.name', 'Name')}</Field>
         <Field width="flex">{t('general.payee_one', 'Payee')}</Field>
         <Field width="flex">{t('general.account_one', 'Account')}</Field>
-        <Field width={110}>{t('schedules.nextDate', 'Next date')}</Field>
+        <Field width={120}>{t('schedules.nextDate', 'Next date')}</Field>
         <Field width={120}>{t('general.status', 'Status')}</Field>
-        <Field width={100} style={{ textAlign: 'right' }}>
+        <Field width={100} style={{ textAlign: 'center' }}>
           {t('general.amount', 'Amount')}
         </Field>
         {!minimal && (
-          <Field width={80} style={{ textAlign: 'center' }}>
+          <Field width={120} style={{ textAlign: 'center' }}>
             {t('general.recurring', 'Recurring')}
           </Field>
         )}

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Split from '../../icons/v0/Split';
 import { colors } from '../../style';
@@ -8,9 +9,13 @@ import Autocomplete, { defaultFilterSuggestion } from './Autocomplete';
 
 export const NativeCategorySelect = React.forwardRef(
   ({ categoryGroups, emptyLabel, ...nativeProps }, ref) => {
+    const { t } = useTranslation();
     return (
       <Select {...nativeProps} ref={ref}>
-        <option value="">{emptyLabel || 'Select category...'}</option>
+        <option value="">
+          {emptyLabel ||
+            t('autocomplete.selectCategoryDotDotDot', 'Select category...')}
+        </option>
         {categoryGroups.map(group => (
           <optgroup key={group.id} label={group.name}>
             {group.categories.map(category => (

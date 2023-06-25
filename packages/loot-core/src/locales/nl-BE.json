@@ -1,0 +1,27 @@
+{
+  "general": {
+  "ordinal_one": "{{count}}ste",
+    "ordinal_two": "{{count}}de",
+    "ordinal_few": "{{count}}de",
+    "ordinal_other": "{{count}}de"
+},
+  "schedules": {
+  "recurring": {
+    "monthly_one": "Elke maand op {{day}}",
+      "monthly_other": "Elke {{count}} maanden op {{day}}",
+      "monthlyPattern_one": "Elke maand op {{pattern}}",
+      "monthlyPattern_other": "Elke {{count}} maanden op {{pattern}}",
+      "pattern": {
+      "lastDay": "last day",
+        "lastWeekday": "afgelopen {{dayName}}",
+        "lastWeekday_sameDay": "laatste",
+        "weekAndDay": "{{week}} {{dayName}}",
+        "weekAndDay_sameDay": "{{week}}"
+    },
+    "weekly_one": "Elke week op {{day}}",
+      "weekly_other": "Elke {{count}} weken op {{day}}",
+      "yearly_one": "Elk jaar op {{day}}",
+      "yearly_other": "Elke {{count}} jaar op {{day}}"
+  }
+}
+}

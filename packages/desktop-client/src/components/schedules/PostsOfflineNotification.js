@@ -29,7 +29,7 @@ export default function PostsOfflineNotification() {
 
   return (
     <Page
-      title={t('schedule.postTransactionsQuestion', 'Post transactions?')}
+      title={t('schedules.postTransactionsQuestion', 'Post transactions?')}
       modalSize="small"
     >
       <P>
@@ -54,7 +54,7 @@ export default function PostsOfflineNotification() {
           </Text>
         ) : (
           <Text>
-            {t('schedule.thereArePayeesThat', {
+            {t('schedules.thereArePayeesThat', {
               count: plural,
               defaultValue: `There ${
                 plural ? 'are payees ' : 'is a payee '
@@ -64,7 +64,7 @@ export default function PostsOfflineNotification() {
         )}
 
         <Text>
-          {t('schedule.thereAreSchedulesDueToday', {
+          {t('schedules.thereAreSchedulesDueToday', {
             count: plural,
             defaultValue: `${
               plural ? 'have ' : 'has '
@@ -95,7 +95,7 @@ export default function PostsOfflineNotification() {
       >
         <Button onClick={onClose}>Decide later</Button>
         <Button primary onClick={onPost}>
-          {t('schedule.postTransactions', 'Post transactions')}
+          {t('schedules.postTransactions', 'Post transactions')}
         </Button>
       </Stack>
     </Page>

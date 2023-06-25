@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCachedAccounts } from 'loot-core/src/client/data-hooks/accounts';
 
@@ -14,7 +15,7 @@ export function AccountList({
   embedded,
 }) {
   let lastItem = null;
-
+  const { t } = useTranslation();
   return (
     <View>
       <View
@@ -27,7 +28,9 @@ export function AccountList({
           const showGroup = lastItem
             ? item.offbudget !== lastItem.offbudget
             : true;
-          const group = item.offbudget ? 'Off Budget' : 'For Budget';
+          const group = item.offbudget
+            ? t('autocomplete.offBudget', 'Off Budget')
+            : t('autocomplete.forBudget', 'For Budget');
           lastItem = item;
 
           return [

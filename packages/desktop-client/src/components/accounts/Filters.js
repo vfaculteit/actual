@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useReducer } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { FocusScope } from '@react-aria/focus';
@@ -158,6 +159,7 @@ function ConfigureField({
   if (subfield === 'month' || subfield === 'year') {
     ops = ['is'];
   }
+  const { t } = useTranslation();
 
   return (
     <Tooltip
@@ -173,15 +175,21 @@ function ConfigureField({
               options={
                 field === 'amount'
                   ? [
-                      ['amount', 'Amount'],
-                      ['amount-inflow', 'Amount (inflow)'],
-                      ['amount-outflow', 'Amount (outflow)'],
+                      ['amount', t('general.amount', 'Amount')],
+                      [
+                        'amount-inflow',
+                        t('general.amountInflow', 'Amount (inflow)'),
+                      ],
+                      [
+                        'amount-outflow',
+                        t('general.amountOutflow', 'Amount (outflow)'),
+                      ],
                     ]
                   : field === 'date'
                   ? [
-                      ['date', 'Date'],
-                      ['month', 'Month'],
-                      ['year', 'Year'],
+                      ['date', t('general.date', 'Date')],
+                      ['month', t('general.month', 'Month')],
+                      ['year', t('general.year', 'Year')],
                     ]
                   : null
               }
@@ -265,7 +273,7 @@ function ConfigureField({
                 });
               }}
             >
-              Apply
+              {t('general.apply', 'Apply')}
             </Button>
           </View>
         </form>
@@ -280,6 +288,7 @@ export function FilterButton({ onApply }) {
       dateFormat: state.prefs.local.dateFormat || 'MM/dd/yyyy',
     };
   });
+  const { t } = useTranslation();
 
   let [state, dispatch] = useReducer(
     (state, action) => {
@@ -321,7 +330,7 @@ export function FilterButton({ onApply }) {
         if (isDateValid(date)) {
           cond.value = formatDate(date, 'yyyy-MM');
         } else {
-          alert('Invalid date format');
+          alert(t('general.invalidDateFormat', 'Invalid date format'));
           return;
         }
       } else if (cond.options.year) {
@@ -329,7 +338,7 @@ export function FilterButton({ onApply }) {
         if (isDateValid(date)) {
           cond.value = formatDate(date, 'yyyy');
         } else {
-          alert('Invalid date format');
+          alert(t('general.invalidDateFormat', 'Invalid date format'));
           return;
         }
       }

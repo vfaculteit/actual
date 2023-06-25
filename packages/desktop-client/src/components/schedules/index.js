@@ -65,7 +65,10 @@ export default function Schedules() {
     <Page title={t('general.schedule_other', 'Schedules')}>
       <View style={{ alignItems: 'flex-end' }}>
         <Search
-          placeholder="Filter schedules…"
+          placeholder={t(
+            'schedules.filterSchedulesdotdotdot',
+            'Filter schedules…',
+          )}
           value={filter}
           onChange={setFilter}
         />
@@ -97,7 +100,9 @@ export default function Schedules() {
           flexShrink: 0,
         }}
       >
-        <Button onClick={onDiscover}>Find schedules</Button>
+        <Button onClick={onDiscover}>
+          {t('schedules.findSchedules', 'Find schedules')}
+        </Button>
         <Button primary onClick={onAdd}>
           {t('schedules.addNewSchedule', 'Add new schedule')}
         </Button>

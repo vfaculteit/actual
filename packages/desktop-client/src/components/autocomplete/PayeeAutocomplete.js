@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { createPayee } from 'loot-core/src/client/actions/queries';
@@ -53,6 +54,8 @@ export function PayeeList({
   let isFiltered = items.filtered;
   let createNew = null;
   items = [...items];
+
+  const { t } = useTranslation();
 
   // If the "new payee" item exists, create it as a special-cased item
   // with the value of the input so it always shows whatever the user
@@ -112,9 +115,9 @@ export function PayeeList({
           let type = item.transfer_acct ? 'account' : 'payee';
           let title;
           if (type === 'payee' && lastType !== type) {
-            title = 'Payees';
+            title = t('general.payee_other', 'Payees');
           } else if (type === 'account' && lastType !== type) {
-            title = 'Transfer To/From';
+            title = t('autocomplete.transferToFrom', 'Transfer To/From');
           }
           let showMoreMessage = idx === items.length - 1 && isFiltered;
           lastType = type;
@@ -185,6 +188,7 @@ export default function PayeeAutocomplete({
 }) {
   let payees = useCachedPayees();
   let accounts = useCachedAccounts();
+  const { t } = useTranslation();
 
   let [focusTransferPayees, setFocusTransferPayees] = useState(
     defaultFocusTransferPayees,
@@ -323,7 +327,7 @@ export default function PayeeAutocomplete({
             <AutocompleteFooter embedded={embedded}>
               {showMakeTransfer && (
                 <AutocompleteFooterButton
-                  title="Make Transfer"
+                  title={t('autocomplete.makeTransfer', 'Make Transfer')}
                   style={[
                     showManagePayees && { marginBottom: 5 },
                     focusTransferPayees && {
@@ -346,7 +350,7 @@ export default function PayeeAutocomplete({
               )}
               {showManagePayees && (
                 <AutocompleteFooterButton
-                  title="Manage Payees"
+                  title={t('autocomplete.managePayees', 'Manage Payees')}
                   onClick={() => onManagePayees()}
                 />
               )}

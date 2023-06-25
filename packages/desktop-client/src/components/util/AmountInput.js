@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   integerToCurrency,
@@ -49,6 +50,7 @@ export function AmountInput({ id, defaultValue = 0, onChange, style }) {
 export function BetweenAmountInput({ defaultValue, onChange }) {
   let [num1, setNum1] = useState(defaultValue.num1);
   let [num2, setNum2] = useState(defaultValue.num2);
+  const { t } = useTranslation();
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -59,7 +61,7 @@ export function BetweenAmountInput({ defaultValue, onChange }) {
           onChange({ num1: value, num2 });
         }}
       />
-      <View style={{ margin: '0 5px' }}>and</View>
+      <View style={{ margin: '0 5px' }}>{t('general.and', 'and')}</View>
       <AmountInput
         defaultValue={num2}
         onChange={value => {

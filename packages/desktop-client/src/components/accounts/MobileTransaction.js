@@ -111,6 +111,8 @@ export class Transaction extends React.PureComponent {
       schedule,
     } = transaction;
 
+    const t = this.props.t;
+
     if (isPreviewId(id)) {
       amount = getScheduledAmount(amount);
     }
@@ -129,9 +131,9 @@ export class Transaction extends React.PureComponent {
       transferAcct,
     );
     let prettyCategory = transferAcct
-      ? 'Transfer'
+      ? t('general.transfer', 'Transfer')
       : is_parent
-      ? 'Split'
+      ? t('general.split', 'Split')
       : categoryName;
 
     let isPreview = isPreviewId(id);
@@ -180,7 +182,7 @@ export class Transaction extends React.PureComponent {
                 },
               ]}
             >
-              {prettyDescription || 'Empty'}
+              {prettyDescription || t('general.empty', 'Empty')}
             </TextOneLine>
           </View>
           {isPreview ? (
@@ -212,7 +214,8 @@ export class Transaction extends React.PureComponent {
                     textAlign: 'left',
                   }}
                 >
-                  {prettyCategory || 'Uncategorized'}
+                  {prettyCategory ||
+                    t('account.uncategorized', 'Uncategorized')}
                 </TextOneLine>
               )}
             </View>
@@ -324,6 +327,7 @@ export class TransactionList extends React.Component {
                         showCategory={this.props.showCategory}
                         added={this.props.isNew(transaction.id)}
                         onSelect={() => {}} // onSelect(transaction)}
+                        t={this.props.t}
                       />
                     </Item>
                   );

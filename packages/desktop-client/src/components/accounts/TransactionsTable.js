@@ -8,6 +8,7 @@ import React, {
   useContext,
   useReducer,
 } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -234,6 +235,7 @@ export function SplitsExpandedProvider({ children, initialMode = 'expand' }) {
 export const TransactionHeader = React.memo(
   ({ hasSelected, showAccount, showCategory, showBalance, showCleared }) => {
     let dispatchSelected = useSelectedDispatch();
+    const { t } = useTranslation();
 
     return (
       <Row
@@ -252,14 +254,32 @@ export const TransactionHeader = React.memo(
           width={20}
           onSelect={() => dispatchSelected({ type: 'select-all' })}
         />
-        <Cell value="Date" width={110} />
-        {showAccount && <Cell value="Account" width="flex" />}
-        <Cell value="Payee" width="flex" />
-        <Cell value="Notes" width="flex" />
-        {showCategory && <Cell value="Category" width="flex" />}
-        <Cell value="Payment" width={80} textAlign="right" />
-        <Cell value="Deposit" width={80} textAlign="right" />
-        {showBalance && <Cell value="Balance" width={88} textAlign="right" />}
+        <Cell value={t('general.date', 'Date')} width={110} />
+        {showAccount && (
+          <Cell value={t('general.account_one', 'Account')} width="flex" />
+        )}
+        <Cell value={t('general.payee_other', 'Payee')} width="flex" />
+        <Cell value={t('general.note_other', 'Notes')} width="flex" />
+        {showCategory && (
+          <Cell value={t('general.category_other', 'Category')} width="flex" />
+        )}
+        <Cell
+          value={t('general.payment_one', 'Payment')}
+          width={80}
+          textAlign="right"
+        />
+        <Cell
+          value={t('general.deposit_one', 'Deposit')}
+          width={80}
+          textAlign="right"
+        />
+        {showBalance && (
+          <Cell
+            value={t('general.balance_one', 'Balance')}
+            width={88}
+            textAlign="right"
+          />
+        )}
         {showCleared && <Field width={21} truncate={false} />}
         <Cell value="" width={15 + styles.scrollbarWidth} />
       </Row>
@@ -524,6 +544,7 @@ export const Transaction = React.memo(function Transaction(props) {
     onCreatePayee,
     onToggleSplit,
   } = props;
+  const { t } = useTranslation();
 
   let dispatchSelected = useSelectedDispatch();
 
@@ -905,7 +926,7 @@ export const Transaction = React.memo(function Transaction(props) {
                 />
               )}
               <Text style={{ fontStyle: 'italic', userSelect: 'none' }}>
-                Split
+                {t('general.split', 'Split')}
               </Text>
             </View>
           </CellButton>
@@ -919,11 +940,11 @@ export const Transaction = React.memo(function Transaction(props) {
           onExpose={!isPreview && (name => onEdit(id, name))}
           value={
             isParent
-              ? 'Split'
+              ? t('general.split', 'Split')
               : isOffBudget
-              ? 'Off Budget'
+              ? t('general.offBudget', 'Off Budget')
               : isBudgetTransfer
-              ? 'Transfer'
+              ? t('general.transfer', 'Transfer')
               : ''
           }
           valueStyle={valueStyle}
@@ -945,7 +966,7 @@ export const Transaction = React.memo(function Transaction(props) {
                   'name',
                 )
               : transaction.id
-              ? 'Categorize'
+              ? t('general.categorize', 'Categorize')
               : ''
           }
           exposed={focusedField === 'category'}
@@ -1061,6 +1082,8 @@ export const Transaction = React.memo(function Transaction(props) {
 });
 
 export function TransactionError({ error, isDeposit, onAddSplit, style }) {
+  const { t } = useTranslation();
+
   switch (error.type) {
     case 'SplitTransactionError':
       if (error.version === 1) {
@@ -1076,21 +1099,21 @@ export function TransactionError({ error, isDeposit, onAddSplit, style }) {
             ]}
             data-testid="transaction-error"
           >
-            <Text>
-              Amount left:{' '}
-              <Text style={{ fontWeight: 500 }}>
-                {integerToCurrency(
+            <Trans
+              i18nKey={'general.amountLeft'}
+              values={{
+                amount: integerToCurrency(
                   isDeposit ? error.difference : -error.difference,
-                )}
-              </Text>
-            </Text>
+                ),
+              }}
+            />
             <View style={{ flex: 1 }} />
             <Button
               style={{ marginLeft: 15, padding: '4px 10px' }}
               primary
               onClick={onAddSplit}
             >
-              Add Split
+              {t('general.addSplit', 'Add Split')}
             </Button>
           </View>
         );
@@ -1148,6 +1171,7 @@ function NewTransaction({
 }) {
   const error = transactions[0].error;
   const isDeposit = transactions[0].amount > 0;
+  const { t } = useTranslation();
 
   return (
     <View
@@ -1207,7 +1231,7 @@ function NewTransaction({
           onClick={() => onClose()}
           data-testid="cancel-button"
         >
-          Cancel
+          {t('general.cancel', 'Cancel')}
         </Button>
         {error ? (
           <TransactionError
@@ -1222,7 +1246,7 @@ function NewTransaction({
             onClick={onAdd}
             data-testid="add-button"
           >
-            Add
+            {t('general.add', 'Add')}
           </Button>
         )}
       </View>
@@ -1438,6 +1462,7 @@ export let TransactionTable = React.forwardRef((props, ref) => {
 
   let tableRef = useRef(null);
   let mergedRef = useMergedRefs(tableRef, ref);
+  const { t } = useTranslation();
 
   let transactions = useMemo(() => {
     let result;
@@ -1522,7 +1547,10 @@ export let TransactionTable = React.forwardRef((props, ref) => {
       if (newTransactions[0].account == null) {
         props.addNotification({
           type: 'error',
-          message: 'Account is a required field',
+          message: t(
+            'transaction.accountIsRequired',
+            'Account is a required field',
+          ),
         });
         newNavigator.onEdit('temp', 'account');
       } else {
