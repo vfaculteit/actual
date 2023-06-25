@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
 import { css } from 'glamor';
@@ -332,6 +333,7 @@ function Accounts({
   onToggleClosedAccounts,
   onReorder,
 }) {
+  const { t } = useTranslation();
   let [isDragging, setIsDragging] = useState(false);
   let offbudgetAccounts = useMemo(
     () =>
@@ -369,7 +371,7 @@ function Accounts({
   return (
     <View>
       <Account
-        name="All accounts"
+        name={t('All accounts')}
         to={allAccountsPath}
         query={getAllAccountBalance()}
         style={{ fontWeight, marginTop: 15 }}
@@ -377,7 +379,7 @@ function Accounts({
 
       {budgetedAccounts.length > 0 && (
         <Account
-          name="For budget"
+          name={t('For budget')}
           to={budgetedAccountPath}
           query={getOnBudgetBalance()}
           style={{ fontWeight, marginTop: 13 }}
@@ -402,7 +404,7 @@ function Accounts({
 
       {offbudgetAccounts.length > 0 && (
         <Account
-          name="Off budget"
+          name={t('Off budget')}
           to={offBudgetAccountPath}
           query={getOffBudgetBalance()}
           style={{ fontWeight, marginTop: 13 }}
@@ -428,7 +430,7 @@ function Accounts({
       {closedAccounts.length > 0 && (
         <SecondaryItem
           style={{ marginTop: 15 }}
-          title={'Closed accounts' + (showClosedAccounts ? '' : '...')}
+          title={t('Closed accounts') + (showClosedAccounts ? '' : '...')}
           onClick={onToggleClosedAccounts}
           bold
         />
@@ -454,7 +456,7 @@ function Accounts({
         }}
         onClick={onAddAccount}
         Icon={Add}
-        title="Add account"
+        title={t('Add account')}
       />
     </View>
   );
@@ -488,6 +490,7 @@ function Tools() {
   let [isOpen, setOpen] = useState(false);
   let onToggle = useCallback(() => setOpen(open => !open), []);
   let location = useLocation();
+  const { t } = useTranslation();
 
   const isActive = ['/payees', '/rules', '/settings', '/tools'].some(route =>
     location.pathname.startsWith(route),
@@ -511,19 +514,19 @@ function Tools() {
       {isOpen && (
         <>
           <SecondaryItem
-            title="Payees"
+            title={t('Payees')}
             Icon={StoreFrontIcon}
             to="/payees"
             indent={15}
           />
           <SecondaryItem
-            title="Rules"
+            title={t('Rules')}
             Icon={TuningIcon}
             to="/rules"
             indent={15}
           />
           <SecondaryItem
-            title="Settings"
+            title={t('Settings')}
             Icon={Cog}
             to="/settings"
             indent={15}
@@ -552,6 +555,7 @@ export function Sidebar({
   onReorder,
 }) {
   let hasWindowButtons = !Platform.isBrowser && Platform.OS === 'mac';
+  const { t } = useTranslation();
 
   const sidebar = useSidebar();
 
@@ -634,10 +638,10 @@ export function Sidebar({
       </View>
 
       <View style={{ overflow: 'auto' }}>
-        <Item title="Budget" Icon={Wallet} to="/budget" />
-        <Item title="Reports" Icon={Reports} to="/reports" />
+        <Item title={t('Budget')} Icon={Wallet} to="/budget" />
+        <Item title={t('Reports')} Icon={Reports} to="/reports" />
 
-        <Item title="Schedules" Icon={CalendarIcon} to="/schedules" />
+        <Item title={t('Schedules')} Icon={CalendarIcon} to="/schedules" />
 
         <Tools />
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import * as actions from 'loot-core/src/client/actions';
@@ -16,19 +17,18 @@ import { styles, colors } from '../../style';
 import tokens from '../../tokens';
 import { View, Text, Button, Tooltip, Menu } from '../common';
 
-function getFileDescription(file) {
+function getFileDescription(file, t) {
   if (file.state === 'unknown') {
-    return (
-      'This is a cloud-based file but its state is unknown because you ' +
-      'are offline.'
+    return t(
+      'This is a cloud-based file but its state is unknown because you are offline.',
     );
   }
 
   if (file.encryptKeyId) {
     if (file.hasKey) {
-      return 'This file is encrypted and you have key to access it.';
+      return t('This file is encrypted and you have key to access it.');
     }
-    return 'This file is encrypted and you do not have the key for it.';
+    return t('This file is encrypted and you do not have the key for it.');
   }
 
   return null;
@@ -45,8 +45,8 @@ function FileMenu({ onDelete, onClose }) {
       default:
     }
   }
-
-  let items = [{ name: 'delete', text: 'Delete' }];
+  const { t } = useTranslation();
+  let items = [{ name: 'delete', text: t('Delete') }];
 
   return <Menu onMenuSelect={onMenuSelect} items={items} />;
 }
@@ -86,25 +86,26 @@ function FileState({ file }) {
   let Icon;
   let status;
   let color;
+  const { t } = useTranslation();
 
   switch (file.state) {
     case 'unknown':
       Icon = CloudUnknown;
-      status = 'Network unavailable';
+      status = t('Network unavailable');
       color = colors.n7;
       break;
     case 'remote':
       Icon = CloudDownload;
-      status = 'Available for download';
+      status = t('Available for download');
       break;
     case 'local':
     case 'broken':
       Icon = FileDouble;
-      status = 'Local';
+      status = t('Local');
       break;
     default:
       Icon = CloudCheck;
-      status = 'Syncing';
+      status = t('Syncing');
       break;
   }
 
@@ -143,11 +144,12 @@ function File({ file, onSelect, onDelete }) {
       selecting.current = false;
     }
   }
+  const { t } = useTranslation();
 
   return (
     <View
       onClick={() => _onSelect(file)}
-      title={getFileDescription(file)}
+      title={getFileDescription(file, t)}
       style={[
         {
           flexDirection: 'row',
@@ -255,6 +257,7 @@ function BudgetList({
       createBudget({ testMode });
     }
   };
+  const { t } = useTranslation();
 
   return (
     <View
@@ -321,11 +324,11 @@ function BudgetList({
             pushModal('import');
           }}
         >
-          Import file
+          {t('Import file')}
         </Button>
 
         <Button primary onClick={onCreate} style={{ marginLeft: 15 }}>
-          Create new file
+          {t('Create new file')}
         </Button>
 
         {isNonProductionEnvironment() && (
@@ -334,7 +337,7 @@ function BudgetList({
             onClick={() => onCreate({ testMode: true })}
             style={{ marginLeft: 15 }}
           >
-            Create test file
+            {t('Create test file')}
           </Button>
         )}
       </View>

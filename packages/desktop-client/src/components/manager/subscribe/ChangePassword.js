@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import { send } from 'loot-core/src/platform/client/fetch';
@@ -10,6 +11,7 @@ import { Title } from './common';
 import { ConfirmPasswordForm } from './ConfirmPasswordForm';
 
 export default function ChangePassword() {
+  const { t } = useTranslation();
   let history = useHistory();
   let [error, setError] = useState(null);
   let [msg, setMessage] = useState(null);
@@ -17,13 +19,13 @@ export default function ChangePassword() {
   function getErrorMessage(error) {
     switch (error) {
       case 'invalid-password':
-        return 'Password cannot be empty';
+        return t('Password cannot be empty');
       case 'password-match':
-        return 'Passwords do not match';
+        return t('Passwords do not match');
       case 'network-failure':
-        return 'Unable to contact the server';
+        return t('Unable to contact the server');
       default:
-        return 'Internal server error';
+        return t('Internal server error');
     }
   }
 
@@ -34,7 +36,7 @@ export default function ChangePassword() {
     if (error) {
       setError(error);
     } else {
-      setMessage('Password successfully changed');
+      setMessage(t('Password successfully changed'));
       await send('subscribe-sign-in', { password });
       history.push('/');
     }
@@ -42,7 +44,7 @@ export default function ChangePassword() {
 
   return (
     <View style={{ maxWidth: 500, marginTop: -30 }}>
-      <Title text="Change server password" />
+      <Title text={t('Change server password')} />
       <Text
         style={{
           fontSize: 16,
@@ -50,8 +52,10 @@ export default function ChangePassword() {
           lineHeight: 1.4,
         }}
       >
-        This will change the password for this server instance. All existing
-        sessions will stay logged in.
+        <Trans i18nKey="messageChangePasswordExistingSessions">
+          This will change the password for this server instance. All existing
+          sessions will stay logged in.
+        </Trans>
       </Text>
 
       {error && (
@@ -88,7 +92,7 @@ export default function ChangePassword() {
             style={{ fontSize: 15, marginRight: 10 }}
             onClick={() => history.push('/')}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         }
         onSetPassword={onSetPassword}

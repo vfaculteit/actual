@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { View, ButtonWithLoading } from '../../common';
 
 import { Input } from './common';
 
 export function ConfirmPasswordForm({ buttons, onSetPassword, onError }) {
+  const { t } = useTranslation();
   let [password1, setPassword1] = useState('');
   let [password2, setPassword2] = useState('');
   let [showPassword, setShowPassword] = useState(false);
@@ -28,7 +30,6 @@ export function ConfirmPasswordForm({ buttons, onSetPassword, onError }) {
   function onShowPassword(e) {
     setShowPassword(e.target.checked);
   }
-
   return (
     <form
       style={{
@@ -41,14 +42,14 @@ export function ConfirmPasswordForm({ buttons, onSetPassword, onError }) {
     >
       <Input
         autoFocus={true}
-        placeholder="Password"
+        placeholder={t('Password')}
         type={showPassword ? 'text' : 'password'}
         value={password1}
         onChange={e => setPassword1(e.target.value)}
         onEnter={onSubmit}
       />
       <Input
-        placeholder="Confirm password"
+        placeholder={t('Confirm password')}
         type={showPassword ? 'text' : 'password'}
         value={password2}
         onChange={e => setPassword2(e.target.value)}
@@ -65,12 +66,13 @@ export function ConfirmPasswordForm({ buttons, onSetPassword, onError }) {
         }}
       >
         <label style={{ userSelect: 'none' }}>
-          <input type="checkbox" onChange={onShowPassword} /> Show password
+          <input type="checkbox" onChange={onShowPassword} />
+          {t('Show password')}
         </label>
         <View style={{ flex: 1 }} />
         {buttons}
         <ButtonWithLoading primary loading={loading}>
-          OK
+          {t('OK')}
         </ButtonWithLoading>
       </View>
     </form>

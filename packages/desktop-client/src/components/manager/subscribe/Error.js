@@ -1,15 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { colors } from '../../../style';
 import { View, Text, Button } from '../../common';
 
-function getErrorMessage(reason) {
+function getErrorMessage(reason, t) {
   switch (reason) {
     case 'network-failure':
-      return 'Unable to access server. Make sure the configured URL for the server is accessible.';
+      return t(
+        'Unable to access server. Make sure the configured URL for the server is accessible.',
+      );
     default:
-      return 'Server returned an error while checking its status.';
+      return t('Server returned an error while checking its status.');
   }
 }
 
@@ -17,7 +20,7 @@ export default function Error() {
   let history = useHistory();
   let location = useLocation();
   let { error } = location.state || {};
-
+  const { t } = useTranslation();
   function onTryAgain() {
     history.push('/');
   }
@@ -31,10 +34,10 @@ export default function Error() {
           lineHeight: 1.4,
         }}
       >
-        {getErrorMessage(error)}
+        {getErrorMessage(error, t)}
       </Text>
       <Button onClick={onTryAgain} style={{ marginTop: 20 }}>
-        Try again
+        {t('Try again')}
       </Button>
     </View>
   );

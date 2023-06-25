@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { format } from 'date-fns';
 
@@ -9,6 +10,7 @@ import { Text, Button } from '../common';
 import { Setting } from './UI';
 
 export default function ExportBudget({ prefs }) {
+  const { t } = useTranslation();
   async function onExport() {
     let data = await send('export-budget');
     window.Actual.saveFile(
@@ -19,17 +21,23 @@ export default function ExportBudget({ prefs }) {
   }
 
   return (
-    <Setting primaryAction={<Button onClick={onExport}>Export data</Button>}>
+    <Setting
+      primaryAction={<Button onClick={onExport}>{t('Export data')}</Button>}
+    >
       <Text>
-        <strong>Export</strong> your data as a zip file containing{' '}
-        <code>db.sqlite</code> and <code>metadata.json</code> files. It can be
-        imported into another Actual instance by closing an open file (if any),
-        then clicking the “Import file” button, then choosing “Actual.”
+        <Trans i18nKey="exportSqLite">
+          <strong>Export</strong> your data as a zip file containing{' '}
+          <code>db.sqlite</code> and <code>metadata.json</code> files. It can be
+          imported into another Actual instance by closing an open file (if
+          any), then clicking the “Import file” button, then choosing “Actual.”
+        </Trans>
       </Text>
       {prefs.encryptKeyId ? (
         <Text>
-          Even though encryption is enabled, the exported zip file will not have
-          any encryption.
+          <Trans i18nKey="noEncryptionZipFile">
+            Even though encryption is enabled, the exported zip file will not
+            have any encryption.
+          </Trans>
         </Text>
       ) : null}
     </Setting>

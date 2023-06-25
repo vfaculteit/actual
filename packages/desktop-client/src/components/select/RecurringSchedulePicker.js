@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { sendCatch } from 'loot-core/src/platform/client/fetch';
@@ -132,6 +133,7 @@ function reducer(state, action) {
 }
 
 function SchedulePreview({ previewDates }) {
+  const { t } = useTranslation();
   const dateFormat = useSelector(state =>
     (state.prefs.local.dateFormat || 'MM/dd/yyyy')
       .replace('MM', 'M')
@@ -148,7 +150,7 @@ function SchedulePreview({ previewDates }) {
   } else {
     content = (
       <View>
-        <Text style={{ fontWeight: 600 }}>Upcoming dates</Text>
+        <Text style={{ fontWeight: 600 }}>{t('Upcoming dates')}</Text>
         <Stack direction="row" spacing={4} style={{ marginTop: 10 }}>
           {previewDates.map(d => (
             <View>
@@ -178,6 +180,7 @@ function validInterval(interval) {
 }
 
 function MonthlyPatterns({ config, dispatch }) {
+  const { t } = useTranslation();
   let updateRecurrence = (recurrence, field, value) =>
     dispatch({ type: 'update-recurrence', recurrence, field, value });
 
@@ -206,7 +209,7 @@ function MonthlyPatterns({ config, dispatch }) {
             <option disabled>---</option>
             {DAY_OF_MONTH_OPTIONS.map(opt => (
               <option key={opt} value={opt}>
-                {opt}
+                {t(opt)}
               </option>
             ))}
           </Select>
@@ -219,7 +222,7 @@ function MonthlyPatterns({ config, dispatch }) {
             <option disabled>---</option>
             {DAY_OF_WEEK_OPTIONS.map(opt => (
               <option key={opt.id} value={opt.id}>
-                {opt.name}
+                {t(opt.name)}
               </option>
             ))}
           </Select>
@@ -250,6 +253,7 @@ function MonthlyPatterns({ config, dispatch }) {
 
 function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
   let [previewDates, setPreviewDates] = useState(null);
+  const { t } = useTranslation();
 
   let [state, dispatch] = useReducer(reducer, {
     config: parseConfig(currentConfig),
@@ -277,7 +281,7 @@ function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
         config: unparseConfig(config),
         count: 4,
       });
-      setPreviewDates(error ? 'Invalid rule' : data);
+      setPreviewDates(error ? t('Invalid rule') : data);
     }
     run();
   }, [config]);
@@ -295,11 +299,11 @@ function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <label htmlFor="start" style={{ marginRight: 5 }}>
-          Starts:
+          {t('StartsColon', 'Starts:')}
         </label>
         <DateSelect
           id="start"
-          inputProps={{ placeholder: 'Start Date' }}
+          inputProps={{ placeholder: t('Start Date') }}
           value={config.start}
           onSelect={value => updateField('start', value)}
           containerProps={{ style: { width: 100 } }}
@@ -329,14 +333,14 @@ function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
         >
           {FREQUENCY_OPTIONS.map(opt => (
             <option key={opt.id} value={opt.id}>
-              {opt.name}
+              {t(opt.name)}
             </option>
           ))}
         </Select>
         {config.frequency === 'monthly' &&
         (config.patterns == null || config.patterns.length === 0) ? (
           <Button onClick={() => dispatch({ type: 'add-recurrence' })}>
-            Add specific days
+            {t('Add specific days')}
           </Button>
         ) : null}
       </Stack>
@@ -355,7 +359,7 @@ function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
           primary
           style={{ marginLeft: 10 }}
         >
-          Apply
+          {t('Apply')}
         </Button>
       </div>
     </Tooltip>
@@ -368,7 +372,7 @@ export default function RecurringSchedulePicker({
   onChange,
 }) {
   let { isOpen, close, getOpenEvents } = useTooltip();
-
+  const { t } = useTranslation();
   function onSave(config) {
     onChange(config);
     close();
@@ -377,7 +381,7 @@ export default function RecurringSchedulePicker({
   return (
     <View>
       <Button {...getOpenEvents()} style={[{ textAlign: 'left' }, buttonStyle]}>
-        {value ? getRecurringDescription(value) : 'No recurring date'}
+        {value ? getRecurringDescription(value) : t('No recurring date')}
       </Button>
       {isOpen && (
         <RecurringScheduleTooltip

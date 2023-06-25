@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import * as d from 'date-fns';
@@ -28,6 +29,7 @@ function NetWorth({ accounts }) {
     onDelete: onDeleteFilter,
     onUpdate: onUpdateFilter,
   } = useFilters();
+  const { t } = useTranslation();
 
   const [allMonths, setAllMonths] = useState(null);
   const [start, setStart] = useState(
@@ -36,7 +38,7 @@ function NetWorth({ accounts }) {
   const [end, setEnd] = useState(monthUtils.currentMonth());
 
   const params = useMemo(
-    () => netWorthSpreadsheet(start, end, accounts, filters),
+    () => netWorthSpreadsheet(start, end, accounts, filters, t),
     [start, end, accounts, filters],
   );
   const data = useReport('net_worth', params);
@@ -82,7 +84,7 @@ function NetWorth({ accounts }) {
   return (
     <View style={[styles.page, { minWidth: 650, overflow: 'hidden' }]}>
       <Header
-        title="Net Worth"
+        title={t('Net Worth')}
         allMonths={allMonths}
         start={start}
         end={end}
@@ -127,14 +129,16 @@ function NetWorth({ accounts }) {
 
         <View style={{ marginTop: 30 }}>
           <P>
-            <strong>How is net worth calculated?</strong>
+            <strong>{t('How is net worth calculated?')}</strong>
           </P>
           <P>
-            Net worth shows the balance of all accounts over time, including all
-            of your investments. Your “net worth” is considered to be the amount
-            you’d have if you sold all your assets and paid off as much debt as
-            possible. If you hover over the graph, you can also see the amount
-            of assets and debt individually.
+            <Trans i18nKey="netWorthExplanation">
+              Net worth shows the balance of all accounts over time, including
+              all of your investments. Your “net worth” is considered to be the
+              amount you’d have if you sold all your assets and paid off as much
+              debt as possible. If you hover over the graph, you can also see
+              the amount of assets and debt individually.
+            </Trans>
           </P>
         </View>
       </View>

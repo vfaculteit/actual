@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { createBudget } from 'loot-core/src/client/actions/budgets';
@@ -15,17 +16,17 @@ export default function Login() {
   let [password, setPassword] = useState('');
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState(null);
-
+  const { t } = useTranslation();
   let { checked } = useBootstrapped();
 
   function getErrorMessage(error) {
     switch (error) {
       case 'invalid-password':
-        return 'Invalid password';
+        return t('Invalid password');
       case 'network-failure':
-        return 'Unable to contact the server';
+        return t('Unable to contact the server');
       default:
-        return `An unknown error occurred: ${error}`;
+        return t('An unknown error occurred') + `: ${error}`;
     }
   }
 
@@ -57,7 +58,7 @@ export default function Login() {
 
   return (
     <View style={{ maxWidth: 450, marginTop: -30 }}>
-      <Title text="Sign in to this Actual instance" />
+      <Title text={t('Sign in to this Actual instance')} />
       <Text
         style={{
           fontSize: 16,
@@ -65,8 +66,10 @@ export default function Login() {
           lineHeight: 1.4,
         }}
       >
-        If you lost your password, you likely still have access to your server
-        to manually reset it.
+        <Trans i18nKey="lostPasswordServerAccessMsg">
+          If you lost your password, you likely still have access to your server
+          to manually reset it.
+        </Trans>
       </Text>
 
       {error && (
@@ -78,7 +81,7 @@ export default function Login() {
             fontSize: 15,
           }}
         >
-          {getErrorMessage(error)}
+          {getErrorMessage(error, t)}
         </Text>
       )}
 
@@ -94,7 +97,7 @@ export default function Login() {
           style={{ flex: 1, marginRight: 10 }}
         />
         <ButtonWithLoading primary loading={loading} style={{ fontSize: 15 }}>
-          Sign in
+          {t('Sign in')}
         </ButtonWithLoading>
       </form>
       <View
@@ -109,7 +112,7 @@ export default function Login() {
           style={{ fontSize: 15, color: colors.b4, marginLeft: 10 }}
           onClick={onDemo}
         >
-          Try Demo &rarr;
+          {t('Try Demo')} &rarr;
         </Button>
       </View>
     </View>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -116,6 +117,7 @@ export function OpSelect({
 }
 
 function EditorButtons({ onAdd, onDelete, style }) {
+  const { t } = useTranslation();
   return (
     <>
       {onDelete && (
@@ -123,7 +125,7 @@ function EditorButtons({ onAdd, onDelete, style }) {
           bare
           onClick={onDelete}
           style={{ padding: 7 }}
-          aria-label="Delete entry"
+          aria-label={t('Delete entry')}
         >
           <SubtractIcon style={{ width: 8, height: 8 }} />
         </Button>
@@ -133,7 +135,7 @@ function EditorButtons({ onAdd, onDelete, style }) {
           bare
           onClick={onAdd}
           style={{ padding: 7 }}
-          aria-label="Add entry"
+          aria-label={t('Add entry')}
         >
           <AddIcon style={{ width: 10, height: 10 }} />
         </Button>
@@ -244,6 +246,8 @@ function formatAmount(amount) {
 }
 
 function ScheduleDescription({ id }) {
+  const { t } = useTranslation();
+
   let dateFormat = useSelector(state => {
     return state.prefs.local.dateFormat || 'MM/dd/yyyy';
   });
@@ -261,7 +265,6 @@ function ScheduleDescription({ id }) {
 
   let [schedule] = scheduleData.schedules;
   let status = schedule && scheduleData.statuses.get(schedule.id);
-
   return (
     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
       <View style={{ marginRight: 15, flexDirection: 'row' }}>
@@ -272,16 +275,16 @@ function ScheduleDescription({ id }) {
             textOverflow: 'ellipsis',
           }}
         >
-          Payee:{' '}
+          {t('Payee') + ': '}
           <DisplayId type="payees" id={schedule._payee} noneColor={colors.n5} />
         </Text>
         <Text style={{ margin: '0 5px' }}> — </Text>
         <Text style={{ flexShrink: 0 }}>
-          Amount: {formatAmount(schedule._amount)}
+          {t('Amount') + ': ' + formatAmount(schedule._amount)}
         </Text>
         <Text style={{ margin: '0 5px' }}> — </Text>
         <Text style={{ flexShrink: 0 }}>
-          Next: {monthUtils.format(schedule.next_date, dateFormat)}
+          {t('Next') + ': ' + monthUtils.format(schedule.next_date, dateFormat)}
         </Text>
       </View>
       <StatusBadge status={status} />
@@ -370,9 +373,11 @@ function StageInfo() {
             lineHeight: 1.5,
           }}
         >
-          The stage of a rule allows you to force a specific order. Pre rules
-          always run first, and post rules always run last. Within each stage
-          rules are automatically ordered from least to most specific.
+          <Trans i18nKey="ruleStageOrder">
+            The stage of a rule allows you to force a specific order. Pre rules
+            always run first, and post rules always run last. Within each stage
+            rules are automatically ordered from least to most specific.
+          </Trans>
         </Tooltip>
       )}
     </View>
@@ -409,6 +414,7 @@ export function ConditionsList({
   isSchedule,
   onChangeConditions,
 }) {
+  const { t } = useTranslation();
   function addCondition(index) {
     // (remove the inflow and outflow pseudo-fields since they’d be a pain to get right)
     let fields = conditionFields
@@ -443,7 +449,7 @@ export function ConditionsList({
     onChangeConditions(conditions.filter(c => c !== cond));
   }
 
-  function updateCondition(cond, field, value) {
+  function updateCondition(cond, field, value, t) {
     onChangeConditions(
       updateValue(conditions, cond, () => {
         if (field === 'field') {
@@ -524,7 +530,7 @@ export function ConditionsList({
 
   return conditions.length === 0 ? (
     <Button style={{ alignSelf: 'flex-start' }} onClick={addInitialCondition}>
-      Add condition
+      {t('Add condition')}
     </Button>
   ) : (
     <Stack spacing={2} data-testid="condition-list">
@@ -550,7 +556,7 @@ export function ConditionsList({
               condition={cond}
               isSchedule={isSchedule}
               onChange={(name, value) => {
-                updateCondition(cond, name, value);
+                updateCondition(cond, name, value, t);
               }}
               onDelete={() => removeCondition(cond)}
               onAdd={() => addCondition(i)}
@@ -586,6 +592,8 @@ export default function EditRule({
   defaultRule,
   onSave: originalOnSave,
 }) {
+  const { t } = useTranslation();
+
   let [conditions, setConditions] = useState(defaultRule.conditions.map(parse));
   let [actions, setActions] = useState(defaultRule.actions.map(parse));
   let [stage, setStage] = useState(defaultRule.stage);
@@ -738,7 +746,7 @@ export default function EditRule({
 
   return (
     <Modal
-      title="Rule"
+      title={t('Rule')}
       padding={0}
       {...modalProps}
       style={[modalProps.style, { flex: 'inherit', maxWidth: '90%' }]}
@@ -764,7 +772,7 @@ export default function EditRule({
             }}
           >
             <Text style={{ color: colors.n4, marginRight: 15 }}>
-              Stage of rule:
+              {t('Stage of rule') + ':'}
             </Text>
 
             <Stack direction="row" align="center" spacing={1}>
@@ -772,19 +780,19 @@ export default function EditRule({
                 selected={stage === 'pre'}
                 onSelect={() => onChangeStage('pre')}
               >
-                Pre
+                {t('Pre')}
               </StageButton>
               <StageButton
                 selected={stage === null}
                 onSelect={() => onChangeStage(null)}
               >
-                Default
+                {t('Default')}
               </StageButton>
               <StageButton
                 selected={stage === 'post'}
                 onSelect={() => onChangeStage('post')}
               >
-                Post
+                {t('Post')}
               </StageButton>
 
               <StageInfo />
@@ -803,18 +811,20 @@ export default function EditRule({
             <View style={{ flexShrink: 0 }}>
               <View style={{ marginBottom: 30 }}>
                 <Text style={{ color: colors.n4, marginBottom: 15 }}>
-                  If
-                  <FieldSelect
-                    data-testid="conditions-op"
-                    style={{ display: 'inline-flex' }}
-                    fields={[
-                      ['and', 'all'],
-                      ['or', 'any'],
-                    ]}
-                    value={conditionsOp}
-                    onChange={onChangeConditionsOp}
-                  />
-                  of these conditions match:
+                  <Trans i18nKey="ifTheseConditionsMatch">
+                    If
+                    <FieldSelect
+                      data-testid="conditions-op"
+                      style={{ display: 'inline-flex' }}
+                      fields={[
+                        ['and', 'all'],
+                        ['or', 'any'],
+                      ]}
+                      value={conditionsOp}
+                      onChange={onChangeConditionsOp}
+                    />
+                    of these conditions match:
+                  </Trans>
                 </Text>
 
                 <ConditionsList
@@ -827,7 +837,7 @@ export default function EditRule({
               </View>
 
               <Text style={{ color: colors.n4, marginBottom: 15 }}>
-                Then apply these actions:
+                {t('Then apply these actions') + ':'}
               </Text>
               <View style={{ flex: 1 }}>
                 {actions.length === 0 ? (
@@ -835,7 +845,7 @@ export default function EditRule({
                     style={{ alignSelf: 'flex-start' }}
                     onClick={addInitialAction}
                   >
-                    Add action
+                    {t('Add action')}
                   </Button>
                 ) : (
                   <Stack spacing={2} data-testid="action-list">
@@ -869,7 +879,7 @@ export default function EditRule({
                 }}
               >
                 <Text style={{ color: colors.n4, marginBottom: 0 }}>
-                  This rule applies to these transactions:
+                  {t('This rule applies to these transactions') + ':'}
                 </Text>
 
                 <View style={{ flex: 1 }} />
@@ -877,7 +887,7 @@ export default function EditRule({
                   disabled={selectedInst.items.size === 0}
                   onClick={onApply}
                 >
-                  Apply actions ({selectedInst.items.size})
+                  {t('Apply actions') + ' ' + selectedInst.items.size}
                 </Button>
               </View>
 
@@ -894,7 +904,7 @@ export default function EditRule({
               >
                 <Button onClick={() => modalProps.onClose()}>Cancel</Button>
                 <Button primary onClick={() => onSave()}>
-                  Save
+                  {t('Save')}
                 </Button>
               </Stack>
             </View>

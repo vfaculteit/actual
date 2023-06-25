@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Formik } from 'formik';
 
@@ -42,6 +43,7 @@ function CloseAccount({
   actions,
   modalProps,
 }) {
+  const { t } = useTranslation();
   let [loading, setLoading] = useState(false);
 
   let filtered = accounts.filter(a => a.id !== account.id);
@@ -50,7 +52,7 @@ function CloseAccount({
 
   return (
     <Modal
-      title="Close Account"
+      title={t('Close Account')}
       {...modalProps}
       style={{ flex: 0 }}
       loading={loading}
@@ -58,15 +60,22 @@ function CloseAccount({
       {() => (
         <View>
           <P>
-            Are you sure you want to close <strong>{account.name}</strong>?{' '}
+            <Trans i18nKey="areYouSureYouWantToClose">
+              Are you sure you want to close <strong>{account.name}</strong>?
+            </Trans>{' '}
             {canDelete ? (
               <span>
-                This account has no transactions so it will be permanently
-                deleted.
+                <Trans>
+                  This account has no transactions so it will be permanently
+                  deleted.
+                </Trans>
               </span>
             ) : (
               <span>
-                This account has transactions so we can’t permanently delete it.
+                <Trans>
+                  This account has transactions so we can’t permanently delete
+                  it.
+                </Trans>
               </span>
             )}
           </P>
@@ -114,10 +123,12 @@ function CloseAccount({
                 {balance !== 0 && (
                   <View>
                     <P>
-                      This account has a balance of{' '}
-                      <strong>{integerToCurrency(balance)}</strong>. To close
-                      this account, select a different account to transfer this
-                      balance to:
+                      <Trans i18nKey="thisAccountHasBalanceOfToClose">
+                        This account has a balance of{' '}
+                        <strong>{integerToCurrency(balance)}</strong>. To close
+                        this account, select a different account to transfer
+                        this balance to:
+                      </Trans>
                     </P>
 
                     <Select
@@ -127,8 +138,8 @@ function CloseAccount({
                       onBlur={handleBlur}
                       style={{ width: 200, marginBottom: 15 }}
                     >
-                      <option value="">Select account...</option>
-                      <optgroup label="For Budget">
+                      <option value="">{t('Select account...')}</option>
+                      <optgroup label={t('For Budget')}>
                         {onbudget.map(acct => (
                           <option key={acct.id} value={acct.id}>
                             {acct.name}
@@ -136,7 +147,7 @@ function CloseAccount({
                         ))}
                       </optgroup>
 
-                      <optgroup label="Off Budget">
+                      <optgroup label={t('Off Budget')}>
                         {offbudget.map(acct => (
                           <option key={acct.id} value={acct.id}>
                             {acct.name}
@@ -146,16 +157,18 @@ function CloseAccount({
                     </Select>
                     {errors.transfer && (
                       <FormError style={{ marginBottom: 15 }}>
-                        Transfer is required
+                        {t('Transfer is required')}
                       </FormError>
                     )}
 
                     {needsCategory(account, values.transfer, accounts) && (
                       <View style={{ marginBottom: 15 }}>
                         <P>
-                          Since you are transferring the balance from a budgeted
-                          account to an off-budget account, this transaction
-                          must be categorized. Select a category:
+                          <Trans i18nKey="transactionMustBeCategorized">
+                            Since you are transferring the balance from a
+                            budgeted account to an off-budget account, this
+                            transaction must be categorized. Select a category:
+                          </Trans>
                         </P>
 
                         <CategorySelect
@@ -167,7 +180,7 @@ function CloseAccount({
                           style={{ width: 200 }}
                         />
                         {errors.category && (
-                          <FormError>Category is required</FormError>
+                          <FormError>{t('Category is required')}</FormError>
                         )}
                       </View>
                     )}
@@ -176,27 +189,29 @@ function CloseAccount({
 
                 {!canDelete && (
                   <View style={{ marginBottom: 15 }}>
-                    <Text style={{ fontSize: 12 }}>
-                      You can also{' '}
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a
-                        href="#"
-                        onClick={e => {
-                          e.preventDefault();
-                          setLoading(true);
+                    <Trans i18nKey="youCanForceCloseAccount">
+                      <Text style={{ fontSize: 12 }}>
+                        You can also{' '}
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a
+                          href="#"
+                          onClick={e => {
+                            e.preventDefault();
+                            setLoading(true);
 
-                          actions
-                            .forceCloseAccount(account.id)
-                            .then(() => modalProps.onClose());
-                        }}
-                        style={{ color: colors.r6 }}
-                      >
-                        force close
-                      </a>{' '}
-                      the account which will delete it and all its transactions
-                      permanently. Doing so may change your budget unexpectedly
-                      since money in it may vanish.
-                    </Text>
+                            actions
+                              .forceCloseAccount(account.id)
+                              .then(() => modalProps.onClose());
+                          }}
+                          style={{ color: colors.r6 }}
+                        >
+                          force close
+                        </a>{' '}
+                        the account which will delete it and all its
+                        transactions permanently. Doing so may change your
+                        budget unexpectedly since money in it may vanish.
+                      </Text>
+                    </Trans>
                   </View>
                 )}
 
@@ -211,10 +226,10 @@ function CloseAccount({
                     style={{ marginRight: 10 }}
                     onClick={modalProps.onClose}
                   >
-                    Cancel
+                    {t('Cancel')}
                   </Button>
                   <Button type="submit" primary>
-                    Close Account
+                    {t('Close Account')}
                   </Button>
                 </View>
               </form>

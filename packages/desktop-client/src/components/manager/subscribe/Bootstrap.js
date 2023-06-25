@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { createBudget } from 'loot-core/src/client/actions/budgets';
@@ -12,6 +13,7 @@ import { useBootstrapped, Title } from './common';
 import { ConfirmPasswordForm } from './ConfirmPasswordForm';
 
 export default function Bootstrap() {
+  const { t } = useTranslation();
   let dispatch = useDispatch();
   let [error, setError] = useState(null);
 
@@ -20,13 +22,13 @@ export default function Bootstrap() {
   function getErrorMessage(error) {
     switch (error) {
       case 'invalid-password':
-        return 'Password cannot be empty';
+        return t('Password cannot be empty');
       case 'password-match':
-        return 'Passwords do not match';
+        return t('Passwords do not match');
       case 'network-failure':
-        return 'Unable to contact the server';
+        return t('Unable to contact the server');
       default:
-        return `An unknown error occurred: ${error}`;
+        return t('An unknown error occurred') + `: ${error}`;
     }
   }
 
@@ -51,26 +53,28 @@ export default function Bootstrap() {
 
   return (
     <View style={{ maxWidth: 450, marginTop: -30 }}>
-      <Title text="Welcome to Actual!" />
+      <Title text={t('Welcome to Actual!')} />
       <P style={{ fontSize: 16, color: colors.n2 }}>
-        Actual is a super fast privacy-focused app for managing your finances.
-        To secure your data, you’ll need to set a password for your server.
+        <Trans i18nKey="actualIntro">
+          Actual is a super fast privacy-focused app for managing your finances.
+          To secure your data, you’ll need to set a password for your server.
+        </Trans>
       </P>
-
-      <P isLast style={{ fontSize: 16, color: colors.n2 }}>
-        Consider opening{' '}
-        <a
-          href="https://actualbudget.github.io/docs/Getting-Started/using-actual/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: colors.b4 }}
-        >
-          our tour
-        </a>{' '}
-        in a new tab for some guidance on what to do when you’ve set your
-        password.
-      </P>
-
+      <Trans i18nKey="gettingStartedLink">
+        <P isLast style={{ fontSize: 16, color: colors.n2 }}>
+          Consider opening{' '}
+          <a
+            href="https://actualbudget.github.io/docs/Getting-Started/using-actual/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: colors.b4 }}
+          >
+            our tour
+          </a>{' '}
+          in a new tab for some guidance on what to do when you’ve set your
+          password.
+        </P>
+      </Trans>
       {error && (
         <Text
           style={{
@@ -91,7 +95,7 @@ export default function Bootstrap() {
             style={{ fontSize: 15, color: colors.b4, marginRight: 15 }}
             onClick={onDemo}
           >
-            Try Demo
+            {t('Try Demo')}
           </Button>
         }
         onSetPassword={onSetPassword}

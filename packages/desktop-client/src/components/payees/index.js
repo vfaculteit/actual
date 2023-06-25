@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useImperativeHandle,
 } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import Component from '@reactions/component';
 import memoizeOne from 'memoize-one';
@@ -77,7 +78,7 @@ function RuleButton({ ruleCount, focused, onEdit, onClick }) {
               {ruleCount} associated {plural(ruleCount, 'rule', 'rules')}
             </>
           ) : (
-            <>Create rule</>
+            <Trans>Create rule</Trans>
           )}
         </Text>
         <ArrowThinRight style={{ width: 8, height: 8, color: colors.g1 }} />
@@ -108,6 +109,7 @@ let Payee = React.memo(
     let dispatchSelected = useSelectedDispatch();
     let borderColor = selected ? colors.b8 : colors.border;
     let backgroundFocus = hovered || focusedField === 'select';
+    const { t } = useTranslation();
 
     return (
       <Row
@@ -141,7 +143,10 @@ let Payee = React.memo(
           }}
         />
         <InputCell
-          value={(payee.transfer_acct ? 'Transfer: ' : '') + payee.name}
+          value={
+            (payee.transfer_acct ? t('transferColonSpace', 'Transfer: ') : '') +
+            payee.name
+          }
           valueStyle={!selected && payee.transfer_acct && { color: colors.n7 }}
           exposed={focusedField === 'name'}
           width="flex"
@@ -227,6 +232,7 @@ function PayeeTableHeader() {
   let borderColor = colors.border;
   let dispatchSelected = useSelectedDispatch();
   let selectedItems = useSelectedItems();
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -247,7 +253,7 @@ function PayeeTableHeader() {
           selected={selectedItems.size > 0}
           onSelect={() => dispatchSelected({ type: 'select-all' })}
         />
-        <Cell value="Name" width="flex" />
+        <Cell value={t('Name')} width="flex" />
       </TableHeader>
     </View>
   );
@@ -277,6 +283,7 @@ function PayeeMenu({ payeesById, selectedPayees, onDelete, onMerge, onClose }) {
   let isDisabled = [...selectedPayees].some(
     id => payeesById[id] == null || payeesById[id].transfer_acct,
   );
+  const { t } = useTranslation();
 
   return (
     <Tooltip
@@ -317,14 +324,14 @@ function PayeeMenu({ payeesById, selectedPayees, onDelete, onMerge, onClose }) {
           {
             icon: Delete,
             name: 'delete',
-            text: 'Delete',
+            text: t('Delete'),
             disabled: isDisabled,
           },
           {
             icon: Merge,
             iconSize: 9,
             name: 'merge',
-            text: 'Merge',
+            text: t('Merge'),
             disabled: isDisabled || selectedPayees.size < 2,
           },
           Menu.line,
@@ -463,7 +470,7 @@ export const ManagePayees = React.forwardRef(
         }
       }),
     );
-
+    const { t } = useTranslation();
     let payeesById = getPayeesById(payees);
 
     return (
@@ -485,10 +492,10 @@ export const ManagePayees = React.forwardRef(
                   onClick={() => setState({ menuOpen: true })}
                 >
                   {buttonsDisabled
-                    ? 'No payees selected'
+                    ? t('No payees selected')
                     : selected.items.size +
                       ' ' +
-                      plural(selected.items.size, 'payee', 'payees')}
+                      plural(selected.items.size, t('payee'), t('payees'))}
                   <ExpandArrow width={8} height={8} style={{ marginLeft: 5 }} />
                 </Button>
                 {state.menuOpen && (
@@ -505,7 +512,7 @@ export const ManagePayees = React.forwardRef(
           </Component>
           <View style={{ flex: 1 }} />
           <Input
-            placeholder="Filter payees..."
+            placeholder={t('Filter payees...')}
             value={filter}
             onChange={e => {
               applyFilter(e.target.value);
@@ -534,7 +541,7 @@ export const ManagePayees = React.forwardRef(
           >
             <PayeeTableHeader />
             {filteredPayees.length === 0 ? (
-              <EmptyMessage text="No payees" style={{ marginTop: 15 }} />
+              <EmptyMessage text={t('No payees')} style={{ marginTop: 15 }} />
             ) : (
               <PayeeTable
                 ref={table}

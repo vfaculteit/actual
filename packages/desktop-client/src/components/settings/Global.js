@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Trans } from 'react-i18next';
 
 import { colors } from '../../style';
 import { Information } from '../alerts';
@@ -33,15 +34,19 @@ export default function GlobalSettings({ globalPrefs, saveGlobalPrefs }) {
           <Button onClick={onChooseDocumentDir}>Change location</Button>
           {documentDirChanged && (
             <Information>
-              A restart is required for this change to take effect
+              <Trans>
+                A restart is required for this change to take effect
+              </Trans>
             </Information>
           )}
         </View>
       }
     >
       <Text>
-        <strong>Actual’s files</strong> are stored in a folder on your computer.
-        Currently, that’s:
+        <Trans i18nKey="actualFilesStoredOnComputer">
+          <strong>Actual’s files</strong> are stored in a folder on your
+          computer. Currently, that’s:
+        </Trans>
       </Text>
       <Text
         innerRef={dirScrolled}

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { replaceModal } from 'loot-core/src/client/actions/modals';
@@ -16,6 +17,8 @@ export default function MergeUnusedPayees({
   payeeIds,
   targetPayeeId,
 }) {
+  const { t } = useTranslation();
+
   let { payees: allPayees, modalStack } = useSelector(state => ({
     payees: state.queries.payees,
     modalStack: state.modals.modalStack,
@@ -92,15 +95,17 @@ export default function MergeUnusedPayees({
           <View>
             <P style={{ marginBottom: 10, fontWeight: 500 }}>
               {payees.length === 1 ? (
-                <>
+                <Trans i18nKey="payeeNotUsedByTransaction_one">
                   The payee <Text style={highlightStyle}>{payees[0].name}</Text>{' '}
                   is not used by transactions any more. Would like to merge it
                   with <Text style={highlightStyle}>{targetPayee.name}</Text>?
-                </>
+                </Trans>
               ) : (
                 <>
-                  The following payees are not used by transactions any more.
-                  Would like to merge them with{' '}
+                  <Trans i18nKey="payeeNotUsedByTransaction_other">
+                    The following payees are not used by transactions any more.
+                    Would like to merge them with
+                  </Trans>{' '}
                   <Text style={highlightStyle}>{targetPayee.name}</Text>?
                   <ul
                     ref={flashRef}
@@ -122,9 +127,11 @@ export default function MergeUnusedPayees({
             </P>
 
             <Information>
-              Merging will remove the payee and transfer any existing rules to
-              the new payee. If checked below, a rule will be created to do this
-              rename while importing transactions.
+              <Trans i18nKey="mergingWillRemovePayee">
+                Merging will remove the payee and transfer any existing rules to
+                the new payee. If checked below, a rule will be created to do
+                this rename while importing transactions.
+              </Trans>
             </Information>
 
             {!isEditingRule && (
@@ -145,9 +152,15 @@ export default function MergeUnusedPayees({
                   onChange={e => setShouldCreateRule(e.target.checked)}
                 />
                 <Text style={{ marginLeft: 3 }}>
-                  Automatically rename{' '}
-                  {payees.length === 1 ? 'this payee' : 'these payees'} in the
-                  future
+                  {payees.length === 1 ? (
+                    <Trans i18nKey="autoRenamePayee_one">
+                      Automatically rename this payee in the future
+                    </Trans>
+                  ) : (
+                    <Trans i18nKey="autoRenamePayee_other">
+                      Automatically rename these payees in the future
+                    </Trans>
+                  )}
                 </Text>
               </label>
             )}
@@ -159,7 +172,7 @@ export default function MergeUnusedPayees({
                 onClick={onMerge}
                 type="button"
               >
-                Merge
+                {t('Merge')}
               </Button>
               {!isEditingRule && (
                 <Button
@@ -167,7 +180,7 @@ export default function MergeUnusedPayees({
                   onClick={onMergeAndCreateRule}
                   type="button"
                 >
-                  Merge and edit rule
+                  {t('Merge and edit rule')}
                 </Button>
               )}
               <Button
@@ -175,7 +188,7 @@ export default function MergeUnusedPayees({
                 onClick={() => modalProps.onBack()}
                 type="button"
               >
-                Do nothing
+                {t('Do nothing')}
               </Button>
             </ModalButtons>
           </View>

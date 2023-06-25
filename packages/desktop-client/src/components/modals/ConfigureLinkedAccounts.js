@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 import {
   fromPlaidAccountType,
@@ -15,6 +16,7 @@ function EmptyMessage() {
 }
 
 function Account({ account, offbudget, onSelect }) {
+  const { t } = useTranslation();
   return (
     <View
       style={[
@@ -58,11 +60,13 @@ function Account({ account, offbudget, onSelect }) {
         </View>
 
         {offbudget ? (
-          <Text style={{ color: colors.n8 }}>Off budget</Text>
+          <Text style={{ color: colors.n8 }}>{t('Off budget')}</Text>
         ) : (
           <>
             <Checkmark style={{ width: 15, height: 15, color: colors.g5 }} />
-            <Text style={{ color: colors.g5, marginLeft: 5 }}>Budgeted</Text>
+            <Text style={{ color: colors.g5, marginLeft: 5 }}>
+              {t('Budgeted')}
+            </Text>
           </>
         )}
       </View>
@@ -83,6 +87,7 @@ export default function ConfigureLinkedAccounts({
       .filter(acct => determineOffBudget(fromPlaidAccountType(acct.type)))
       .map(acct => acct.id),
   );
+  const { t } = useTranslation();
 
   function toggleAccount(id) {
     if (offbudgetAccounts.includes(id)) {
@@ -111,16 +116,18 @@ export default function ConfigureLinkedAccounts({
 
   return (
     <Modal
-      title={upgradingId ? 'Link Account' : 'Link Accounts'}
+      title={upgradingId ? t('Link Account') : t('Link Accounts')}
       {...modalProps}
     >
       {() => (
         <View style={{ maxWidth: 500 }}>
           <Text style={{ fontSize: 15, marginBottom: 15, lineHeight: '1.4em' }}>
-            A <strong>budgeted account</strong> is one where expenses and income
-            affect the budget. Usually things like investments are off budget.
-            We’ve chosen some defaults here, but you can change the status if
-            you like.
+            <Trans i18nKey="explanationBudgetedAccount">
+              A <strong>budgeted account</strong> is one where expenses and
+              income affect the budget. Usually things like investments are off
+              budget. We’ve chosen some defaults here, but you can change the
+              status if you like.
+            </Trans>
           </Text>
 
           <View
@@ -162,10 +169,10 @@ export default function ConfigureLinkedAccounts({
             }}
           >
             <Button style={{ marginRight: 10 }} onClick={modalProps.onBack}>
-              Back
+              {t('Back')}
             </Button>
             <Button primary onClick={onNext}>
-              {upgradingId ? 'Link Account' : 'Next'}
+              {upgradingId ? t('Link Account') : t('Next')}
             </Button>
           </View>
         </View>

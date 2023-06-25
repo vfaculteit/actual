@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Formik } from 'formik';
 
@@ -20,8 +21,9 @@ import {
 } from '../common';
 
 function CreateLocalAccount({ modalProps, actions, history }) {
+  const { t } = useTranslation();
   return (
-    <Modal title="Create Local Account" {...modalProps} showBack={false}>
+    <Modal title={t('Create Local Account')} {...modalProps} showBack={false}>
       {() => (
         <View>
           <Formik
@@ -67,7 +69,7 @@ function CreateLocalAccount({ modalProps, actions, history }) {
               setFieldValue,
             }) => (
               <form onSubmit={handleSubmit}>
-                <InlineField label="Name" width="75%">
+                <InlineField label={t('Name')} width="75%">
                   <InitialFocus>
                     <Input
                       name="name"
@@ -80,7 +82,7 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                 </InlineField>
                 {errors.name && (
                   <FormError style={{ marginLeft: 75 }}>
-                    Name is required
+                    {t('Name is required')}
                   </FormError>
                 )}
 
@@ -97,18 +99,18 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                     }}
                     onBlur={handleBlur}
                   >
-                    <option value="checking">Checking / Cash</option>
-                    <option value="savings">Savings</option>
-                    <option value="credit">Credit Card</option>
-                    <option value="investment">Investment</option>
-                    <option value="mortgage">Mortgage</option>
-                    <option value="debt">Debt</option>
-                    <option value="other">Other</option>
+                    <option value="checking">{t('Checking / Cash')}</option>
+                    <option value="savings">{t('Savings')}</option>
+                    <option value="credit">{t('Credit Card')}</option>
+                    <option value="investment">{t('Investment')}</option>
+                    <option value="mortgage">{t('Mortgage')}</option>
+                    <option value="debt">{t('Debt')}</option>
+                    <option value="other">{t('Other')}</option>
                   </Select>
                 </InlineField>
                 {errors.type && (
                   <FormError style={{ marginLeft: 75 }}>
-                    You must select a type
+                    {t('You must select a type')}
                   </FormError>
                 )}
 
@@ -139,7 +141,7 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      Off-budget
+                      {t('Off-budget')}
                     </label>
                     <div
                       style={{
@@ -150,19 +152,21 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                       }}
                     >
                       <Text>
-                        This cannot be changed later. <br /> {'\n'}
-                        See{' '}
-                        <a
-                          href="https://actualbudget.github.io/docs/Accounts/overview/#off-budget-accounts"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            color: colors.n5,
-                          }}
-                        >
-                          Accounts Overview
-                        </a>{' '}
-                        for more information.
+                        <Trans i18nKey="thisCanNotBeChangedLaterOffBudgetAccounts">
+                          This cannot be changed later. <br /> {'\n'}
+                          See{' '}
+                          <a
+                            href="https://actualbudget.github.io/docs/Accounts/overview/#off-budget-accounts"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: colors.n5,
+                            }}
+                          >
+                            Accounts Overview
+                          </a>{' '}
+                          for more information.
+                        </Trans>
                       </Text>
                     </div>
                   </View>
@@ -179,16 +183,16 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                 </InlineField>
                 {errors.balance && (
                   <FormError style={{ marginLeft: 75 }}>
-                    Balance must be a number
+                    {t('Balance must be a number')}
                   </FormError>
                 )}
 
                 <ModalButtons>
                   <Button onClick={() => modalProps.onBack()} type="button">
-                    Back
+                    {t('Back')}
                   </Button>
                   <Button primary style={{ marginLeft: 10 }}>
-                    Create
+                    {t('Create')}
                   </Button>
                 </ModalButtons>
               </form>

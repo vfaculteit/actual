@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { pushModal } from 'loot-core/src/client/actions/modals';
@@ -11,6 +12,7 @@ import { View, Text, Modal, P, Button, ButtonWithLoading } from '../common';
 export default function CreateAccount({ modalProps, syncServerStatus }) {
   const dispatch = useDispatch();
   const [isNordigenSetupComplete, setIsNordigenSetupComplete] = useState(null);
+  const { t } = useTranslation();
 
   const onConnect = () => {
     if (!isNordigenSetupComplete) {
@@ -39,13 +41,15 @@ export default function CreateAccount({ modalProps, syncServerStatus }) {
   }, [configured]);
 
   return (
-    <Modal title="Add Account" {...modalProps}>
+    <Modal title={t('Add Account')} {...modalProps}>
       {() => (
         <View style={{ maxWidth: 500 }}>
           <Text style={{ marginBottom: 10, lineHeight: '1.4em', fontSize: 15 }}>
-            <strong>Link your bank accounts</strong> to automatically download
-            transactions. We offer hundreds of banks to sync with, and Nordigen
-            will provide reliable, up-to-date information.
+            <Trans i18nKey="linkYourBankAccount">
+              <strong>Link your bank accounts</strong> to automatically download
+              transactions. We offer hundreds of banks to sync with, and
+              Nordigen will provide reliable, up-to-date information.
+            </Trans>
           </Text>
 
           <ButtonWithLoading
@@ -60,26 +64,28 @@ export default function CreateAccount({ modalProps, syncServerStatus }) {
             onClick={onConnect}
           >
             {isNordigenSetupComplete
-              ? 'Link bank account'
-              : 'Set-up Nordigen for bank-sync'}
+              ? t('Link bank account')
+              : t('Set-up Nordigen for bank-sync')}
           </ButtonWithLoading>
           {isNordigenSetupComplete && (
             <Button bare onClick={onNordigenInit}>
-              set new API secrets
+              {t('set new API secrets')}
             </Button>
           )}
 
           {syncServerStatus !== 'online' && (
             <P style={{ color: colors.r5, marginTop: 5 }}>
-              Nordigen integration is only available for budgets using
-              actual-server.{' '}
-              <a
-                href="https://actualbudget.github.io/docs/Installing/overview"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn more.
-              </a>
+              <Trans i18nKey="nordigenIntegrationOnlyAvalaibleActualServer">
+                Nordigen integration is only available for budgets using
+                actual-server.{' '}
+                <a
+                  href="https://actualbudget.github.io/docs/Installing/overview"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn more.
+                </a>
+              </Trans>
             </P>
           )}
 
@@ -91,9 +97,11 @@ export default function CreateAccount({ modalProps, syncServerStatus }) {
               fontSize: 15,
             }}
           >
-            You can also create a local account if you want to track
-            transactions manually. You can add transactions manually or import
-            QIF/OFX/QFX files.
+            <Trans i18nKey="createLocalAccountTrackTransactionsManually">
+              You can also create a local account if you want to track
+              transactions manually. You can add transactions manually or import
+              QIF/OFX/QFX files.
+            </Trans>
           </View>
 
           <Button
@@ -106,7 +114,7 @@ export default function CreateAccount({ modalProps, syncServerStatus }) {
             }}
             onClick={onCreateLocalAccount}
           >
-            Create local account
+            {t('Create local account')}
           </Button>
         </View>
       )}

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
@@ -62,9 +63,10 @@ function Card({ flex, to, style, children }) {
 function NetWorthCard({ accounts }) {
   const end = monthUtils.currentMonth();
   const start = monthUtils.subMonths(end, 5);
+  const { t } = useTranslation();
 
   const params = useMemo(
-    () => netWorthSpreadsheet(start, end, accounts),
+    () => netWorthSpreadsheet(start, end, accounts, t),
     [start, end, accounts],
   );
   const data = useReport('net_worth', params);
@@ -82,7 +84,7 @@ function NetWorthCard({ accounts }) {
               style={[styles.mediumText, { fontWeight: 500, marginBottom: 5 }]}
               role="heading"
             >
-              Net Worth
+              {t('Net Worth')}
             </Block>
             <DateRange start={start} end={end} />
           </View>
@@ -114,6 +116,7 @@ function NetWorthCard({ accounts }) {
 function CashFlowCard() {
   const end = monthUtils.currentDay();
   const start = monthUtils.currentMonth() + '-01';
+  const { t } = useTranslation();
 
   const params = useMemo(() => simpleCashFlow(start, end), [start, end]);
   const data = useReport('cash_flow_simple', params);
@@ -134,7 +137,7 @@ function CashFlowCard() {
               style={[styles.mediumText, { fontWeight: 500, marginBottom: 5 }]}
               role="heading"
             >
-              Cash Flow
+              {t('Cash Flow')}
             </Block>
             <DateRange start={start} end={end} />
           </View>
@@ -187,7 +190,7 @@ function CashFlowCard() {
                     y: Math.max(income, 5),
                     premadeLabel: (
                       <div style={{ textAlign: 'right' }}>
-                        <div>Income</div>
+                        <div>{t('Income')}</div>
                         <div>{integerToCurrency(income)}</div>
                       </div>
                     ),
@@ -204,7 +207,7 @@ function CashFlowCard() {
                     y: Math.max(expense, 5),
                     premadeLabel: (
                       <div>
-                        <div>Expenses</div>
+                        <div>{t('Expenses')}</div>
                         <div>{integerToCurrency(expense)}</div>
                       </div>
                     ),
@@ -257,8 +260,10 @@ function Overview({ accounts }) {
             styles.mediumText,
           ]}
         >
-          More reports
-          <br /> coming soon!
+          <Trans i18nKey="moreReportsComingSoon">
+            More reports
+            <br /> coming soon!
+          </Trans>
         </Card>
       </View>
     </View>

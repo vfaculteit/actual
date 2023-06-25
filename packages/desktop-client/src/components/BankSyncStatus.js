@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { useTransition, animated } from 'react-spring';
 
@@ -15,6 +16,7 @@ function BankSyncStatus({ accountsSyncing }) {
       ? 'accounts'
       : accountsSyncing
     : null;
+  const { t } = useTranslation();
 
   const transitions = useTransition(name, null, {
     from: { opacity: 0, transform: 'translateY(-100px)' },
@@ -54,7 +56,9 @@ function BankSyncStatus({ accountsSyncing }) {
                   animating={true}
                   iconStyle={{ color: colors.b1 }}
                 />
-                <Text>Syncing {item}</Text>
+                <Text>
+                  {t('syncingItem', { item, defaultValue: `Syncing ${item}` })}
+                </Text>
               </View>
             </animated.div>
           ),
