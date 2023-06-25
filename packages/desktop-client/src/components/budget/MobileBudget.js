@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import * as actions from 'loot-core/src/client/actions';
@@ -189,13 +190,14 @@ class Budget extends React.Component {
 
   onOpenActionSheet = () => {
     let { budgetType } = this.props;
+    const { t } = useTranslation();
 
     let options = [
-      'Edit Categories',
-      'Copy last month’s budget',
-      'Set budgets to zero',
-      'Set budgets to 3 month average',
-      budgetType === 'report' && 'Apply to all future budgets',
+      t('Edit Categories'),
+      t('Copy last month’s budget'),
+      t('Set budgets to zero'),
+      t('Set budgets to 3 month average'),
+      budgetType === 'report' && t('Apply to all future budgets'),
       'Cancel',
     ].filter(Boolean);
 
@@ -203,7 +205,7 @@ class Budget extends React.Component {
       {
         options,
         cancelButtonIndex: options.length - 1,
-        title: 'Actions',
+        title: t('Actions'),
       },
       idx => {
         switch (idx) {
@@ -285,6 +287,7 @@ class Budget extends React.Component {
             onReorderGroup={this.onReorderGroup}
             onOpenActionSheet={() => {}} //this.onOpenActionSheet}
             onBudgetAction={applyBudgetAction}
+            t={this.props.t}
           />
         )}
       </SyncRefresh>
@@ -294,7 +297,8 @@ class Budget extends React.Component {
 
 function BudgetWrapper(props) {
   let spreadsheet = useSpreadsheet();
-  return <Budget {...props} spreadsheet={spreadsheet} />;
+  const { t } = useTranslation();
+  return <Budget {...props} spreadsheet={spreadsheet} t={t} />;
 }
 
 export default connect(

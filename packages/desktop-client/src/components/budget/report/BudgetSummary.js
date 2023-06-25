@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { css } from 'glamor';
 
@@ -152,9 +153,10 @@ function BudgetTotal({ title, current, target, ProgressComponent, style }) {
 }
 
 function IncomeTotal({ projected, style }) {
+  const { t } = useTranslation();
   return (
     <BudgetTotal
-      title="Income"
+      title={t('general.income', 'Income')}
       current={reportBudget.totalIncome}
       target={reportBudget.totalBudgetedIncome}
       ProgressComponent={IncomeProgress}
@@ -164,9 +166,10 @@ function IncomeTotal({ projected, style }) {
 }
 
 function ExpenseTotal({ style }) {
+  const { t } = useTranslation();
   return (
     <BudgetTotal
-      title="Expenses"
+      title={t('general.expense_other', 'Expenses')}
       current={reportBudget.totalSpent}
       target={reportBudget.totalBudgetedExpense}
       ProgressComponent={ExpenseProgress}
@@ -180,6 +183,7 @@ function Saved({ projected, style }) {
   let totalSaved = useSheetValue(reportBudget.totalSaved) || 0;
   let saved = projected ? budgetedSaved : totalSaved;
   let isNegative = saved < 0;
+  const { t } = useTranslation();
 
   return (
     <View style={[{ alignItems: 'center', fontSize: 14 }, style]}>
@@ -187,7 +191,9 @@ function Saved({ projected, style }) {
         <Text style={{ color: colors.n4 }}>Projected Savings:</Text>
       ) : (
         <View style={{ color: colors.n4 }}>
-          {isNegative ? 'Overspent:' : 'Saved:'}
+          {isNegative
+            ? t('budget.overspentColon', 'Overspent:')
+            : t('budget.savedColon', 'Saved:')}
         </View>
       )}
 
@@ -201,7 +207,7 @@ function Saved({ projected, style }) {
                 style={{ padding: 10, fontSize: 14 }}
               >
                 <AlignedText
-                  left="Projected Savings:"
+                  left={t('budget.projectedSavingsColon', 'Projected Savings:')}
                   right={
                     <Text
                       style={[makeAmountFullStyle(budgetedSaved), styles.tnum]}
@@ -211,7 +217,7 @@ function Saved({ projected, style }) {
                   }
                 />
                 <AlignedText
-                  left="Difference:"
+                  left={t('budget.differenceColon', 'Difference:')}
                   right={
                     <Text style={[makeAmountFullStyle(diff), styles.tnum]}>
                       {format(diff, 'financial-with-sign')}
@@ -246,6 +252,7 @@ export const BudgetSummary = React.memo(function BudgetSummary({ month }) {
     onBudgetAction,
     onToggleSummaryCollapse,
   } = useReport();
+  const { t } = useTranslation();
 
   let [menuOpen, setMenuOpen] = useState(false);
   function onMenuOpen(e) {
@@ -364,11 +371,26 @@ export const BudgetSummary = React.memo(function BudgetSummary({ month }) {
                       onBudgetAction(month, type);
                     }}
                     items={[
-                      { name: 'copy-last', text: 'Copy last month’s budget' },
-                      { name: 'set-zero', text: 'Set budgets to zero' },
+                      {
+                        name: 'copy-last',
+                        text: t(
+                          'budget.copyLastMonthsBudget',
+                          'Copy last month’s budget',
+                        ),
+                      },
+                      {
+                        name: 'set-zero',
+                        text: t(
+                          'budget.setBudgetsToZero',
+                          'Set budgets to zero',
+                        ),
+                      },
                       {
                         name: 'set-3-avg',
-                        text: 'Set budgets to 3 month avg',
+                        text: t(
+                          'budget.setBudgetsToThreeMonthsAvg',
+                          'Set budgets to 3 month avg',
+                        ),
                       },
                     ]}
                   />

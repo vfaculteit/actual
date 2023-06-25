@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CalendarIcon from '../../icons/v2/Calendar';
 import { colors } from '../../style';
@@ -16,6 +17,7 @@ function Calendar({ color, onClick }) {
 }
 
 export function MonthCountSelector({ maxMonths, onChange }) {
+  const { t } = useTranslation();
   let { displayMax } = useBudgetMonthCount();
 
   // It doesn't make sense to show anything if we can only fit one
@@ -48,7 +50,7 @@ export function MonthCountSelector({ maxMonths, onChange }) {
           transform: 'scale(1.2)',
         },
       }}
-      title="Choose the number of months shown at a time"
+      title={t('Choose the number of months shown at a time')}
     >
       {calendars}
     </View>

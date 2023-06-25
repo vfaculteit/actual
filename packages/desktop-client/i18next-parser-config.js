@@ -1,7 +1,12 @@
 module.exports = {
-  input: ['src/**/*.js'],
+  input: [
+    'src/components/budget/rollover/BudgetSummary.js',
+    'src/components/budget/rollover/HoldTooltip.js',
+    'src/components/budget/rollover/rollover-components.js',
+    'src/**/*.js',
+  ],
   output: 'src/locales/$LOCALE.json',
-  locales: ['en-GB', 'es-ES'],
+  locales: ['en-GB', 'es-ES', 'nl-BE'],
   defaultNamespace: 'web',
   sort: true,
   // Force usage of JsxLexer for .js files as otherwise we can't pick up <Trans> components.
@@ -11,6 +16,6 @@ module.exports = {
     jsx: ['JsxLexer'],
     tsx: ['JsxLexer'],
 
-    default: ['JsxLexer']
-  }
+    default: ['JsxLexer'],
+  },
 };

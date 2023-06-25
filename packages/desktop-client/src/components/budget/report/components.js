@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { reportBudget } from 'loot-core/src/client/queries';
 import evalArithmetic from 'loot-core/src/shared/arithmetic';
@@ -19,6 +20,8 @@ export { BudgetSummary } from './BudgetSummary';
 let headerLabelStyle = { flex: 1, padding: '0 5px', textAlign: 'right' };
 
 export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -30,7 +33,9 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
       }}
     >
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Budgeted</Text>
+        <Text style={{ color: colors.n4 }}>
+          {t('budget.budgeted', 'Budgeted')}
+        </Text>
         <CellValue
           binding={reportBudget.totalBudgetedExpense}
           type="financial"
@@ -41,7 +46,7 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
         />
       </View>
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Spent</Text>
+        <Text style={{ color: colors.n4 }}>{t('general.spent', 'Spent')}</Text>
         <CellValue
           binding={reportBudget.totalSpent}
           type="financial"
@@ -49,7 +54,9 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
         />
       </View>
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Balance</Text>
+        <Text style={{ color: colors.n4 }}>
+          {t('general.balance_one', 'Balance')}
+        </Text>
         <CellValue
           binding={reportBudget.totalLeftover}
           type="financial"
@@ -61,6 +68,8 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
 });
 
 export function IncomeHeaderMonth() {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -70,10 +79,15 @@ export function IncomeHeaderMonth() {
       }}
     >
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Budgeted</Text>
+        <Text style={{ color: colors.n4 }}>
+          {' '}
+          {t('budget.budgeted', 'Budgeted')}
+        </Text>
       </View>
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Received</Text>
+        <Text style={{ color: colors.n4 }}>
+          {t('budget.received', 'Received')}
+        </Text>
       </View>
     </View>
   );
@@ -129,6 +143,7 @@ export const GroupMonth = React.memo(function ExpenseGroupMonth({ group }) {
 
 function BalanceTooltip({ categoryId, tooltip, monthIndex, onBudgetAction }) {
   let carryover = useSheetValue(reportBudget.catCarryover(categoryId));
+  const { t } = useTranslation();
 
   return (
     <Tooltip
@@ -149,8 +164,11 @@ function BalanceTooltip({ categoryId, tooltip, monthIndex, onBudgetAction }) {
           {
             name: 'carryover',
             text: carryover
-              ? 'Remove overspending rollover'
-              : 'Rollover overspending',
+              ? t(
+                  'budget.removeOverspendingRollover',
+                  'Remove overspending rollover',
+                )
+              : t('budget.rolloverOverspending', 'Rollover overspending'),
           },
         ]}
       />

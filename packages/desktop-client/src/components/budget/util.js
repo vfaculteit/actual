@@ -4,12 +4,12 @@ import { colors } from '../../style';
 
 export let CategoryGroupsContext = React.createContext([]);
 
-export function addToBeBudgetedGroup(groups) {
+export function addToBeBudgetedGroup(groups, t) {
   return [
     {
       id: 'to-be-budgeted',
-      name: 'To Be Budgeted',
-      categories: [{ id: 'to-be-budgeted', name: 'To Be Budgeted' }],
+      name: t('To Be Budgeted'),
+      categories: [{ id: 'to-be-budgeted', name: t('To Be Budgeted') }],
     },
     ...groups,
   ];

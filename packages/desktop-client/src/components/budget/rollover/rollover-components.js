@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { rolloverBudget } from 'loot-core/src/client/queries';
 import evalArithmetic from 'loot-core/src/shared/arithmetic';
@@ -38,9 +39,11 @@ function CoverTooltip({
   onSubmit,
   onClose,
 }) {
+  const { t } = useTranslation();
   let categoryGroups = useContext(CategoryGroupsContext);
   categoryGroups = addToBeBudgetedGroup(
     categoryGroups.filter(g => !g.is_income),
+    t,
   );
   let [category, setCategory] = useState(null);
 
@@ -59,7 +62,9 @@ function CoverTooltip({
       {...tooltipProps}
       onClose={onClose}
     >
-      <View style={{ marginBottom: 5 }}>Cover from category:</View>
+      <View style={{ marginBottom: 5 }}>
+        <Trans>Cover from category:</Trans>
+      </View>
 
       <InitialFocus>
         {node => (
@@ -95,7 +100,7 @@ function CoverTooltip({
           }}
           onClick={submit}
         >
-          Transfer
+          {t('Transfer')}
         </Button>
       </View>
     </Tooltip>
@@ -106,6 +111,8 @@ function BalanceTooltip({ categoryId, tooltip, monthIndex, onBudgetAction }) {
   let carryover = useSheetValue(rolloverBudget.catCarryover(categoryId));
   let balance = useSheetValue(rolloverBudget.catBalance(categoryId));
   let [menu, setMenu] = useState('menu');
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -131,17 +138,17 @@ function BalanceTooltip({ categoryId, tooltip, monthIndex, onBudgetAction }) {
             items={[
               {
                 name: 'transfer',
-                text: 'Transfer to another category',
+                text: t('Transfer to another category'),
               },
               {
                 name: 'carryover',
                 text: carryover
-                  ? 'Remove overspending rollover'
-                  : 'Rollover overspending',
+                  ? t('Remove overspending rollover')
+                  : t('Rollover overspending'),
               },
               balance < 0 && {
                 name: 'cover',
-                text: 'Cover overspending',
+                text: t('Cover overspending'),
               },
             ].filter(x => x)}
           />
@@ -182,6 +189,7 @@ function BalanceTooltip({ categoryId, tooltip, monthIndex, onBudgetAction }) {
 let headerLabelStyle = { flex: 1, padding: '0 5px', textAlign: 'right' };
 
 export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -193,7 +201,7 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
       }}
     >
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Budgeted</Text>
+        <Text style={{ color: colors.n4 }}>{t('Budgeted')}</Text>
         <CellValue
           binding={rolloverBudget.totalBudgeted}
           type="financial"
@@ -224,6 +232,7 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
 });
 
 export function IncomeHeaderMonth() {
+  const { t } = useTranslation();
   return (
     <Row
       style={{
@@ -232,7 +241,7 @@ export function IncomeHeaderMonth() {
         paddingRight: 10,
       }}
     >
-      <View style={{ flex: 1, textAlign: 'right' }}>Received</View>
+      <View style={{ flex: 1, textAlign: 'right' }}>{t('Received')}</View>
     </Row>
   );
 }

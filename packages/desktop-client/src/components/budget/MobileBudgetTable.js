@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 // import {
 //   RectButton,
 //   PanGestureHandler,
@@ -36,6 +37,7 @@ import { AmountInput } from '../util/AmountInput';
 import { ListItem, ROW_HEIGHT } from './MobileTable';
 
 export function ToBudget({ toBudget, onClick }) {
+  const { t } = useTranslation();
   return (
     <SheetValue binding={toBudget}>
       {({ value: amount }) => {
@@ -46,7 +48,7 @@ export function ToBudget({ toBudget, onClick }) {
             onClick={onClick}
           >
             <Label
-              title={amount < 0 ? 'OVERBUDGETED' : 'TO BUDGET'}
+              title={amount < 0 ? t('OVERBUDGETED') : t('TO BUDGET')}
               style={{ color: colors.n1, flexShrink: 0 }}
             />
             <Text
@@ -68,6 +70,7 @@ export function ToBudget({ toBudget, onClick }) {
 }
 
 function Saved({ projected }) {
+  const { t } = useTranslation();
   let budgetedSaved = useSheetValue(reportBudget.totalBudgetedSaved) || 0;
   let totalSaved = useSheetValue(reportBudget.totalSaved) || 0;
   let saved = projected ? budgetedSaved : totalSaved;
@@ -76,10 +79,10 @@ function Saved({ projected }) {
   return (
     <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
       {projected ? (
-        <Label title="PROJECTED SAVINGS" style={{ color: colors.n1 }} />
+        <Label title={t('PROJECTED SAVINGS')} style={{ color: colors.n1 }} />
       ) : (
         <Label
-          title={isNegative ? 'OVERSPENT' : 'SAVED'}
+          title={isNegative ? t('OVERSPENT') : t('SAVED')}
           style={{ color: colors.n1 }}
         />
       )}
@@ -653,6 +656,7 @@ export class BudgetGroup extends React.PureComponent {
 export class IncomeBudgetGroup extends React.Component {
   render() {
     const { type, group } = this.props;
+    const { t } = this.props.t;
     return (
       <View>
         <View
@@ -666,14 +670,14 @@ export class IncomeBudgetGroup extends React.Component {
           }}
         >
           {type === 'report' && (
-            <Label title="BUDGETED" style={{ width: 90 }} />
+            <Label title={t('BUDGETED')} style={{ width: 90 }} />
           )}
-          <Label title="RECEIVED" style={{ width: 90 }} />
+          <Label title={t('RECEIVED')} style={{ width: 90 }} />
         </View>
 
         <Card style={{ marginTop: 0 }}>
           <IncomeCategory
-            name="Income"
+            name={t('Income')}
             budget={
               type === 'report' ? reportBudget.groupBudgeted(group.id) : null
             }
@@ -720,7 +724,6 @@ export class BudgetGroups extends React.Component {
       expenseGroups: groups.filter(group => !group.is_income),
     };
   });
-
   render() {
     const {
       type,
@@ -760,7 +763,9 @@ export class BudgetGroups extends React.Component {
           );
         })}
 
-        {incomeGroup && <IncomeBudgetGroup type={type} group={incomeGroup} />}
+        {incomeGroup && (
+          <IncomeBudgetGroup type={type} group={incomeGroup} t={this.props.t} />
+        )}
       </View>
     );
   }
@@ -876,11 +881,11 @@ export class BudgetTable extends React.Component {
       onShowBudgetDetails,
       onOpenActionSheet,
       onBudgetAction,
+      t,
     } = this.props;
     // let editMode = false; // neuter editMode -- sorry, not rewriting drag-n-drop right now
     let { editingCategory } = this.state;
     let currentMonth = monthUtils.currentMonth();
-
     return (
       <NamespaceContext.Provider value={monthUtils.sheetForMonth(month, type)}>
         <View
@@ -918,7 +923,7 @@ export class BudgetTable extends React.Component {
             <View style={{ flex: 1 }} />
 
             <View style={{ width: 90 }}>
-              <Label title="BUDGETED" style={{ color: colors.n1 }} />
+              <Label title={t('BUDGETED')} style={{ color: colors.n1 }} />
               <CellValue
                 binding={reportBudget.totalBudgetedExpense}
                 type="financial"
@@ -932,7 +937,7 @@ export class BudgetTable extends React.Component {
               />
             </View>
             <View style={{ width: 90 }}>
-              <Label title="BALANCE" style={{ color: colors.n1 }} />
+              <Label title={t('BALANCE')} style={{ color: colors.n1 }} />
               <CellValue
                 binding={rolloverBudget.totalBalance}
                 type="financial"
@@ -967,6 +972,7 @@ export class BudgetTable extends React.Component {
                   onReorderCategory={onReorderCategory}
                   onReorderGroup={onReorderGroup}
                   onBudgetAction={onBudgetAction}
+                  t={t}
                 />
               </View>
             ) : (
@@ -990,6 +996,7 @@ export class BudgetTable extends React.Component {
                     onAddCategory={onAddCategory}
                     onReorderCategory={onReorderCategory}
                     onReorderGroup={onReorderGroup}
+                    t={t}
                   />
                 </View>
 
@@ -1028,7 +1035,7 @@ function UnconnectedBudgetHeader({
   //     default:
   //   }
   // };
-
+  const { t } = useTranslation();
   let prevEnabled = currentMonth > monthBounds.start;
   let nextEnabled = currentMonth < monthUtils.subMonths(monthBounds.end, 1);
 
@@ -1096,7 +1103,7 @@ function UnconnectedBudgetHeader({
             fontWeight: '500',
           }}
         >
-          Done
+          {t('Done')}
         </Button>
       ) : (
         <>

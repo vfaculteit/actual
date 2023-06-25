@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSpreadsheet } from 'loot-core/src/client/SpreadsheetProvider';
 import evalArithmetic from 'loot-core/src/shared/arithmetic';
@@ -8,6 +9,7 @@ import { View, Button, Tooltip, InitialFocus, Input } from '../../common';
 import NamespaceContext from '../../spreadsheet/NamespaceContext';
 
 export default function HoldTooltip({ onSubmit, onClose }) {
+  const { t } = useTranslation();
   const spreadsheet = useSpreadsheet();
   const sheetName = useContext(NamespaceContext);
 
@@ -65,7 +67,7 @@ export default function HoldTooltip({ onSubmit, onClose }) {
           }}
           onClick={submit}
         >
-          Hold
+          {t('Hold')}
         </Button>
       </View>
     </Tooltip>

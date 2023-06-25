@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import Component from '@reactions/component';
 import { css } from 'glamor';
@@ -125,16 +126,25 @@ function TotalsList({ prevMonthName, collapsed }) {
       </View>
 
       <View>
-        <Block>Available Funds</Block>
-        <Block>Overspent in {prevMonthName}</Block>
-        <Block>Budgeted</Block>
-        <Block>For Next Month</Block>
+        <Block>
+          <Trans>Available Funds</Trans>
+        </Block>
+        <Block>
+          <Trans>Overspent in {prevMonthName}</Trans>
+        </Block>
+        <Block>
+          <Trans>Budgeted</Trans>
+        </Block>
+        <Block>
+          <Trans>For Next Month</Trans>
+        </Block>
       </View>
     </View>
   );
 }
 
 function ToBudget({ month, prevMonthName, collapsed, onBudgetAction }) {
+  const { t } = useTranslation();
   return (
     <SheetValue binding={rolloverBudget.toBudget} initialValue={0}>
       {node => {
@@ -199,15 +209,15 @@ function ToBudget({ month, prevMonthName, collapsed, onBudgetAction }) {
                         items={[
                           {
                             name: 'transfer',
-                            text: 'Move to a category',
+                            text: t('Move to a category'),
                           },
                           {
                             name: 'buffer',
-                            text: 'Hold for next month',
+                            text: t('Hold for next month'),
                           },
                           {
                             name: 'reset-buffer',
-                            text: 'Reset next month’s buffer',
+                            text: t('Reset next month’s buffer'),
                           },
                         ]}
                       />
@@ -263,6 +273,7 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
   let prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
 
   let ExpandOrCollapseIcon = collapsed ? ArrowButtonDown1 : ArrowButtonUp1;
+  const { t } = useTranslation();
 
   return (
     <View
@@ -369,19 +380,22 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
                       onBudgetAction(month, type);
                     }}
                     items={[
-                      { name: 'copy-last', text: 'Copy last month’s budget' },
-                      { name: 'set-zero', text: 'Set budgets to zero' },
+                      {
+                        name: 'copy-last',
+                        text: t('Copy last month’s budget'),
+                      },
+                      { name: 'set-zero', text: t('Set budgets to zero') },
                       {
                         name: 'set-3-avg',
-                        text: 'Set budgets to 3 month avg',
+                        text: t('Set budgets to 3 month avg'),
                       },
                       isGoalTemplatesEnabled && {
                         name: 'apply-goal-template',
-                        text: 'Apply budget template',
+                        text: t('Apply budget template'),
                       },
                       isGoalTemplatesEnabled && {
                         name: 'overwrite-goal-template',
-                        text: 'Overwrite with budget template',
+                        text: t('Overwrite with budget template'),
                       },
                     ]}
                   />

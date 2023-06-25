@@ -1,4 +1,5 @@
 import React, { useContext, useState, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import * as monthUtils from 'loot-core/src/shared/months';
 
@@ -296,6 +297,7 @@ export function SidebarCategory({
   onDelete,
   onHideNewCategory,
 }) {
+  const { t } = useTranslation();
   const temporary = category.id === 'new';
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -419,7 +421,7 @@ export function SidebarCategory({
         onBlur={() => onEditName(null)}
         style={[{ paddingLeft: 13 }, isLast && { borderBottomWidth: 0 }]}
         inputProps={{
-          placeholder: temporary ? 'New Category Name' : '',
+          placeholder: temporary ? t('New Category Name') : '',
         }}
       />
     </View>
@@ -443,6 +445,7 @@ export function SidebarGroup({
 }) {
   const temporary = group.id === 'new';
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const displayed = (
     <View
@@ -477,7 +480,11 @@ export function SidebarGroup({
           minWidth: 0,
         }}
       >
-        {dragPreview && <Text style={{ fontWeight: 500 }}>Group: </Text>}
+        {dragPreview && (
+          <Text style={{ fontWeight: 500 }}>
+            <Trans>Group: </Trans>
+          </Text>
+        )}
         {group.name}
       </div>
       {!dragPreview && (
@@ -512,9 +519,9 @@ export function SidebarGroup({
                     setMenuOpen(false);
                   }}
                   items={[
-                    { name: 'add-category', text: 'Add category' },
-                    { name: 'rename', text: 'Rename' },
-                    onDelete && { name: 'delete', text: 'Delete' },
+                    { name: 'add-category', text: t('Add category') },
+                    { name: 'rename', text: t('Rename') },
+                    onDelete && { name: 'delete', text: t('Delete') },
                   ]}
                 />
               </Tooltip>
@@ -573,7 +580,7 @@ export function SidebarGroup({
         style={{ fontWeight: 600 }}
         inputProps={{
           style: { marginLeft: 20 },
-          placeholder: temporary ? 'New Group Name' : '',
+          placeholder: temporary ? t('New Group Name') : '',
         }}
       />
     </View>
@@ -606,6 +613,7 @@ function RenderMonths({ component: Component, editingIndex, args, style }) {
 }
 
 const BudgetTotals = React.memo(function BudgetTotals({ MonthComponent }) {
+  const { t } = useTranslation();
   return (
     <View
       data-testid="budget-totals"
@@ -628,7 +636,7 @@ const BudgetTotals = React.memo(function BudgetTotals({ MonthComponent }) {
           paddingLeft: 18,
         }}
       >
-        Category
+        {t('Category')}
       </View>
       <RenderMonths component={MonthComponent} />
     </View>
@@ -1188,6 +1196,7 @@ const BudgetCategories = React.memo(
 );
 
 function IncomeHeader({ MonthComponent, onShowNewGroup }) {
+  const { t } = useTranslation();
   return (
     <View style={{ flexDirection: 'row', flex: 1 }}>
       <View
@@ -1198,7 +1207,7 @@ function IncomeHeader({ MonthComponent, onShowNewGroup }) {
         }}
       >
         <Button onClick={onShowNewGroup} style={{ fontSize: 12, margin: 10 }}>
-          Add Group
+          {t('Add Group')}
         </Button>
       </View>
       <RenderMonths

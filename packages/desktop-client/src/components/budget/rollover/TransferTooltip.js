@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useSpreadsheet } from 'loot-core/src/client/SpreadsheetProvider';
 import evalArithmetic from 'loot-core/src/shared/arithmetic';
@@ -17,13 +18,14 @@ export default function TransferTooltip({
   onSubmit,
   onClose,
 }) {
+  const { t } = useTranslation();
   let spreadsheet = useSpreadsheet();
   let sheetName = useContext(NamespaceContext);
   let categoryGroups = useContext(CategoryGroupsContext);
 
   categoryGroups = categoryGroups.filter(g => !g.is_income);
   if (showToBeBudgeted) {
-    categoryGroups = addToBeBudgetedGroup(categoryGroups);
+    categoryGroups = addToBeBudgetedGroup(categoryGroups, t);
   }
 
   let [amount, setAmount] = useState(null);
@@ -64,7 +66,9 @@ export default function TransferTooltip({
       {...tooltipProps}
       onClose={onClose}
     >
-      <View style={{ marginBottom: 5 }}>Transfer this amount:</View>
+      <View style={{ marginBottom: 5 }}>
+        <Trans>Transfer this amount:</Trans>
+      </View>
       <View>
         <InitialFocus>
           <Input
@@ -74,7 +78,9 @@ export default function TransferTooltip({
           />
         </InitialFocus>
       </View>
-      <View style={{ margin: '10px 0 5px 0' }}>To:</View>
+      <View style={{ margin: '10px 0 5px 0' }}>
+        <Trans>To:</Trans>
+      </View>
 
       <CategoryAutocomplete
         categoryGroups={categoryGroups}
@@ -100,7 +106,7 @@ export default function TransferTooltip({
           }}
           onClick={submit}
         >
-          Transfer
+          {t('Transfer')}
         </Button>
       </View>
     </Tooltip>
