@@ -102,12 +102,12 @@ export default function ConfigServer() {
         }}
       >
         {currentUrl ? (
-          <Trans>
+          <Trans i18nKey="existingSessionsLoggedOut">
             Existing sessions will be logged out and you will log in to this
             server. We will validate that Actual is running at this URL.
           </Trans>
         ) : (
-          <Trans>
+          <Trans i18nKey="noServerConfiguredSpecifyUrl">
             There is no server configured. After running the server, specify the
             URL here to use the app. You can always change this later. We will
             validate that Actual is running at this URL.

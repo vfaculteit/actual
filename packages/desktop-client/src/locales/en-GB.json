@@ -158,6 +158,7 @@
   "createLocalAccountTrackTransactionsManually": "You can also create a local account if you want to track transactions manually. You can add transactions manually or import QIF/OFX/QFX files.",
   "Credit Card": "",
   "Dates": "",
+  "Days": "",
   "Debt": "",
   "DebtColon": "Debt:",
   "Default": "",
@@ -186,9 +187,7 @@
   "Enable encryption…": "",
   "enableEndToEndEncryptionCreateKeyExplanation": "To enable end-to-end encryption, you need to create a key. We will generate a key based on a password and use it to encrypt from now on. <1>This requires a sync reset</1> and all other devices will have to revert to this version of your data. <4>Learn more</4>",
   "errorLoadinApp": "There was a problem loading the app in this browser version. If this continues to be a problem, you can <2>download the desktop app</2>.",
-  "Existing sessions will be logged out and you will log in to this server": {
-    " We will validate that Actual is running at this URL": "Existing sessions will be logged out and you will log in to this server. We will validate that Actual is running at this URL."
-  },
+  "existingSessionsLoggedOut": "Existing sessions will be logged out and you will log in to this server. We will validate that Actual is running at this URL.",
   "Expenses": "",
   "ExpensesColon": "Expenses:",
   "experimentalFeaturesExplanation": "<0>Experimental features.</0> These features are not fully tested and may not work as expected. THEY MAY CAUSE IRRECOVERABLE DATA LOSS. They may do nothing at all. Only enable them if you know what you are doing.",
@@ -210,6 +209,7 @@
   "For Budget": "",
   "For Next Month": "For Next Month",
   "formattingDoesNotAffectStoredData": "<0>Formatting</0> does not affect how budget data is stored, and can be changed at any time.",
+  "Friday": "",
   "general": {
     "account": "Account",
     "account_one": "Account",
@@ -312,6 +312,8 @@
   "Merge and edit rule": "",
   "mergingWillRemovePayee": "Merging will remove the payee and transfer any existing rules to the new payee. If checked below, a rule will be created to do this rename while importing transactions.",
   "messageChangePasswordExistingSessions": "This will change the password for this server instance. All existing sessions will stay logged in.",
+  "Monday": "",
+  "Months": "",
   "moreReportsComingSoon": "More reports<1></1> coming soon!",
   "Mortgage": "",
   "Move to a category": "",
@@ -334,6 +336,7 @@
   "noKeyForFile": "We don’t have a key that encrypts or decrypts this file. Enter the password for this file to create the key for encryption. <2>Learn more</2>",
   "None": "",
   "nordigenIntegrationOnlyAvalaibleActualServer": "Nordigen integration is only available for budgets using actual-server. <2>Learn more.</2>",
+  "noServerConfiguredSpecifyUrl": "There is no server configured. After running the server, specify the URL here to use the app. You can always change this later. We will validate that Actual is running at this URL.",
   "Not logged in": "",
   "notes": "",
   "nothing": "",
@@ -387,6 +390,7 @@
   "Rules": "",
   "rulesAreRunInTheOrderYouSeeThem": "Rules are always run in the order that you see them. <2>Learn more</2>",
   "ruleStageOrder": "The stage of a rule allows you to force a specific order. Pre rules always run first, and post rules always run last. Within each stage rules are automatically ordered from least to most specific.",
+  "Saturday": "",
   "Save": "",
   "SAVED": "",
   "Savings": "",
@@ -488,6 +492,7 @@
     "upcoming": ""
   },
   "Stop using a server": "",
+  "Sunday": "",
   "support": {
     "anErrorOccuredWhileSaving": "An error occurred while saving. Please contact help@actualbudget.com for support."
   },
@@ -501,13 +506,6 @@
   "The newer web app": "",
   "The old unsupported desktop app": "",
   "Then apply these actions": "",
-  "There is no server configured": {
-    " After running the server, specify the URL here to use the app": {
-      " You can always change this later": {
-        " We will validate that Actual is running at this URL": "There is no server configured. After running the server, specify the URL here to use the app. You can always change this later. We will validate that Actual is running at this URL."
-      }
-    }
-  },
   "This account has no transactions so it will be permanently deleted": "This account has no transactions so it will be permanently deleted.",
   "This account has transactions so we can’t permanently delete it": "This account has transactions so we can’t permanently delete it.",
   "This archive is not a valid Actual export file": "",
@@ -526,6 +524,7 @@
   "thisAccountHasBalanceOfToClose": "This account has a balance of <2>{integerToCurrency(balance)}</2>. To close this account, select a different account to transfer this balance to:",
   "thisCanNotBeChangedLaterOffBudgetAccounts": "This cannot be changed later. <1></1> \nSee <6>Accounts Overview</6> for more information.",
   "thisIsAHostedFileMsg": "This is a <1>hosted file</1> which means it is stored on your server to make it available for download on any device. You can delete it from the server, which will also remove it from all of your devices.",
+  "Thursday": "",
   "to": "",
   "To Be Budgeted": "",
   "To budget": "",
@@ -543,6 +542,7 @@
   "Try again": "",
   "Try Demo": "",
   "Try it anyway": "",
+  "Tuesday": "",
   "uiErrorContactUs": "<0>There was an unrecoverable error in the UI. Sorry!</0><1>If this error persists, please get <2>in touch</2> so it can be investigated.</1>",
   "Unable to access server": {
     " Make sure the configured URL for the server is accessible": ""
@@ -554,9 +554,12 @@
   },
   "Upcoming dates": "",
   "Update key": "",
+  "Wednesday": "",
+  "Weeks": "",
   "Welcome to Actual!": "",
   "Where’s the server?": "",
   "While we work to improve this experience, you may find the full Actual feature set on devices with larger screens": "While we work to improve this experience, you may find the full Actual feature set on devices with larger screens.",
+  "Years": "",
   "You must select a category": "",
   "You must select a type": "",
   "You’re up to date!": "",
