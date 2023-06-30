@@ -1,4 +1,5 @@
 import * as d from 'date-fns';
+import { nl } from 'date-fns/locale';
 import memoizeOne from 'memoize-one';
 
 export function _parse(value: string | number | Date) {
@@ -238,7 +239,7 @@ export function nameForMonth(month: string | Date) {
 }
 
 export function format(month: string | Date, str: string) {
-  return d.format(_parse(month), str);
+  return d.format(_parse(month), str, { locale: nl });
 }
 
 export const getDateFormatRegex = memoizeOne((format: string) => {

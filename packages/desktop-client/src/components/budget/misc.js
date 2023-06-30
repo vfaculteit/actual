@@ -1272,6 +1272,7 @@ export const MonthPicker = ({
   style,
   onSelect,
 }) => {
+  const { t } = useTranslation();
   const currentMonth = monthUtils.currentMonth();
   const range = getRangeForYear(currentMonth);
   const monthNames = range.map(month => {
@@ -1365,7 +1366,7 @@ export const MonthPicker = ({
               ]}
               onClick={() => onSelect(month)}
             >
-              {size === 'small' ? monthName[0] : monthName}
+              {size === 'small' ? t(monthName)[0] : t(monthName)}
             </View>
           );
         })}

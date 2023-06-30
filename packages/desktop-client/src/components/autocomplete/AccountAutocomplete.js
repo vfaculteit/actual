@@ -28,9 +28,7 @@ export function AccountList({
           const showGroup = lastItem
             ? item.offbudget !== lastItem.offbudget
             : true;
-          const group = item.offbudget
-            ? t('autocomplete.offBudget', 'Off Budget')
-            : t('autocomplete.forBudget', 'For Budget');
+          const group = item.offbudget ? t('Off Budget') : t('For Budget');
           lastItem = item;
 
           return [

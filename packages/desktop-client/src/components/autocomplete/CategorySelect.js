@@ -13,8 +13,7 @@ export const NativeCategorySelect = React.forwardRef(
     return (
       <Select {...nativeProps} ref={ref}>
         <option value="">
-          {emptyLabel ||
-            t('autocomplete.selectCategoryDotDotDot', 'Select category...')}
+          {emptyLabel || t('selectCategoryDotDotDot', 'Select category...')}
         </option>
         {categoryGroups.map(group => (
           <optgroup key={group.id} label={group.name}>

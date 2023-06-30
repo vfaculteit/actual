@@ -115,9 +115,9 @@ export function PayeeList({
           let type = item.transfer_acct ? 'account' : 'payee';
           let title;
           if (type === 'payee' && lastType !== type) {
-            title = t('general.payee_other', 'Payees');
+            title = t('Payees');
           } else if (type === 'account' && lastType !== type) {
-            title = t('autocomplete.transferToFrom', 'Transfer To/From');
+            title = t('Transfer To/From');
           }
           let showMoreMessage = idx === items.length - 1 && isFiltered;
           lastType = type;
@@ -327,7 +327,7 @@ export default function PayeeAutocomplete({
             <AutocompleteFooter embedded={embedded}>
               {showMakeTransfer && (
                 <AutocompleteFooterButton
-                  title={t('autocomplete.makeTransfer', 'Make Transfer')}
+                  title={t('Make Transfer')}
                   style={[
                     showManagePayees && { marginBottom: 5 },
                     focusTransferPayees && {
@@ -350,7 +350,7 @@ export default function PayeeAutocomplete({
               )}
               {showManagePayees && (
                 <AutocompleteFooterButton
-                  title={t('autocomplete.managePayees', 'Manage Payees')}
+                  title={t('Manage Payees')}
                   onClick={() => onManagePayees()}
                 />
               )}

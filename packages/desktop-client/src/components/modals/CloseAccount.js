@@ -138,7 +138,9 @@ function CloseAccount({
                       onBlur={handleBlur}
                       style={{ width: 200, marginBottom: 15 }}
                     >
-                      <option value="">{t('Select account...')}</option>
+                      <option value="">
+                        {t('selectAccountDotDotDot', 'Select account...')}
+                      </option>
                       <optgroup label={t('For Budget')}>
                         {onbudget.map(acct => (
                           <option key={acct.id} value={acct.id}>

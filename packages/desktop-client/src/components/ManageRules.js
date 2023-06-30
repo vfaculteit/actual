@@ -834,8 +834,8 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
             {selectedInst.items.size > 0 && (
               <Button onClick={onDeleteSelected}>
                 {t('deleteNRules', {
-                  amountRules: selectedInst.items.size,
-                  defaultValue: `Delete ${selectedInst.items.size} rules`,
+                  count: selectedInst.items.size,
+                  defaultValue: 'Delete {{count}} rules',
                 })}
               </Button>
             )}
