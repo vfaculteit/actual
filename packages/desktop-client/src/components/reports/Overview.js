@@ -66,7 +66,7 @@ function NetWorthCard({ accounts }) {
   const { t } = useTranslation();
 
   const params = useMemo(
-    () => netWorthSpreadsheet(start, end, accounts, t),
+    () => netWorthSpreadsheet(start, end, accounts, [], t),
     [start, end, accounts],
   );
   const data = useReport('net_worth', params);

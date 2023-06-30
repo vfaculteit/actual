@@ -87,7 +87,7 @@ export function Value({
 
   function formatValue(value) {
     if (value == null || value === '') {
-      return '(nothing)';
+      return t('(nothing)');
     } else if (typeof value === 'boolean') {
       return value ? 'true' : 'false';
     } else {
@@ -218,6 +218,7 @@ export function ConditionExpression({
   prefix,
   style,
 }) {
+  const { t } = useTranslation();
   return (
     <View
       style={[
@@ -235,8 +236,10 @@ export function ConditionExpression({
       ]}
     >
       {prefix && <Text style={{ color: colors.n3 }}>{prefix} </Text>}
-      <Text style={{ color: colors.p4 }}>{mapField(field, options)}</Text>{' '}
-      <Text style={{ color: colors.n3 }}>{friendlyOp(op)}</Text>{' '}
+      <Text style={{ color: colors.p4 }}>
+        {mapField(field, options, t)}
+      </Text>{' '}
+      <Text style={{ color: colors.n3 }}>{friendlyOp(op, '', t)}</Text>{' '}
       <Value value={value} field={field} />
     </View>
   );
@@ -287,14 +290,16 @@ export function ActionExpression({ field, op, value, options, style }) {
     >
       {op === 'set' ? (
         <>
-          <Text style={{ color: colors.n3 }}>{friendlyOp(op)}</Text>{' '}
-          <Text style={{ color: colors.p4 }}>{mapField(field, options)}</Text>{' '}
+          <Text style={{ color: colors.n3 }}>{friendlyOp(op, '', t)}</Text>{' '}
+          <Text style={{ color: colors.p4 }}>
+            {mapField(field, options, t)}
+          </Text>{' '}
           <Text style={{ color: colors.n3 }}>{t('to') + ' '}</Text>
           <Value value={value} field={field} />
         </>
       ) : op === 'link-schedule' ? (
         <>
-          <Text style={{ color: colors.n3 }}>{friendlyOp(op)}</Text>{' '}
+          <Text style={{ color: colors.n3 }}>{friendlyOp(op, '', t)}</Text>{' '}
           <ScheduleValue value={value} />
         </>
       ) : null}
@@ -352,7 +357,7 @@ let Rule = React.memo(
                 padding: '3px 5px',
               }}
             >
-              {rule.stage}
+              {t(rule.stage)}
             </View>
           )}
         </Cell>
@@ -370,7 +375,7 @@ let Rule = React.memo(
                   op={cond.op}
                   value={cond.value}
                   options={cond.options}
-                  prefix={i > 0 ? friendlyOp(rule.conditionsOp) : null}
+                  prefix={i > 0 ? friendlyOp(rule.conditionsOp, '', t) : null}
                   style={i !== 0 && { marginTop: 3 }}
                 />
               ))}
@@ -551,8 +556,8 @@ function mapValue(field, value, { payees, categories, accounts }, t) {
 
 function ruleToString(rule, data, t) {
   let conditions = rule.conditions.flatMap(cond => [
-    mapField(cond.field),
-    friendlyOp(cond.op),
+    mapField(cond.field, {}, t),
+    friendlyOp(cond.op, '', t),
     cond.op === 'oneOf'
       ? cond.value.map(v => mapValue(cond.field, v, data, t)).join(', ')
       : mapValue(cond.field, cond.value, data, t),
@@ -560,15 +565,15 @@ function ruleToString(rule, data, t) {
   let actions = rule.actions.flatMap(action => {
     if (action.op === 'set') {
       return [
-        friendlyOp(action.op),
-        mapField(action.field),
+        friendlyOp(action.op, '', t),
+        mapField(action.field, {}, t),
         'to',
         mapValue(action.field, action.value, data, t),
       ];
     } else if (action.op === 'link-schedule') {
       let schedule = data.schedules.find(s => s.id === action.value);
       return [
-        friendlyOp(action.op),
+        friendlyOp(action.op, '', t),
         describeSchedule(
           schedule,
           data.payees.find(p => p.id === schedule._payee),
@@ -778,7 +783,7 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
           </View>
           <View style={{ flex: 1 }} />
           <Input
-            placeholder={t('Filter rules...')}
+            placeholder={t('filterRulesDotDotDot', 'Filter rules...')}
             value={filter}
             onChange={e => {
               setFilter(e.target.value);

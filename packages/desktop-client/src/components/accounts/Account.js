@@ -2031,7 +2031,7 @@ class AccountInternal extends React.PureComponent {
                             fontStyle: 'italic',
                           }}
                         >
-                          No transactions
+                          <Trans>No transactions</Trans>
                         </View>
                       ) : null
                     }

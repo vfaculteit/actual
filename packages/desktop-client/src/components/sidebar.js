@@ -505,7 +505,7 @@ function Tools() {
   return (
     <View style={{ flexShrink: 0 }}>
       <Item
-        title="More"
+        title={t('More')}
         Icon={isOpen ? CheveronDown : CheveronRight}
         onClick={onToggle}
         style={{ marginBottom: isOpen ? 8 : 0 }}

@@ -53,72 +53,82 @@ export const FIELD_TYPES = new Map(
   }),
 );
 
-export function mapField(field, opts) {
+export function mapField(field, opts, t) {
   opts = opts || {};
 
   switch (field) {
     case 'imported_payee':
-      return 'imported payee';
+      return t('imported payee');
+    case 'account':
+      return t('general.accountSmallCase');
+    case 'category':
+      return t('category');
+    case 'date':
+      return t('date');
+    case 'payee':
+      return t('payee');
+    case 'notes':
+      return t('notesSmallCase', 'notes');
     case 'amount':
       if (opts.inflow) {
-        return 'amount (inflow)';
+        return t('amount (inflow)');
       } else if (opts.outflow) {
-        return 'amount (outflow)';
+        return t('amount (outflow)');
       }
-      return 'amount';
+      return t('amount');
     case 'amount-inflow':
-      return 'amount (inflow)';
+      return t('amount (inflow)');
     case 'amount-outflow':
-      return 'amount (outflow)';
+      return t('amount (outflow)');
     default:
       return field;
   }
 }
 
-export function friendlyOp(op, type) {
+export function friendlyOp(op, type, t) {
   switch (op) {
     case 'oneOf':
-      return 'one of';
+      return t('one of');
     case 'is':
-      return 'is';
+      return t('is');
     case 'isapprox':
-      return 'is approx';
+      return t('is approx');
     case 'isbetween':
-      return 'is between';
+      return t('is between');
     case 'contains':
-      return 'contains';
+      return t('contains');
     case 'gt':
       if (type === 'date') {
-        return 'is after';
+        return t('is after');
       }
-      return 'is greater than';
+      return t('is greater than');
     case 'gte':
       if (type === 'date') {
-        return 'is after or equals';
+        return t('is after or equals');
       }
-      return 'is greater than or equals';
+      return t('is greater than or equals');
     case 'lt':
       if (type === 'date') {
-        return 'is before';
+        return t('is before');
       }
-      return 'is less than';
+      return t('is less than');
     case 'lte':
       if (type === 'date') {
-        return 'is before or equals';
+        return t('is before or equals');
       }
-      return 'is less than or equals';
+      return t('is less than or equals');
     case 'true':
-      return 'is true';
+      return t('is true');
     case 'false':
-      return 'is false';
+      return t('is false');
     case 'set':
-      return 'set';
+      return t('set');
     case 'link-schedule':
-      return 'link schedule';
+      return t('link schedule');
     case 'and':
-      return 'and';
+      return t('and');
     case 'or':
-      return 'or';
+      return t('or');
     default:
       return '';
   }
@@ -134,20 +144,23 @@ export function deserializeField(field) {
   }
 }
 
-export function getFieldError(type) {
+export function getFieldError(type, t) {
   switch (type) {
     case 'date-format':
-      return 'Invalid date format';
+      return t('Invalid date format');
     case 'no-null':
     case 'no-empty-array':
     case 'no-empty-string':
-      return 'Value cannot be empty';
+      return t('Value cannot be empty');
     case 'not-number':
-      return 'Value must be a number';
+      return t('Value must be a number');
     case 'invalid-field':
-      return 'Please choose a valid field for this type of rule';
+      return t('Please choose a valid field for this type of rule');
     default:
-      return 'Internal error, sorry! Please get in touch https://actualbudget.github.io/docs/Contact/ for support';
+      return t(
+        'internalErrorContactSupport',
+        'Internal error, sorry! Please get in touch https://actualbudget.github.io/docs/Contact/ for support',
+      );
   }
 }
 

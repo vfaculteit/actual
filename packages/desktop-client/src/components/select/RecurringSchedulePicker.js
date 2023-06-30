@@ -353,7 +353,7 @@ function RecurringScheduleTooltip({ config: currentConfig, onClose, onSave }) {
       <div
         style={{ display: 'flex', marginTop: 15, justifyContent: 'flex-end' }}
       >
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t('Cancel')}</Button>
         <Button
           onClick={() => onSave(unparseConfig(config))}
           primary

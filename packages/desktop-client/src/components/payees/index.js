@@ -74,9 +74,9 @@ function RuleButton({ ruleCount, focused, onEdit, onClick }) {
       >
         <Text style={{ paddingRight: 5 }}>
           {ruleCount > 0 ? (
-            <>
-              {ruleCount} associated {plural(ruleCount, 'rule', 'rules')}
-            </>
+            <Trans i18nKey="associatedRulesWithAmount" count={ruleCount}>
+              {ruleCount} associated rules
+            </Trans>
           ) : (
             <Trans>Create rule</Trans>
           )}
@@ -512,7 +512,7 @@ export const ManagePayees = React.forwardRef(
           </Component>
           <View style={{ flex: 1 }} />
           <Input
-            placeholder={t('Filter payees...')}
+            placeholder={t('filterPayeesDotDotDot', 'Filter payees...')}
             value={filter}
             onChange={e => {
               applyFilter(e.target.value);

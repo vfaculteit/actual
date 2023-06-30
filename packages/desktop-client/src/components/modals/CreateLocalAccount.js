@@ -172,7 +172,7 @@ function CreateLocalAccount({ modalProps, actions, history }) {
                   </View>
                 </View>
 
-                <InlineField label="Balance" width="75%">
+                <InlineField label={t('Balance')} width="75%">
                   <Input
                     name="balance"
                     value={values.balance}

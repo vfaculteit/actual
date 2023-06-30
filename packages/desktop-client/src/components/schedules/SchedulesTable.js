@@ -316,7 +316,7 @@ export function SchedulesTable({
         style={[{ flex: 1, backgroundColor: 'transparent' }, style]}
         items={items}
         renderItem={renderItem}
-        renderEmpty={filter ? 'No matching schedules' : 'No schedules'}
+        renderEmpty={filter ? t('No matching schedules') : t('No schedules')}
         allowPopupsEscape={items.length < 6}
       />
     </View>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,19 +11,19 @@ import q, { runQuery } from 'loot-core/src/client/query-helpers';
 import { send } from 'loot-core/src/platform/client/fetch';
 import * as monthUtils from 'loot-core/src/shared/months';
 import {
-  mapField,
+  FIELD_TYPES,
   friendlyOp,
   getFieldError,
-  parse,
-  unparse,
   makeValue,
-  FIELD_TYPES,
+  mapField,
+  parse,
   TYPE_INFO,
+  unparse,
 } from 'loot-core/src/shared/rules';
 import {
-  integerToCurrency,
-  integerToAmount,
   amountToInteger,
+  integerToAmount,
+  integerToCurrency,
 } from 'loot-core/src/shared/util';
 
 import useSelected, { SelectedProvider } from '../../hooks/useSelected';
@@ -33,13 +33,13 @@ import InformationOutline from '../../icons/v1/InformationOutline';
 import { colors } from '../../style';
 import SimpleTransactionsTable from '../accounts/SimpleTransactionsTable';
 import {
-  View,
-  Text,
-  Modal,
   Button,
-  Stack,
   CustomSelect,
+  Modal,
+  Stack,
+  Text,
   Tooltip,
+  View,
 } from '../common';
 import { StatusBadge } from '../schedules/StatusBadge';
 import { BetweenAmountInput } from '../util/AmountInput';
@@ -102,13 +102,14 @@ export function OpSelect({
 }) {
   // We don't support the `contains` operator for the id type for
   // rules yet
+  const { t } = useTranslation();
   if (type === 'id') {
     ops = ops.filter(op => op !== 'contains');
   }
 
   return (
     <CustomSelect
-      options={ops.map(op => [op, formatOp(op, type)])}
+      options={ops.map(op => [op, formatOp(op, type, t)])}
       value={value}
       onChange={value => onChange('op', value)}
       style={style}
@@ -145,6 +146,7 @@ function EditorButtons({ onAdd, onDelete, style }) {
 }
 
 function FieldError({ type }) {
+  const { t } = useTranslation();
   return (
     <Text
       style={{
@@ -154,7 +156,7 @@ function FieldError({ type }) {
         marginBottom: 5,
       }}
     >
-      {getFieldError(type)}
+      {getFieldError(type, t)}
     </Text>
   );
 }
@@ -186,6 +188,7 @@ export function ConditionEditor({
   onDelete,
   onAdd,
 }) {
+  const { t } = useTranslation();
   let { field, op, value, type, options, error } = condition;
 
   if (field === 'amount' && options) {
@@ -218,7 +221,11 @@ export function ConditionEditor({
 
   return (
     <Editor style={editorStyle} error={error}>
-      <FieldSelect fields={conditionFields} value={field} onChange={onChange} />
+      <FieldSelect
+        fields={conditionFields(t)}
+        value={field}
+        onChange={onChange}
+      />
       <OpSelect ops={ops} value={op} type={type} onChange={onChange} />
 
       <View style={{ flex: 1 }}>{valueEditor}</View>
@@ -292,18 +299,21 @@ function ScheduleDescription({ id }) {
   );
 }
 
-let actionFields = [
-  'category',
-  'payee',
-  'notes',
-  'cleared',
-  'account',
-  'date',
-  'amount',
-].map(field => [field, mapField(field)]);
+function actionFields(t) {
+  return [
+    'category',
+    'payee',
+    'notes',
+    'cleared',
+    'account',
+    'date',
+    'amount',
+  ].map(field => [field, mapField(field, {}, t)]);
+}
+
 function ActionEditor({ ops, action, editorStyle, onChange, onDelete, onAdd }) {
   let { field, op, value, type, error, inputKey = 'initial' } = action;
-
+  const { t } = useTranslation();
   return (
     <Editor style={editorStyle} error={error}>
       {/*<OpSelect ops={ops} value={op} onChange={onChange} />*/}
@@ -311,11 +321,11 @@ function ActionEditor({ ops, action, editorStyle, onChange, onDelete, onAdd }) {
       {op === 'set' ? (
         <>
           <View style={{ padding: '5px 10px', lineHeight: '1em' }}>
-            {friendlyOp(op)}
+            {friendlyOp(op, '', t)}
           </View>
 
           <FieldSelect
-            fields={actionFields}
+            fields={actionFields(t)}
             value={field}
             onChange={onChange}
           />
@@ -334,7 +344,7 @@ function ActionEditor({ ops, action, editorStyle, onChange, onDelete, onAdd }) {
       ) : op === 'link-schedule' ? (
         <>
           <View style={{ padding: '5px 10px', color: colors.p4 }}>
-            {friendlyOp(op)}
+            {friendlyOp(op, '', t)}
           </View>
           <ScheduleDescription id={value || null} />
         </>
@@ -417,7 +427,7 @@ export function ConditionsList({
   const { t } = useTranslation();
   function addCondition(index) {
     // (remove the inflow and outflow pseudo-fields since they’d be a pain to get right)
-    let fields = conditionFields
+    let fields = conditionFields(t)
       .map(f => f[0])
       .filter(f => f !== 'amount-inflow' && f !== 'amount-outflow');
 
@@ -571,20 +581,22 @@ export function ConditionsList({
 // TODO:
 // * Dont touch child transactions?
 
-let conditionFields = [
-  'imported_payee',
-  'account',
-  'category',
-  'date',
-  'payee',
-  'notes',
-  'amount',
-]
-  .map(field => [field, mapField(field)])
-  .concat([
-    ['amount-inflow', mapField('amount', { inflow: true })],
-    ['amount-outflow', mapField('amount', { outflow: true })],
-  ]);
+function conditionFields(t) {
+  return [
+    'imported_payee',
+    'account',
+    'category',
+    'date',
+    'payee',
+    'notes',
+    'amount',
+  ]
+    .map(field => [field, mapField(field, {}, t)])
+    .concat([
+      ['amount-inflow', mapField('amount', { inflow: true }, t)],
+      ['amount-outflow', mapField('amount', { outflow: true }, t)],
+    ]);
+}
 
 export default function EditRule({
   history,
@@ -649,7 +661,7 @@ export default function EditRule({
   }
 
   function addAction(index) {
-    let fields = actionFields.map(f => f[0]);
+    let fields = actionFields(t).map(f => f[0]);
     for (let action of actions) {
       fields = fields.filter(f => f !== action.field);
     }
@@ -817,8 +829,8 @@ export default function EditRule({
                       data-testid="conditions-op"
                       style={{ display: 'inline-flex' }}
                       fields={[
-                        ['and', 'all'],
-                        ['or', 'any'],
+                        ['and', t('all')],
+                        ['or', t('any')],
                       ]}
                       value={conditionsOp}
                       onChange={onChangeConditionsOp}
@@ -902,7 +914,9 @@ export default function EditRule({
                 justify="flex-end"
                 style={{ marginTop: 20 }}
               >
-                <Button onClick={() => modalProps.onClose()}>Cancel</Button>
+                <Button onClick={() => modalProps.onClose()}>
+                  {t('Cancel')}
+                </Button>
                 <Button primary onClick={() => onSave()}>
                   {t('Save')}
                 </Button>

@@ -70,7 +70,8 @@ function Header({
         bare
         style={{ marginBottom: '15', alignSelf: 'flex-start' }}
       >
-        <ArrowLeft width={10} height={10} style={{ marginRight: 5 }} /> Back
+        <ArrowLeft width={10} height={10} style={{ marginRight: 5 }} />{' '}
+        {t('Back')}
       </ButtonLink>
       <View style={styles.veryLargeText}>{title}</View>
 

@@ -1,5 +1,5 @@
 module.exports = {
-  input: ['src/**/*.js'],
+  input: ['src/**/*.js', '../loot-core/src/shared/rules.ts'],
   output: 'src/locales/$LOCALE.json',
   locales: ['en-GB', 'es-ES', 'nl-BE'],
   defaultNamespace: 'web',

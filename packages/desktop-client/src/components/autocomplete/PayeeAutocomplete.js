@@ -106,7 +106,7 @@ export function PayeeList({
                   display: 'inline-block',
                 }}
               />
-              Create Payee “{inputValue}”
+              {t('Create Payee') + ` “${inputValue}”`}
             </View>
           </View>
         )}

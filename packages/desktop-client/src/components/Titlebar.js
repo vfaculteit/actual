@@ -273,7 +273,7 @@ function Titlebar({
 }) {
   let sidebar = useSidebar();
   const serverURL = useServerURL();
-
+  const { t } = useTranslation();
   return (
     <View
       style={[
@@ -333,7 +333,7 @@ function Titlebar({
                   height={10}
                   style={{ marginRight: 5, color: 'currentColor' }}
                 />{' '}
-                Back
+                {t('Back')}
               </Button>
             ) : null;
           }}

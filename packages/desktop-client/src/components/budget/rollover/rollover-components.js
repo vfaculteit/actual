@@ -212,7 +212,7 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
         />
       </View>
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Spent</Text>
+        <Text style={{ color: colors.n4 }}>{t('Spent')}</Text>
         <CellValue
           binding={rolloverBudget.totalSpent}
           type="financial"
@@ -220,7 +220,7 @@ export const BudgetTotalsMonth = React.memo(function BudgetTotalsMonth() {
         />
       </View>
       <View style={headerLabelStyle}>
-        <Text style={{ color: colors.n4 }}>Balance</Text>
+        <Text style={{ color: colors.n4 }}>{t('Balance')}</Text>
         <CellValue
           binding={rolloverBudget.totalBalance}
           type="financial"

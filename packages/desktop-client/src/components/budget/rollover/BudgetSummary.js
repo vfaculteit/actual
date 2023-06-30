@@ -130,7 +130,10 @@ function TotalsList({ prevMonthName, collapsed }) {
           <Trans>Available Funds</Trans>
         </Block>
         <Block>
-          <Trans>Overspent in {prevMonthName}</Trans>
+          {/* eslint-disable-next-line prettier/prettier */}
+          <Trans i18nKey="overspentInMonth" values={{ month:prevMonthName }} defaults="Overspent in {{month}}">
+            Overspent in {prevMonthName}
+          </Trans>
         </Block>
         <Block>
           <Trans>Budgeted</Trans>
@@ -154,7 +157,11 @@ function ToBudget({ month, prevMonthName, collapsed, onBudgetAction }) {
 
         return (
           <View style={{ alignItems: 'center' }}>
-            <Block>{isNegative ? 'Overbudgeted:' : 'To Budget:'}</Block>
+            <Block>
+              {isNegative
+                ? t('overbudgetedColon', 'Overbudgeted:')
+                : t('toBudgetColon', 'To Budget:')}
+            </Block>
             <Component initialState={{ menuOpen: null }}>
               {({ state, setState }) => (
                 <View>
@@ -270,7 +277,10 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
     setMenuOpen(false);
   }
 
-  let prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
+  let prevMonthName = monthUtils.nonLocalizedFormat(
+    monthUtils.prevMonth(month),
+    'MMM',
+  );
 
   let ExpandOrCollapseIcon = collapsed ? ArrowButtonDown1 : ArrowButtonUp1;
   const { t } = useTranslation();
@@ -338,7 +348,7 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
               currentMonth === month && { textDecoration: 'underline' },
             ])}
           >
-            {monthUtils.format(month, 'MMMM')}
+            {monthUtils.nonLocalizedFormat(month, 'MMMM')}
           </div>
 
           <View

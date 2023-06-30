@@ -1,25 +1,25 @@
-import React, { useState, useRef, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { FocusScope } from '@react-aria/focus';
 import {
-  parse as parseDate,
   format as formatDate,
   isValid as isDateValid,
+  parse as parseDate,
 } from 'date-fns';
 
 import { send } from 'loot-core/src/platform/client/fetch';
 import { getMonthYearFormat } from 'loot-core/src/shared/months';
 import {
-  mapField,
-  friendlyOp,
   deserializeField,
-  getFieldError,
-  unparse,
-  makeValue,
   FIELD_TYPES,
+  friendlyOp,
+  getFieldError,
+  makeValue,
+  mapField,
   TYPE_INFO,
+  unparse,
 } from 'loot-core/src/shared/rules';
 import { titleFirst } from 'loot-core/src/shared/util';
 
@@ -27,26 +27,28 @@ import DeleteIcon from '../../icons/v0/Delete';
 import SettingsSliderAlternate from '../../icons/v2/SettingsSliderAlternate';
 import { colors } from '../../style';
 import {
-  View,
+  Button,
+  CustomSelect,
+  Menu,
+  Stack,
   Text,
   Tooltip,
-  Stack,
-  Button,
-  Menu,
-  CustomSelect,
+  View,
 } from '../common';
 import { Value } from '../ManageRules';
 import GenericInput from '../util/GenericInput';
 
-let filterFields = [
-  'date',
-  'account',
-  'payee',
-  'notes',
-  'category',
-  'amount',
-  'cleared',
-].map(field => [field, mapField(field)]);
+function filterFields(t) {
+  return [
+    'date',
+    'account',
+    'payee',
+    'notes',
+    'category',
+    'amount',
+    'cleared',
+  ].map(field => [field, mapField(field, {}, t)]);
+}
 
 function subfieldFromFilter({ field, options, value }) {
   if (field === 'date') {
@@ -91,6 +93,7 @@ function subfieldToOptions(field, subfield) {
 }
 
 function OpButton({ op, selected, style, onClick }) {
+  const { t } = useTranslation();
   return (
     <Button
       bare
@@ -104,7 +107,7 @@ function OpButton({ op, selected, style, onClick }) {
       ]}
       onClick={onClick}
     >
-      {friendlyOp(op)}
+      {friendlyOp(op, '', t)}
     </Button>
   );
 }
@@ -204,7 +207,7 @@ function ConfigureField({
               style={{ borderWidth: 1 }}
             />
           ) : (
-            titleFirst(mapField(field))
+            titleFirst(mapField(field, {}, t))
           )}
         </View>
 
@@ -350,8 +353,8 @@ export function FilterButton({ onApply }) {
     });
 
     if (error && error.conditionErrors.length > 0) {
-      let field = titleFirst(mapField(cond.field));
-      alert(field + ': ' + getFieldError(error.conditionErrors[0]));
+      let field = titleFirst(mapField(cond.field, {}, t));
+      alert(field + ': ' + getFieldError(error.conditionErrors[0], t));
     } else {
       onApply(cond);
       dispatch({ type: 'close' });
@@ -381,7 +384,7 @@ export function FilterButton({ onApply }) {
             onMenuSelect={name => {
               dispatch({ type: 'configure', field: name });
             }}
-            items={filterFields.map(([name, text]) => ({
+            items={filterFields(t).map(([name, text]) => ({
               name: name,
               text: titleFirst(text),
             }))}
@@ -445,7 +448,7 @@ function FilterExpression({
   let [editing, setEditing] = useState(false);
 
   let field = subfieldFromFilter({ field: originalField, value });
-
+  const { t } = useTranslation();
   return (
     <View
       style={[
@@ -472,9 +475,9 @@ function FilterExpression({
           ) : (
             <>
               <Text style={{ color: colors.p4 }}>
-                {mapField(field, options)}
+                {mapField(field, options, t)}
               </Text>{' '}
-              <Text style={{ color: colors.n3 }}>{friendlyOp(op)}</Text>{' '}
+              <Text style={{ color: colors.n3 }}>{friendlyOp(op, '', t)}</Text>{' '}
               <Value
                 value={value}
                 field={field}
