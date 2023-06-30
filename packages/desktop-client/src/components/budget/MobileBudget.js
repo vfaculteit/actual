@@ -190,14 +190,13 @@ class Budget extends React.Component {
 
   onOpenActionSheet = () => {
     let { budgetType } = this.props;
-    const { t } = useTranslation();
 
     let options = [
-      t('Edit Categories'),
-      t('Copy last month’s budget'),
-      t('Set budgets to zero'),
-      t('Set budgets to 3 month average'),
-      budgetType === 'report' && t('Apply to all future budgets'),
+      this.props.t('Edit Categories'),
+      this.props.t('Copy last month’s budget'),
+      this.props.t('Set budgets to zero'),
+      this.props.t('Set budgets to 3 month average'),
+      budgetType === 'report' && this.props.t('Apply to all future budgets'),
       'Cancel',
     ].filter(Boolean);
 
@@ -205,7 +204,7 @@ class Budget extends React.Component {
       {
         options,
         cancelButtonIndex: options.length - 1,
-        title: t('Actions'),
+        title: this.props.t('Actions'),
       },
       idx => {
         switch (idx) {

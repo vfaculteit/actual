@@ -188,7 +188,9 @@ function Saved({ projected, style }) {
   return (
     <View style={[{ alignItems: 'center', fontSize: 14 }, style]}>
       {projected ? (
-        <Text style={{ color: colors.n4 }}>Projected Savings:</Text>
+        <Text style={{ color: colors.n4 }}>
+          {t('projectSavingsColon', 'Projected Savings:')}
+        </Text>
       ) : (
         <View style={{ color: colors.n4 }}>
           {isNegative

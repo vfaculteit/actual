@@ -881,7 +881,6 @@ export class BudgetTable extends React.Component {
       onShowBudgetDetails,
       onOpenActionSheet,
       onBudgetAction,
-      t,
     } = this.props;
     // let editMode = false; // neuter editMode -- sorry, not rewriting drag-n-drop right now
     let { editingCategory } = this.state;
@@ -923,7 +922,10 @@ export class BudgetTable extends React.Component {
             <View style={{ flex: 1 }} />
 
             <View style={{ width: 90 }}>
-              <Label title={t('BUDGETED')} style={{ color: colors.n1 }} />
+              <Label
+                title={this.props.t('BUDGETED')}
+                style={{ color: colors.n1 }}
+              />
               <CellValue
                 binding={reportBudget.totalBudgetedExpense}
                 type="financial"
@@ -937,7 +939,10 @@ export class BudgetTable extends React.Component {
               />
             </View>
             <View style={{ width: 90 }}>
-              <Label title={t('BALANCE')} style={{ color: colors.n1 }} />
+              <Label
+                title={this.props.t('BALANCE')}
+                style={{ color: colors.n1 }}
+              />
               <CellValue
                 binding={rolloverBudget.totalBalance}
                 type="financial"
@@ -972,7 +977,7 @@ export class BudgetTable extends React.Component {
                   onReorderCategory={onReorderCategory}
                   onReorderGroup={onReorderGroup}
                   onBudgetAction={onBudgetAction}
-                  t={t}
+                  t={this.props.t}
                 />
               </View>
             ) : (
@@ -996,7 +1001,7 @@ export class BudgetTable extends React.Component {
                     onAddCategory={onAddCategory}
                     onReorderCategory={onReorderCategory}
                     onReorderGroup={onReorderGroup}
-                    t={t}
+                    t={this.props.t}
                   />
                 </View>
 
