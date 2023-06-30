@@ -353,8 +353,8 @@ export function SidebarCategory({
                 setMenuOpen(false);
               }}
               items={[
-                { name: 'rename', text: 'Rename' },
-                { name: 'delete', text: 'Delete' },
+                { name: 'rename', text: t('Rename') },
+                { name: 'delete', text: t('Delete') },
               ]}
             />
           </Tooltip>
