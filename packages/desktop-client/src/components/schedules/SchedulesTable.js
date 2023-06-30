@@ -230,7 +230,7 @@ export function SchedulesTable({
         </Field>
         <Field width={120} name="date">
           {item.next_date
-            ? monthUtils.nonLocalizedFormat(item.next_date, dateFormat)
+            ? monthUtils.format(item.next_date, dateFormat)
             : null}
         </Field>
         <Field width={120} name="status" style={{ alignItems: 'flex-start' }}>

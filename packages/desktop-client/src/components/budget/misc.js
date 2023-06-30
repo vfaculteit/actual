@@ -1261,7 +1261,7 @@ function getMonth(year, idx) {
 
 function getCurrentMonthName(startMonth, currentMonth) {
   return monthUtils.getYear(startMonth) === monthUtils.getYear(currentMonth)
-    ? monthUtils.nonLocalizedFormat(currentMonth, 'MMM')
+    ? monthUtils.format(currentMonth, 'MMM')
     : null;
 }
 
@@ -1275,7 +1275,7 @@ export const MonthPicker = ({
   const currentMonth = monthUtils.currentMonth();
   const range = getRangeForYear(currentMonth);
   const monthNames = range.map(month => {
-    return monthUtils.nonLocalizedFormat(month, 'MMM');
+    return monthUtils.format(month, 'MMM');
   });
   const currentMonthName = getCurrentMonthName(startMonth, currentMonth);
   const year = monthUtils.getYear(startMonth);
@@ -1306,7 +1306,7 @@ export const MonthPicker = ({
           flex: '0 0 40px',
         }}
       >
-        {monthUtils.nonLocalizedFormat(year, 'yyyy')}
+        {monthUtils.format(year, 'yyyy')}
       </View>
       <View
         innerRef={containerRef}

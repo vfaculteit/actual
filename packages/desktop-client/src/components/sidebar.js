@@ -636,7 +636,6 @@ export function Sidebar({
           <ToggleButton isFloating={isFloating} onFloat={onFloat} />
         )}
       </View>
-
       <View style={{ overflow: 'auto' }}>
         <Item title={t('Budget')} Icon={Wallet} to="/budget" />
         <Item title={t('Reports')} Icon={Reports} to="/reports" />

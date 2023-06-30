@@ -277,10 +277,7 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
     setMenuOpen(false);
   }
 
-  let prevMonthName = monthUtils.nonLocalizedFormat(
-    monthUtils.prevMonth(month),
-    'MMM',
-  );
+  let prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
 
   let ExpandOrCollapseIcon = collapsed ? ArrowButtonDown1 : ArrowButtonUp1;
   const { t } = useTranslation();
@@ -348,7 +345,7 @@ export function BudgetSummary({ month, isGoalTemplatesEnabled }) {
               currentMonth === month && { textDecoration: 'underline' },
             ])}
           >
-            {monthUtils.nonLocalizedFormat(month, 'MMMM')}
+            {monthUtils.format(month, 'MMMM')}
           </div>
 
           <View

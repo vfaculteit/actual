@@ -822,7 +822,7 @@ const AccountHeader = React.memo(
                     {account && account.closed
                       ? t('account.closedNamed', {
                           name: account.name,
-                          defaultValue: 'Closed: {{account.name}}',
+                          defaultValue: 'Closed: {{name}}',
                         })
                       : account.name}
                   </View>
@@ -850,7 +850,7 @@ const AccountHeader = React.memo(
                   {account && account.closed
                     ? t('account.closedNamed', {
                         name: account.name,
-                        defaultValue: 'Closed: {{accountName}}',
+                        defaultValue: 'Closed: {{name}}',
                       })
                     : accountName}
                 </View>
